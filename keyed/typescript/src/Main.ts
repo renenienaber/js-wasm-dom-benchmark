@@ -1,13 +1,31 @@
-'use strict';
+// 'use strict';
 
-function _random(max) {
+interface DataElement {
+    id: number;
+    label: string;
+}
+
+interface ExtendedTrElement extends HTMLTableRowElement {
+    data_id?: number;
+}
+
+interface ExtendedHTMLElement extends HTMLElement {
+    data_id?: number;
+}
+
+function _random(max: number) {
     return Math.round(Math.random()*1000)%max;
 }
 
-const rowTemplate = document.createElement("tr");
+const rowTemplate: ExtendedTrElement = document.createElement("tr");
 rowTemplate.innerHTML = "<td class='col-md-1'></td><td class='col-md-4'><a class='lbl'></a></td><td class='col-md-1'><a class='remove'><span class='remove glyphicon glyphicon-remove' aria-hidden='true'></span></a></td><td class='col-md-6'></td>";
 
 class Store {
+    data: DataElement[];
+    backup: DataElement[] | null;
+    selected: number | null;
+    id: number;
+
     constructor() {
         this.data = [];
         this.backup = null;
@@ -29,7 +47,7 @@ class Store {
             // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
         }
     }
-    delete(id) {
+    delete(id: number) {
         const idx = this.data.findIndex(d => d.id==id);
         this.data = this.data.filter((e,i) => i!=idx);
         return this;
@@ -46,7 +64,7 @@ class Store {
         this.updateData();
         this.selected = null;
     }
-    select(id) {
+    select(id: number) {
         this.selected = id;
     }
     hideAll() {
@@ -55,7 +73,9 @@ class Store {
         this.selected = null;
     }
     showAll() {
-        this.data = this.backup;
+        if(this.backup) {
+            this.data = this.backup;
+        }
         this.backup = null;
         this.selected = null;
     }
@@ -76,17 +96,25 @@ class Store {
     }
 }
 
-var getParentId = function(elem) {
+var getParentId = function(elem?: ExtendedHTMLElement) {
     while (elem) {
         if (elem.tagName==="TR") {
             return elem.data_id;
         }
-        elem = elem.parentNode;
+        elem = elem.parentNode as HTMLElement;
     }
     return undefined;
 }
 class Main {
-    constructor(props) {
+    store: Store;
+    start: number;
+    rows: ExtendedTrElement[];
+    data: DataElement[];
+    selectedRow: ExtendedTrElement | undefined;
+
+    tbody: HTMLElement | null;
+
+    constructor() {
         this.store = new Store();
         this.select = this.select.bind(this);
         this.delete = this.delete.bind(this);
@@ -98,66 +126,70 @@ class Main {
         this.data = [];
         this.selectedRow = undefined;
 
-        document.getElementById("main").addEventListener('click', e => {
+        document.getElementById("main")?.addEventListener('click', e => {
             //console.log("listener",e);
-            if (e.target.matches('#add')) {
+            if ((e.target as HTMLElement).matches('#add')) {
                 e.preventDefault();
                 //console.log("add");
                 this.add();
             }
-            else if (e.target.matches('#run')) {
+            else if ((e.target as HTMLElement).matches('#run')) {
                 e.preventDefault();
                 //console.log("run");
                 this.run();
             }
-            else if (e.target.matches('#update')) {
+            else if ((e.target as HTMLElement).matches('#update')) {
                 e.preventDefault();
                 //console.log("update");
                 this.update();
             }
-            else if (e.target.matches('#hideall')) {
-                e.preventDefault();
-                //console.log("hideAll");
-                this.hideAll();
-            }
-            else if (e.target.matches('#showall')) {
-                e.preventDefault();
-                //console.log("showAll");
-                this.showAll();
-            }
-            else if (e.target.matches('#runlots')) {
+            // else if ((e.target as HTMLElement).matches('#hideall')) {
+            //     e.preventDefault();
+            //     //console.log("hideAll");
+            //     this.hideAll();
+            // }
+            // else if ((e.target as HTMLElement).matches('#showall')) {
+            //     e.preventDefault();
+            //     //console.log("showAll");
+            //     this.showAll();
+            // }
+            else if ((e.target as HTMLElement).matches('#runlots')) {
                 e.preventDefault();
                 //console.log("runLots");
                 this.runLots();
             }
-            else if (e.target.matches('#clear')) {
+            else if ((e.target as HTMLElement).matches('#clear')) {
                 e.preventDefault();
                 //console.log("clear");
                 this.clear();
             }
-            else if (e.target.matches('#swaprows')) {
+            else if ((e.target as HTMLElement).matches('#swaprows')) {
                 e.preventDefault();
                 //console.log("swapRows");
                 this.swapRows();
             }
-            else if (e.target.matches('.remove')) {
+            else if ((e.target as HTMLElement).matches('.remove')) {
                 e.preventDefault();
-                let id = getParentId(e.target);
+                let id = getParentId((e.target as HTMLElement));
                 let idx = this.findIdx(id);
                 //console.log("delete",idx);
-                this.delete(idx);
+                if(idx) {
+                    this.delete(idx);
+                }
             }
-            else if (e.target.matches('.lbl')) {
+            else if ((e.target as HTMLElement).matches('.lbl')) {
                 e.preventDefault();
-                let id = getParentId(e.target);
+                let id = getParentId((e.target as HTMLElement));
                 let idx = this.findIdx(id);
                 //console.log("select",idx);
-                this.select(idx);
+                if(idx) {
+                    this.select(idx);
+                }
             }
         });
         this.tbody = document.getElementById("tbody");
     }
-    findIdx(id) {
+    findIdx(id: number | undefined) {
         for (let i=0;i<this.data.length;i++){
             if (this.data[i].id === id) return i;
         }
@@ -179,7 +211,7 @@ class Main {
     update() {
         this.store.update();
         for (let i=0;i<this.data.length;i+=10) {
-            this.rows[i].childNodes[1].childNodes[0].innerText = this.store.data[i].label;
+            (this.rows[i].childNodes[1].childNodes[0] as HTMLAnchorElement).innerText = this.store.data[i].label;
         }
     }
     unselect() {
@@ -188,7 +220,7 @@ class Main {
             this.selectedRow = undefined;
         }
     }
-    select(idx) {
+    select(idx: number) {
         this.unselect();
         this.store.select(this.data[idx].id);
         this.selectedRow = this.rows[idx];
@@ -203,7 +235,7 @@ class Main {
             this.selectedRow.className = "danger";
         }
     }
-    delete(idx) {
+    delete(idx: number) {
         // Remove that row from the DOM
         this.store.delete(this.data[idx].id);
         this.rows[idx].remove();
@@ -225,7 +257,9 @@ class Main {
         // var cNode = tbody.cloneNode(false);
         // tbody.parentNode.replaceChild(cNode ,tbody);
         // ~212 msecs
-        this.tbody.textContent = "";
+        if(this.tbody) {
+            this.tbody.textContent = "";
+        }
 
         // ~236 msecs
         // var rangeObj = new Range();
@@ -260,8 +294,8 @@ class Main {
             this.data[1] = this.store.data[1];
             this.data[998] = this.store.data[998];
 
-            this.tbody.insertBefore(this.rows[998], this.rows[2])
-            this.tbody.insertBefore(this.rows[1], this.rows[999])
+            this.tbody?.insertBefore(this.rows[998], this.rows[2])
+            this.tbody?.insertBefore(this.rows[1], this.rows[999])
 
             let tmp = this.rows[998];
             this.rows[998] = this.rows[1];
@@ -296,18 +330,18 @@ class Main {
         // ... than adding directly
         var rows = this.rows, s_data = this.store.data, data = this.data, tbody = this.tbody;
         for(let i=rows.length;i<s_data.length; i++) {
-            let tr = this.createRow(s_data[i]);
+            let tr = this.createRow(s_data[i]) as ExtendedTrElement;
             rows[i] = tr;
             data[i] = s_data[i];
-            tbody.appendChild(tr);
+            tbody?.appendChild(tr);
         }
     }
-    createRow(data) {
-        const tr = rowTemplate.cloneNode(true),
-            td1 = tr.firstChild,
-            a2 = td1.nextSibling.firstChild;
+    createRow(data: DataElement) {
+        const tr = rowTemplate.cloneNode(true) as ExtendedTrElement,
+            td1 = tr.firstChild as HTMLTableCellElement,
+            a2 = td1?.nextSibling?.firstChild as HTMLAnchorElement;
         tr.data_id = data.id;
-        td1.textContent = data.id;
+        td1.textContent = data.id.toString();
         a2.textContent = data.label;
         return tr;
     }
