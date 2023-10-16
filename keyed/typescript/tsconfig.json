@@ -2,11 +2,13 @@
   "compilerOptions": {
     "outDir": "./built",
     "allowJs": true,
-    "target": "es5",
+    "lib": ["es6", "dom"],
+    "target": "es6",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "removeComments": true
   },
   "include": ["./src/**/*"]
 }
