@@ -1,10 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script type="module">
-import { add } from "./build/release.js";
-document.body.innerText = add(1, 2);
-</script>
+    <meta charset="UTF-8">
+    <title>WebAssembly (no strategy)</title>
+    <script type="module" src='build/index.js'></script>
 </head>
-<body></body>
+<body>
+<div>
+    <span id="benchmark"></span>
+</div>
+
+<div>
+    <div>
+        <button type='button' onclick="run()">Create 1,000 rows</button>
+    </div>
+    <div>
+        <button type='button' onclick="runLots()">Create 10,000 rows</button>
+    </div>
+    <div>
+        <button type='button' onclick="add()">Append 1,000 rows</button>
+    </div>
+    <div>
+        <button type='button' onclick="update()">Update every 10th row</button>
+    </div>
+    <div>
+        <button type='button' onclick="clearRows()">Clear</button>
+    </div>
+    <div>
+        <button type='button' onclick="swapRows()">Swap Rows</button>
+    </div>
+</div>
+
+
+<main>
+    <table>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</main>
+</body>
 </html>
