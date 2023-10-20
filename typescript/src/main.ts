@@ -1,36 +1,66 @@
 // Click Handler
 
 function run(): void {
+    const t0 = performance.now();
+
     _removeAllRows();
     _appendRows(buildData());
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 function runLots(): void {
+    const t0 = performance.now();
+
     _removeAllRows();
     _appendRows(buildData(10000));
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 function add(): void {
+    const t0 = performance.now();
+
     _appendRows(buildData(1000, _getTableRowCount()+1));
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 function update(): void {
+    const t0 = performance.now();
+
     const updatedData = updateData(_getTableRows());
 
     _removeAllRows();
     _appendRows(updatedData);
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 function clearRows(): void {
+    const t0 = performance.now();
+
     _removeAllRows();
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 function swapRows(): void {
+    const t0 = performance.now();
+
     const table = _getTableRows();
     const updatedData = updateDataForSwap(table);
 
     _removeAllRows();
     _appendRows(updatedData);
+
+    const t1 = performance.now();
+    _displayBenchmark(t1-t0);
 }
 
 // setup
@@ -118,4 +148,10 @@ function _appendRows(rowElements: RowElement[]): void {
 function _removeAllRows(): void {
     const tbody: Element = document.querySelector('#tbody') as Element;
     tbody.textContent = "";
+}
+
+// benchmarking
+function _displayBenchmark(ms: number): void {
+    const span = document.querySelector('#benchmark') as Element;
+    span.textContent = `Benchmark Result: ${ms}ms`;
 }

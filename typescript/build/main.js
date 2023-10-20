@@ -1,28 +1,46 @@
 "use strict";
 function run() {
+    const t0 = performance.now();
     _removeAllRows();
     _appendRows(buildData());
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function runLots() {
+    const t0 = performance.now();
     _removeAllRows();
     _appendRows(buildData(10000));
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function add() {
+    const t0 = performance.now();
     _appendRows(buildData(1000, _getTableRowCount() + 1));
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function update() {
+    const t0 = performance.now();
     const updatedData = updateData(_getTableRows());
     _removeAllRows();
     _appendRows(updatedData);
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function clearRows() {
+    const t0 = performance.now();
     _removeAllRows();
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function swapRows() {
+    const t0 = performance.now();
     const table = _getTableRows();
     const updatedData = updateDataForSwap(table);
     _removeAllRows();
     _appendRows(updatedData);
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
 }
 function buildData(count = 1000, firstId = 1) {
     const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
@@ -87,4 +105,8 @@ function _appendRows(rowElements) {
 function _removeAllRows() {
     const tbody = document.querySelector('#tbody');
     tbody.textContent = "";
+}
+function _displayBenchmark(ms) {
+    const span = document.querySelector('#benchmark');
+    span.textContent = `Benchmark Result: ${ms}ms`;
 }
