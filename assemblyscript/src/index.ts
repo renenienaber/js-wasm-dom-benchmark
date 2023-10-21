@@ -1,66 +1,57 @@
-// Click Handler
 
-function run(): void {
+import {buildData, updateData, updateDataForSwap} from "../build/release";
+
+// add event-listener for clicking buttons
+document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);
+document.getElementById('runLots')?.addEventListener("click", () => doBenchmark(runLots), false);
+document.getElementById('add')?.addEventListener("click", () => doBenchmark(add), false);
+document.getElementById('update')?.addEventListener("click", () => doBenchmark(update), false);
+document.getElementById('clearRows')?.addEventListener("click", () => doBenchmark(clearRows), false);
+document.getElementById('swapRows')?.addEventListener("click", () => doBenchmark(swapRows), false);
+
+
+// click handler
+
+function doBenchmark(fn: () => void): void {
     const t0 = performance.now();
 
-    _removeAllRows();
-    _appendRows(buildData());
+    fn();
 
     const t1 = performance.now();
     _displayBenchmark(t1-t0);
+}
+
+function run(): void {
+    _removeAllRows();
+    _appendRows(buildData());
 }
 
 function runLots(): void {
-    const t0 = performance.now();
-
     _removeAllRows();
     _appendRows(buildData(10000));
-
-    const t1 = performance.now();
-    _displayBenchmark(t1-t0);
 }
 
 function add(): void {
-    const t0 = performance.now();
-
     _appendRows(buildData(1000, _getTableRowCount()+1));
-
-    const t1 = performance.now();
-    _displayBenchmark(t1-t0);
 }
 
 function update(): void {
-    const t0 = performance.now();
-
     const updatedData = updateData(_getTableRows());
 
     _removeAllRows();
     _appendRows(updatedData);
-
-    const t1 = performance.now();
-    _displayBenchmark(t1-t0);
 }
 
 function clearRows(): void {
-    const t0 = performance.now();
-
     _removeAllRows();
-
-    const t1 = performance.now();
-    _displayBenchmark(t1-t0);
 }
 
 function swapRows(): void {
-    const t0 = performance.now();
-
     const table = _getTableRows();
     const updatedData = updateDataForSwap(table);
 
     _removeAllRows();
     _appendRows(updatedData);
-
-    const t1 = performance.now();
-    _displayBenchmark(t1-t0);
 }
 
 // setup
