@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript (with strategy: Virtual DOM)</title>
+</head>
+<body>
+<h1>JavaScript (with strategy: Virtual DOM)</h1>
+<div>
+  <span id="benchmark"></span>
+</div>
+<div>
+  <div>
+    <button type='button' id="run">Create 1,000 rows</button>
+  </div>
+  <div>
+    <button type='button' id="runLots">Create 10,000 rows</button>
+  </div>
+  <div>
+    <button type='button' id="add">Append 1,000 rows</button>
+  </div>
+  <div>
+    <button type='button' id="update">Update every 10th row</button>
+  </div>
+  <div>
+    <button type='button' id="clearRows">Clear</button>
+  </div>
+  <div>
+    <button type='button' id="swapRows">Swap Rows</button>
+  </div>
+</div>
+<main>
+  <table>
+    <tbody id="tbody">
+    </tbody>
+  </table>
+</main>
+<script src='build/index.js'></script>
+</body>
+</html>

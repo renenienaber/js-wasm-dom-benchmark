@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "lib": ["es6", "dom"],
+    "target": "es6",
+    "strict": true,
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "removeComments": true
+  },
+  "include": ["./src/**/*"]
+}
