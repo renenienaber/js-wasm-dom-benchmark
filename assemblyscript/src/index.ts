@@ -1,5 +1,5 @@
 
-import {buildData, updateData, updateDataForSwap} from "../build/release";
+import {buildData, updateData, updateDataForSwap} from "../build/main";
 
 // add event-listener for clicking buttons
 document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);

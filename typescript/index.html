@@ -6,40 +6,35 @@
 </head>
 <body>
 <h1>JavaScript (no strategy)</h1>
-
 <div>
   <span id="benchmark"></span>
 </div>
-
 <div>
   <div>
-    <button type='button' onclick="run()">Create 1,000 rows</button>
+    <button type='button' id="run">Create 1,000 rows</button>
   </div>
   <div>
-    <button type='button' onclick="runLots()">Create 10,000 rows</button>
+    <button type='button' id="runLots">Create 10,000 rows</button>
   </div>
   <div>
-    <button type='button' onclick="add()">Append 1,000 rows</button>
+    <button type='button' id="add">Append 1,000 rows</button>
   </div>
   <div>
-    <button type='button' onclick="update()">Update every 10th row</button>
+    <button type='button' id="update">Update every 10th row</button>
   </div>
   <div>
-    <button type='button' onclick="clearRows()">Clear</button>
+    <button type='button' id="clearRows">Clear</button>
   </div>
   <div>
-    <button type='button' onclick="swapRows()">Swap Rows</button>
+    <button type='button' id="swapRows">Swap Rows</button>
   </div>
 </div>
-
-
 <main>
   <table>
     <tbody id="tbody">
     </tbody>
   </table>
 </main>
-
-<script src='build/main.js'></script>
+<script src='build/index.js'></script>
 </body>
 </html>

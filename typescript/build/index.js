@@ -1,46 +1,41 @@
 "use strict";
-function run() {
+var _a, _b, _c, _d, _e, _f;
+(_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
+(_b = document.getElementById('runLots')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => doBenchmark(runLots), false);
+(_c = document.getElementById('add')) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => doBenchmark(add), false);
+(_d = document.getElementById('update')) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => doBenchmark(update), false);
+(_e = document.getElementById('clearRows')) === null || _e === void 0 ? void 0 : _e.addEventListener("click", () => doBenchmark(clearRows), false);
+(_f = document.getElementById('swapRows')) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => doBenchmark(swapRows), false);
+function doBenchmark(fn) {
     const t0 = performance.now();
+    fn();
+    const t1 = performance.now();
+    _displayBenchmark(t1 - t0);
+}
+function run() {
     _removeAllRows();
     _appendRows(buildData());
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function runLots() {
-    const t0 = performance.now();
     _removeAllRows();
     _appendRows(buildData(10000));
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function add() {
-    const t0 = performance.now();
     _appendRows(buildData(1000, _getTableRowCount() + 1));
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function update() {
-    const t0 = performance.now();
     const updatedData = updateData(_getTableRows());
     _removeAllRows();
     _appendRows(updatedData);
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function clearRows() {
-    const t0 = performance.now();
     _removeAllRows();
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function swapRows() {
-    const t0 = performance.now();
     const table = _getTableRows();
     const updatedData = updateDataForSwap(table);
     _removeAllRows();
     _appendRows(updatedData);
-    const t1 = performance.now();
-    _displayBenchmark(t1 - t0);
 }
 function buildData(count = 1000, firstId = 1) {
     const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
