@@ -61,42 +61,7 @@ interface RowElement {
     label: string;
 }
 
-// function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
-//     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
-//     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
-//     const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
-//     const data: RowElement[] = [];
-//     for (let i = 0; i < count; i++)
-//         data.push({id: firstId+i, label: adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)] });
-//     return data;
-// }
-//
-// function updateData(rowElements: RowElement[], mod: number = 10): RowElement[] {
-//     const updatedElements = rowElements;
-//     for (let i=0; i < updatedElements.length; i+=mod) {
-//         updatedElements[i].label += ' !!!';
-//     }
-//     return updatedElements;
-// }
-//
-// function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
-//     const length = rowElements.length;
-//     if (length < 2) {
-//         return rowElements;
-//     }
-//
-//     const a = rowElements[1];
-//     rowElements[1] = rowElements[length-2];
-//     rowElements[length-2] = a;
-//
-//     return rowElements;
-// }
-
 // functions using browser apis
-
-// function _random(max: number): number {
-//     return Math.round(Math.random()*1000)%max;
-// }
 
 function _getTableRowCount(): number {
     const tbody: Element = document.querySelector('#tbody') as Element;
