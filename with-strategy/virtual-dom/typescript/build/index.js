@@ -1,5 +1,7 @@
-"use strict";
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
+import { Element as VElement } from './lib/element.js';
+import { diff } from './lib/diff.js';
+import { patch } from './lib/patch.js';
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
 (_b = document.getElementById('runLots')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => doBenchmark(runLots), false);
 (_c = document.getElementById('add')) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => doBenchmark(add), false);
@@ -37,6 +39,9 @@ function swapRows() {
     _removeAllRows();
     _appendRows(updatedData);
 }
+let vtree = new VElement('tbody', { 'id': 'tbody' }, []);
+const root = vtree.render();
+(_g = document.querySelector('table')) === null || _g === void 0 ? void 0 : _g.appendChild(root);
 function buildData(count = 1000, firstId = 1) {
     const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
@@ -67,39 +72,43 @@ function _random(max) {
     return Math.round(Math.random() * 1000) % max;
 }
 function _getTableRowCount() {
-    const tbody = document.querySelector('#tbody');
-    return tbody.children.length;
+    return vtree.children.length;
 }
 function _getTableRows() {
-    const tbody = document.querySelector('#tbody');
     const rowElements = [];
-    for (let i = 0; i < tbody.children.length; i++) {
-        const tr = tbody.children[i];
-        const td1 = tr.firstChild;
-        const a2 = td1.nextSibling.firstChild;
-        rowElements.push({ id: parseInt(td1.textContent), label: a2.textContent });
+    for (let i = 0; i < vtree.children.length; i++) {
+        const tr = vtree.children[i];
+        const td1 = tr.children[0];
+        const a2 = vtree.children[i].children[1].children[0];
+        rowElements.push({ id: parseInt(td1.children[0]), label: a2.children[0] });
     }
     return rowElements;
 }
 function _createRow(data) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = "<td></td><td><a></a></td>";
-    const td1 = tr.firstChild;
-    const a2 = td1.nextSibling.firstChild;
-    td1.textContent = data.id.toString();
-    a2.textContent = data.label;
-    return tr;
+    return new VElement('tr', {}, [
+        new VElement('td', [data.id.toString()], []),
+        new VElement('td', {}, [
+            new VElement('a', [data.label], [])
+        ])
+    ]);
+}
+function _renderVTree(newTree) {
+    const patches = diff(vtree, newTree);
+    patch(root, patches);
+    vtree = newTree;
 }
 function _appendRows(rowElements) {
-    const tbody = document.querySelector('#tbody');
-    for (let el of rowElements) {
-        const tr = _createRow(el);
-        tbody.appendChild(tr);
+    const rows = [...vtree.children];
+    for (let i = 0; i < rowElements.length; i++) {
+        const tr = _createRow(rowElements[i]);
+        rows.push(tr);
     }
+    const newTree = new VElement('tbody', { 'id': 'tbody' }, rows);
+    _renderVTree(newTree);
 }
 function _removeAllRows() {
-    const tbody = document.querySelector('#tbody');
-    tbody.textContent = "";
+    const newTree = new VElement('tbody', { 'id': 'tbody' }, []);
+    _renderVTree(newTree);
 }
 function _displayBenchmark(ms) {
     const span = document.querySelector('#benchmark');

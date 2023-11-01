@@ -1,3 +1,7 @@
+import {Element as VElement} from './lib/element'
+import { diff } from './lib/diff'
+import { patch } from './lib/patch'
+
 // add event-listener for clicking buttons
 document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);
 document.getElementById('runLots')?.addEventListener("click", () => doBenchmark(runLots), false);
@@ -58,6 +62,10 @@ interface RowElement {
     label: string;
 }
 
+let vtree = new VElement('tbody', {'id': 'tbody'}, []);
+const root = vtree.render();
+document.querySelector('table')?.appendChild(root);
+
 function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
@@ -96,46 +104,52 @@ function _random(max: number): number {
 }
 
 function _getTableRowCount(): number {
-    const tbody: Element = document.querySelector('#tbody') as Element;
-    return tbody.children.length;
+    return vtree.children.length;
 }
 
 function _getTableRows(): RowElement[] {
-    const tbody: Element = document.querySelector('#tbody') as Element;
     const rowElements: RowElement[] = [];
 
-    for (let i = 0; i < tbody.children.length; i++) {
-        const tr: Element = tbody.children[i];
-        const td1: ChildNode = tr.firstChild as ChildNode;
-        const a2: ChildNode = (td1.nextSibling as ChildNode).firstChild as ChildNode;
-        rowElements.push({id: parseInt(td1.textContent as string), label: a2.textContent as string});
+    for (let i = 0; i < vtree.children.length; i++) {
+        const tr: VElement = vtree.children[i] as VElement;
+        const td1: VElement = tr.children[0] as VElement;
+        const a2: VElement = (((vtree.children[i] as VElement).children[1] as VElement).children[0] as VElement) as VElement;
+        rowElements.push({id: parseInt(td1.children[0] as string), label: a2.children[0] as string});
     }
     return rowElements;
 }
 
-function _createRow(data: RowElement): Node {
-    const tr: HTMLTableRowElement = document.createElement("tr");
-    tr.innerHTML = "<td></td><td><a></a></td>";
-    const td1: ChildNode = tr.firstChild as ChildNode;
-    const a2: ChildNode = (td1.nextSibling as ChildNode).firstChild as ChildNode;
+function _createRow(data: RowElement): VElement {
+    return new VElement('tr', {}, [
+        new VElement('td', [data.id.toString()], []),
+        new VElement('td', {}, [
+            new VElement('a', [data.label], [])
+        ])
+    ]);
+}
 
-    td1.textContent = data.id.toString();
-    a2.textContent = data.label;
+// mutating functions
 
-    return tr;
+function _renderVTree(newTree: VElement) {
+    const patches = diff(vtree, newTree);
+    patch(root, patches);
+    vtree = newTree;
 }
 
 function _appendRows(rowElements: RowElement[]): void {
-    const tbody: Element = document.querySelector('#tbody') as Element;
-    for(let el of rowElements) {
-        const tr = _createRow(el);
-        tbody.appendChild(tr);
+    const rows: VElement[] = [...vtree.children] as VElement[];
+    for(let i = 0; i < rowElements.length; i++) {
+        const tr = _createRow(rowElements[i]);
+        rows.push(tr);
     }
+
+    const newTree = new VElement('tbody', {'id': 'tbody'}, rows);
+    _renderVTree(newTree as VElement);
 }
 
 function _removeAllRows(): void {
-    const tbody: Element = document.querySelector('#tbody') as Element;
-    tbody.textContent = "";
+    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
+    _renderVTree(newTree);
 }
 
 // benchmarking
