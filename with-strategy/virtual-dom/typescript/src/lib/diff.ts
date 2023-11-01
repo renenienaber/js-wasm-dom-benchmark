@@ -58,7 +58,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
   }
 }
 
-function diffChildren(oldChildren: Element[] | string[], newChildren: Element[] | string[], index: number, patches: Patch[][], currentPatch: Patch[]) {
+function diffChildren(oldChildren: (Element|string)[], newChildren: (Element|string)[], index: number, patches: Patch[][], currentPatch: Patch[]) {
   var diffs = listDiff(oldChildren, newChildren, 'key')
   newChildren = diffs.children
 

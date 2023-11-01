@@ -3,11 +3,11 @@ import {_each, _isArray, _setAttr, _slice, _truthy} from "./util";
 export class Element {
   tagName: string = '';
   props: any;
-  children: Element[] | string[] = [];
+  children: (Element|string)[] = [];
   key: any;
   count: number = 0;
 
-  constructor(tagName: string, props: any, children: Element[] | string[]) {
+  constructor(tagName: string, props: any, children: (Element|string)[]) {
     if (!(this instanceof Element)) {
       if (!_isArray(children) && children != null) {
         children = _slice(arguments, 2).filter(_truthy);
