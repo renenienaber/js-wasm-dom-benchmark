@@ -2,6 +2,7 @@ import {Element as VElement} from './lib/element'
 import { diff } from './lib/diff'
 import { patch } from './lib/patch'
 
+
 // add event-listener for clicking buttons
 document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);
 document.getElementById('runLots')?.addEventListener("click", () => doBenchmark(runLots), false);
@@ -11,7 +12,12 @@ document.getElementById('clearRows')?.addEventListener("click", () => doBenchmar
 document.getElementById('swapRows')?.addEventListener("click", () => doBenchmark(swapRows), false);
 
 
-// click handler
+// benchmarking
+
+function _displayBenchmark(ms: number): void {
+    const span = document.querySelector('#benchmark') as Element;
+    span.textContent = `Benchmark Result: ${ms}ms`;
+}
 
 function doBenchmark(fn: () => void): void {
     const t0 = performance.now();
@@ -21,6 +27,9 @@ function doBenchmark(fn: () => void): void {
     const t1 = performance.now();
     _displayBenchmark(t1-t0);
 }
+
+
+// click handler
 
 function run(): void {
     _removeAllRows();
@@ -48,12 +57,12 @@ function clearRows(): void {
 }
 
 function swapRows(): void {
-    const table = _getTableRows();
-    const updatedData = updateDataForSwap(table);
+    const updatedData = updateDataForSwap(_getTableRows());
 
     _removeAllRows();
     _appendRows(updatedData);
 }
+
 
 // setup
 
@@ -62,9 +71,12 @@ interface RowElement {
     label: string;
 }
 
-let vtree = new VElement('tbody', {'id': 'tbody'}, []);
-const root = vtree.render();
+let vtree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
+const root: HTMLElement = vtree.render();
 document.querySelector('table')?.appendChild(root);
+
+
+// RowElement functions
 
 function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
@@ -97,11 +109,15 @@ function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
     return rowElements;
 }
 
-// functions using browser apis
+
+// functions using Browser APIs
 
 function _random(max: number): number {
     return Math.round(Math.random()*1000)%max;
 }
+
+
+// interaction with Virtual DOM (using lib)
 
 function _getTableRowCount(): number {
     return vtree.children.length;
@@ -128,13 +144,8 @@ function _createRow(data: RowElement): VElement {
     ]);
 }
 
-// mutating functions
 
-function _renderVTree(newTree: VElement) {
-    const patches = diff(vtree, newTree);
-    patch(root, patches);
-    vtree = newTree;
-}
+// mutating functions
 
 function _appendRows(rowElements: RowElement[]): void {
     const rows: VElement[] = [...vtree.children] as VElement[];
@@ -143,8 +154,8 @@ function _appendRows(rowElements: RowElement[]): void {
         rows.push(tr);
     }
 
-    const newTree = new VElement('tbody', {'id': 'tbody'}, rows);
-    _renderVTree(newTree as VElement);
+    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, rows);
+    _renderVTree(newTree);
 }
 
 function _removeAllRows(): void {
@@ -152,8 +163,8 @@ function _removeAllRows(): void {
     _renderVTree(newTree);
 }
 
-// benchmarking
-function _displayBenchmark(ms: number): void {
-    const span = document.querySelector('#benchmark') as Element;
-    span.textContent = `Benchmark Result: ${ms}ms`;
+function _renderVTree(newTree: VElement) {
+    const patches = diff(vtree, newTree);
+    patch(root, patches);
+    vtree = newTree;
 }

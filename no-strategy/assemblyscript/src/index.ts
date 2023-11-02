@@ -1,5 +1,5 @@
-
 import {buildData, updateData, updateDataForSwap} from "../build/main";
+
 
 // add event-listener for clicking buttons
 document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);
@@ -10,7 +10,12 @@ document.getElementById('clearRows')?.addEventListener("click", () => doBenchmar
 document.getElementById('swapRows')?.addEventListener("click", () => doBenchmark(swapRows), false);
 
 
-// click handler
+// benchmarking
+
+function _displayBenchmark(ms: number): void {
+    const span = document.querySelector('#benchmark') as Element;
+    span.textContent = `Benchmark Result: ${ms}ms`;
+}
 
 function doBenchmark(fn: () => void): void {
     const t0 = performance.now();
@@ -20,6 +25,8 @@ function doBenchmark(fn: () => void): void {
     const t1 = performance.now();
     _displayBenchmark(t1-t0);
 }
+
+// click handler
 
 function run(): void {
     _removeAllRows();
@@ -47,12 +54,12 @@ function clearRows(): void {
 }
 
 function swapRows(): void {
-    const table = _getTableRows();
-    const updatedData = updateDataForSwap(table);
+    const updatedData = updateDataForSwap(_getTableRows());
 
     _removeAllRows();
     _appendRows(updatedData);
 }
+
 
 // setup
 
@@ -61,7 +68,8 @@ interface RowElement {
     label: string;
 }
 
-// functions using browser apis
+
+// interaction with DOM (using DOM API)
 
 function _getTableRowCount(): number {
     const tbody: Element = document.querySelector('#tbody') as Element;
@@ -93,10 +101,13 @@ function _createRow(data: RowElement): Node {
     return tr;
 }
 
+
+// mutating functions
+
 function _appendRows(rowElements: RowElement[]): void {
     const tbody: Element = document.querySelector('#tbody') as Element;
-    for(let el of rowElements) {
-        const tr = _createRow(el);
+    for(let i = 0; i < rowElements.length; i++) {
+        const tr = _createRow(rowElements[i]);
         tbody.appendChild(tr);
     }
 }
@@ -104,10 +115,4 @@ function _appendRows(rowElements: RowElement[]): void {
 function _removeAllRows(): void {
     const tbody: Element = document.querySelector('#tbody') as Element;
     tbody.textContent = "";
-}
-
-// benchmarking
-function _displayBenchmark(ms: number): void {
-    const span = document.querySelector('#benchmark') as Element;
-    span.textContent = `Benchmark Result: ${ms}ms`;
 }
