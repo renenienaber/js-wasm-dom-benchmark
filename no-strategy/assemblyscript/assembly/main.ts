@@ -7,6 +7,9 @@ class RowElement {
     label: string;
 }
 
+
+// RowElement functions
+
 export function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
@@ -42,7 +45,8 @@ export function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
     return rowElements;
 }
 
-// functions using browser apis
+
+// functions using built-in APIs
 
 function _random(max: number): number {
     return Math.round(Math.random()*1000)%max;

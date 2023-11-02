@@ -7,7 +7,12 @@ document.getElementById('clearRows')?.addEventListener("click", () => doBenchmar
 document.getElementById('swapRows')?.addEventListener("click", () => doBenchmark(swapRows), false);
 
 
-// click handler
+// benchmarking
+
+function _displayBenchmark(ms: number): void {
+    const span = document.querySelector('#benchmark') as Element;
+    span.textContent = `Benchmark Result: ${ms}ms`;
+}
 
 function doBenchmark(fn: () => void): void {
     const t0 = performance.now();
@@ -17,6 +22,9 @@ function doBenchmark(fn: () => void): void {
     const t1 = performance.now();
     _displayBenchmark(t1-t0);
 }
+
+
+// click handler
 
 function run(): void {
     _removeAllRows();
@@ -33,10 +41,8 @@ function add(): void {
 }
 
 function update(): void {
-    const updatedData = updateData(_getTableRows());
-
     _removeAllRows();
-    _appendRows(updatedData);
+    _appendRows(updateData(_getTableRows()));
 }
 
 function clearRows(): void {
@@ -44,12 +50,10 @@ function clearRows(): void {
 }
 
 function swapRows(): void {
-    const table = _getTableRows();
-    const updatedData = updateDataForSwap(table);
-
     _removeAllRows();
-    _appendRows(updatedData);
+    _appendRows(updateDataForSwap(_getTableRows()));
 }
+
 
 // setup
 
@@ -57,6 +61,9 @@ interface RowElement {
     id: number;
     label: string;
 }
+
+
+// RowElement functions
 
 function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
@@ -89,11 +96,15 @@ function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
     return rowElements;
 }
 
-// functions using browser apis
+
+// functions using Browser APIs
 
 function _random(max: number): number {
     return Math.round(Math.random()*1000)%max;
 }
+
+
+// interaction with DOM (using DOM API)
 
 function _getTableRowCount(): number {
     const tbody: Element = document.querySelector('#tbody') as Element;
@@ -125,10 +136,13 @@ function _createRow(data: RowElement): Node {
     return tr;
 }
 
+
+// mutating functions
+
 function _appendRows(rowElements: RowElement[]): void {
     const tbody: Element = document.querySelector('#tbody') as Element;
-    for(let el of rowElements) {
-        const tr = _createRow(el);
+    for(let i = 0; i < rowElements.length; i++) {
+        const tr: Node = _createRow(rowElements[i]);
         tbody.appendChild(tr);
     }
 }
@@ -136,10 +150,4 @@ function _appendRows(rowElements: RowElement[]): void {
 function _removeAllRows(): void {
     const tbody: Element = document.querySelector('#tbody') as Element;
     tbody.textContent = "";
-}
-
-// benchmarking
-function _displayBenchmark(ms: number): void {
-    const span = document.querySelector('#benchmark') as Element;
-    span.textContent = `Benchmark Result: ${ms}ms`;
 }
