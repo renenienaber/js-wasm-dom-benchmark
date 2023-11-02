@@ -6,6 +6,10 @@ var _a, _b, _c, _d, _e, _f;
 (_d = document.getElementById('update')) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => doBenchmark(update), false);
 (_e = document.getElementById('clearRows')) === null || _e === void 0 ? void 0 : _e.addEventListener("click", () => doBenchmark(clearRows), false);
 (_f = document.getElementById('swapRows')) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => doBenchmark(swapRows), false);
+function _displayBenchmark(ms) {
+    const span = document.querySelector('#benchmark');
+    span.textContent = `Benchmark Result: ${ms}ms`;
+}
 function doBenchmark(fn) {
     const t0 = performance.now();
     fn();
@@ -32,8 +36,7 @@ function clearRows() {
     _removeAllRows();
 }
 function swapRows() {
-    const table = _getTableRows();
-    const updatedData = updateDataForSwap(table);
+    const updatedData = updateDataForSwap(_getTableRows());
     _removeAllRows();
     _appendRows(updatedData);
 }
@@ -92,16 +95,12 @@ function _createRow(data) {
 }
 function _appendRows(rowElements) {
     const tbody = document.querySelector('#tbody');
-    for (let el of rowElements) {
-        const tr = _createRow(el);
+    for (let i = 0; i < rowElements.length; i++) {
+        const tr = _createRow(rowElements[i]);
         tbody.appendChild(tr);
     }
 }
 function _removeAllRows() {
     const tbody = document.querySelector('#tbody');
     tbody.textContent = "";
-}
-function _displayBenchmark(ms) {
-    const span = document.querySelector('#benchmark');
-    span.textContent = `Benchmark Result: ${ms}ms`;
 }

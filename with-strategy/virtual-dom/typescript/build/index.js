@@ -8,6 +8,10 @@ import { patch } from './lib/patch.js';
 (_d = document.getElementById('update')) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => doBenchmark(update), false);
 (_e = document.getElementById('clearRows')) === null || _e === void 0 ? void 0 : _e.addEventListener("click", () => doBenchmark(clearRows), false);
 (_f = document.getElementById('swapRows')) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => doBenchmark(swapRows), false);
+function _displayBenchmark(ms) {
+    const span = document.querySelector('#benchmark');
+    span.textContent = `Benchmark Result: ${ms}ms`;
+}
 function doBenchmark(fn) {
     const t0 = performance.now();
     fn();
@@ -34,8 +38,7 @@ function clearRows() {
     _removeAllRows();
 }
 function swapRows() {
-    const table = _getTableRows();
-    const updatedData = updateDataForSwap(table);
+    const updatedData = updateDataForSwap(_getTableRows());
     _removeAllRows();
     _appendRows(updatedData);
 }
@@ -92,11 +95,6 @@ function _createRow(data) {
         ])
     ]);
 }
-function _renderVTree(newTree) {
-    const patches = diff(vtree, newTree);
-    patch(root, patches);
-    vtree = newTree;
-}
 function _appendRows(rowElements) {
     const rows = [...vtree.children];
     for (let i = 0; i < rowElements.length; i++) {
@@ -110,7 +108,8 @@ function _removeAllRows() {
     const newTree = new VElement('tbody', { 'id': 'tbody' }, []);
     _renderVTree(newTree);
 }
-function _displayBenchmark(ms) {
-    const span = document.querySelector('#benchmark');
-    span.textContent = `Benchmark Result: ${ms}ms`;
+function _renderVTree(newTree) {
+    const patches = diff(vtree, newTree);
+    patch(root, patches);
+    vtree = newTree;
 }
