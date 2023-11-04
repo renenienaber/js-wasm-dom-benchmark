@@ -1,5 +1,5 @@
 export const _type = function (obj) {
-    return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
+    return obj.toString().replace(/\[object\s|\]/g, '');
 };
 export const _isString = function isString(list) {
     return _type(list) === 'String';

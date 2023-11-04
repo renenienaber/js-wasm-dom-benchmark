@@ -1,5 +1,5 @@
 var _a, _b, _c, _d, _e, _f, _g;
-import { Element as VElement } from './lib/element.js';
+import { Element as VElement, TextElement } from './lib/element.js';
 import { diff } from './lib/diff.js';
 import { patch } from './lib/patch.js';
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
@@ -42,7 +42,7 @@ function swapRows() {
     _removeAllRows();
     _appendRows(updatedData);
 }
-let vtree = new VElement('tbody', { 'id': 'tbody' }, []);
+let vtree = new VElement('tbody', new Map([['id', 'body']]), []);
 const root = vtree.render();
 (_g = document.querySelector('table')) === null || _g === void 0 ? void 0 : _g.appendChild(root);
 function buildData(count = 1000, firstId = 1) {
@@ -83,15 +83,19 @@ function _getTableRows() {
         const tr = vtree.children[i];
         const td1 = tr.children[0];
         const a2 = vtree.children[i].children[1].children[0];
-        rowElements.push({ id: parseInt(td1.children[0]), label: a2.children[0] });
+        rowElements.push({ id: parseInt(td1.children[0].text), label: a2.children[0].text });
     }
     return rowElements;
 }
 function _createRow(data) {
-    return new VElement('tr', {}, [
-        new VElement('td', {}, [data.id.toString()]),
-        new VElement('td', {}, [
-            new VElement('a', {}, [data.label])
+    return new VElement('tr', new Map(), [
+        new VElement('td', new Map(), [
+            new TextElement(data.id.toString())
+        ]),
+        new VElement('td', new Map(), [
+            new VElement('a', new Map(), [
+                new TextElement(data.label)
+            ])
         ])
     ]);
 }
@@ -101,11 +105,11 @@ function _appendRows(rowElements) {
         const tr = _createRow(rowElements[i]);
         rows.push(tr);
     }
-    const newTree = new VElement('tbody', { 'id': 'tbody' }, rows);
+    const newTree = new VElement('tbody', new Map([['id', 'body']]), rows);
     _renderVTree(newTree);
 }
 function _removeAllRows() {
-    const newTree = new VElement('tbody', { 'id': 'tbody' }, []);
+    const newTree = new VElement('tbody', new Map([['id', 'body']]), []);
     _renderVTree(newTree);
 }
 function _renderVTree(newTree) {
