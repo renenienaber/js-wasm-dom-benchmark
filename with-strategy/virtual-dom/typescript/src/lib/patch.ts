@@ -1,18 +1,47 @@
 import {_each, _setAttr, _toArray} from "./util";
+import {Element as VElement} from "./element";
 
 export enum PatchType {
-  REPLACE,
-  REORDER,
-  PROPS,
-  TEXT
+  REPLACE, // node
+  REORDER, // moves
+  PROPS, // props
+  TEXT // content
 }
 
 export interface Patch {
   type: PatchType;
-  content?: any;
-  props?: any;
-  node?: any;
-  moves?: any;
+}
+
+export class ReplacePatch implements Patch {
+  type: PatchType = PatchType.REPLACE;
+  node: VElement | string;
+
+  constructor(vElement: VElement | string) {
+    this.node = vElement;
+  }
+}
+
+export class ReorderPatch implements Patch {
+  type: PatchType = PatchType.REORDER;
+  moves: any;
+}
+
+export class PropsPatch implements Patch {
+  type: PatchType = PatchType.PROPS;
+  props: {[key: string]: string};
+
+  constructor(props: {[key: string]: string}) {
+    this.props = props;
+  }
+}
+
+export class TextPatch implements Patch {
+  type: PatchType = PatchType.TEXT;
+  content: VElement|string;
+
+  constructor(vElement: VElement|string) {
+    this.content = vElement;
+  }
 }
 
 export interface Walker {
@@ -24,7 +53,7 @@ export function patch (node: Node, patches: Patch[][]) {
   dfsWalk(node, walker, patches);
 }
 
-export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]) {
+export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]): void {
   const currentPatches = patches[walker.index];
 
   const len = node.childNodes
@@ -41,26 +70,26 @@ export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]) {
   }
 }
 
-export function applyPatches (node: Node, currentPatches: Patch[]) {
+export function applyPatches (node: Node, currentPatches: Patch[]): void {
   _each(currentPatches, function (currentPatch: Patch) {
     switch (currentPatch.type) {
       case PatchType.REPLACE:
-        const newNode = (typeof currentPatch.node === 'string')
-          ? document.createTextNode(currentPatch.node)
-          : currentPatch.node.render();
+        const newNode = (typeof (currentPatch as ReplacePatch).node === 'string')
+          ? document.createTextNode((currentPatch as ReplacePatch).node as string)
+          : ((currentPatch as ReplacePatch).node as VElement).render();
         node.parentNode?.replaceChild(newNode, node);
         break;
       case PatchType.REORDER:
-        reorderChildren(node as HTMLElement, currentPatch.moves)
+        reorderChildren(node as HTMLElement, (currentPatch as ReorderPatch).moves)
         break;
       case PatchType.PROPS:
-        setProps(node as HTMLElement, currentPatch.props)
+        setProps(node as HTMLElement, (currentPatch as PropsPatch).props as {[key: string]: string})
         break;
       case PatchType.TEXT:
         if (node.textContent) {
-          node.textContent = currentPatch.content
+          node.textContent = (currentPatch as TextPatch).content as string
         } else {
-          node.nodeValue = currentPatch.content
+          node.nodeValue = (currentPatch as TextPatch).content as string
         }
         break;
       default:
@@ -69,7 +98,7 @@ export function applyPatches (node: Node, currentPatches: Patch[]) {
   })
 }
 
-export function setProps (node: HTMLElement, props: any) {
+export function setProps (node: HTMLElement, props: {[key: string]: string}): void {
   for (const key in props) {
     if (props[key] === void 666) {
       node.removeAttribute(key)

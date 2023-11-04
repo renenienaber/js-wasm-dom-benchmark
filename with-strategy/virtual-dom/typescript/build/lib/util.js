@@ -1,15 +1,6 @@
 export const _type = function (obj) {
     return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
 };
-export const _isArray = function isArray(list) {
-    return _type(list) === 'Array';
-};
-export const _slice = function slice(arrayLike, index) {
-    return Array.prototype.slice.call(arrayLike, index);
-};
-export const _truthy = function truthy(value) {
-    return !!value;
-};
 export const _isString = function isString(list) {
     return _type(list) === 'String';
 };

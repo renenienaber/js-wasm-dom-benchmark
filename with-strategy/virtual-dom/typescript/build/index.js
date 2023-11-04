@@ -89,9 +89,9 @@ function _getTableRows() {
 }
 function _createRow(data) {
     return new VElement('tr', {}, [
-        new VElement('td', [data.id.toString()], []),
+        new VElement('td', {}, [data.id.toString()]),
         new VElement('td', {}, [
-            new VElement('a', [data.label], [])
+            new VElement('a', {}, [data.label])
         ])
     ]);
 }

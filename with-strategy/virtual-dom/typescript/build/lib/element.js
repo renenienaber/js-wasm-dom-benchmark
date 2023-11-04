@@ -1,22 +1,13 @@
-import { _each, _isArray, _setAttr, _slice, _truthy } from "./util.js";
+import { _each, _setAttr } from "./util.js";
 export class Element {
     constructor(tagName, props, children) {
         this.tagName = '';
+        this.props = {};
         this.children = [];
         this.count = 0;
-        if (!(this instanceof Element)) {
-            if (!_isArray(children) && children != null) {
-                children = _slice(arguments, 2).filter(_truthy);
-            }
-            return new Element(tagName, props, children);
-        }
-        if (_isArray(props)) {
-            children = props;
-            props = {};
-        }
         this.tagName = tagName;
-        this.props = props || {};
-        this.children = children || [];
+        this.props = props;
+        this.children = children;
         this.key = props
             ? props.key
             : void 666;

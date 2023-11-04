@@ -1,35 +1,23 @@
-import {_each, _isArray, _setAttr, _slice, _truthy} from "./util";
+import {_each, _setAttr} from "./util";
 
 export class Element {
   tagName: string = '';
-  props: any;
+  props: {[key: string]: string} = {};
   children: (Element|string)[] = [];
   key: any;
   count: number = 0;
 
-  constructor(tagName: string, props: any, children: (Element|string)[]) {
-    if (!(this instanceof Element)) {
-      if (!_isArray(children) && children != null) {
-        children = _slice(arguments, 2).filter(_truthy);
-      }
-      return new Element(tagName, props, children);
-    }
-
-    if (_isArray(props)) {
-      children = props;
-      props = {};
-    }
-
+  constructor(tagName: string, props: {[key: string]: string}, children: (Element|string)[]) {
     this.tagName = tagName;
-    this.props = props || {};
-    this.children = children || [];
+    this.props = props //|| {};
+    this.children = children //|| [];
     this.key = props
         ? props.key
         : void 666;
 
     let count = 0;
 
-    _each(this.children, function (child: any, i: number) {
+    _each(this.children, function (child: Element | string, i: number) {
       if (child instanceof Element) {
         count += child.count
       } else {
@@ -50,7 +38,7 @@ export class Element {
       _setAttr(el, propName, propValue);
     }
 
-    _each(this.children, function (child: any) {
+    _each(this.children, function (child: Element | string) {
       const childEl = (child instanceof Element)
           ? child.render()
           : document.createTextNode(child);

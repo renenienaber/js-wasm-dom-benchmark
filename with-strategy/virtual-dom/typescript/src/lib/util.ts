@@ -2,23 +2,23 @@ export const _type = function (obj: any) {
   return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '')
 }
 
-export const _isArray = function isArray (list: any) {
-  return _type(list) === 'Array'
-}
-
-export const _slice = function slice (arrayLike: any, index: number) {
-  return Array.prototype.slice.call(arrayLike, index)
-}
-
-export const _truthy = function truthy (value: any) {
-  return !!value
-}
+// export const _isArray = function isArray (list: any) {
+//   return _type(list) === 'Array'
+// }
+//
+// export const _slice = function slice (arrayLike: any, index: number) {
+//   return Array.prototype.slice.call(arrayLike, index)
+// }
+//
+// export const _truthy = function truthy (value: any) {
+//   return !!value
+// }
 
 export const _isString = function isString (list: any) {
   return _type(list) === 'String'
 }
 
-export const _each = function each (array: any, fn: any) {
+export const _each = function each (array: any[], fn: (arr: any, index: number) => void) {
   for (let i = 0, len = array.length; i < len; i++) {
     fn(array[i], i);
   }

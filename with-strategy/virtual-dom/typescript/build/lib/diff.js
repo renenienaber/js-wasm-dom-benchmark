@@ -1,5 +1,5 @@
 import { _each, _isString } from "./util.js";
-import { PatchType } from "./patch.js";
+import { PatchType, PropsPatch, ReplacePatch, TextPatch } from "./patch.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
     const index = 0;
@@ -13,21 +13,21 @@ function dfsWalk(oldNode, newNode, index, patches) {
     }
     else if (_isString(oldNode) && _isString(newNode)) {
         if (newNode !== oldNode) {
-            currentPatch.push({ type: PatchType.TEXT, content: newNode });
+            currentPatch.push(new TextPatch(newNode));
         }
     }
     else if (oldNode.tagName === newNode.tagName &&
         oldNode.key === newNode.key) {
         var propsPatches = diffProps(oldNode, newNode);
         if (propsPatches) {
-            currentPatch.push({ type: PatchType.PROPS, props: propsPatches });
+            currentPatch.push(new PropsPatch(propsPatches));
         }
         if (!isIgnoreChildren(newNode)) {
             diffChildren(oldNode.children, newNode.children, index, patches, currentPatch);
         }
     }
     else {
-        currentPatch.push({ type: PatchType.REPLACE, node: newNode });
+        currentPatch.push(new ReplacePatch(newNode));
     }
     if (currentPatch.length) {
         patches[index] = currentPatch;

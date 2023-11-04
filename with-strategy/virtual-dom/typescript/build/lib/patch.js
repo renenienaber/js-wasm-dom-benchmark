@@ -6,6 +6,29 @@ export var PatchType;
     PatchType[PatchType["PROPS"] = 2] = "PROPS";
     PatchType[PatchType["TEXT"] = 3] = "TEXT";
 })(PatchType || (PatchType = {}));
+export class ReplacePatch {
+    constructor(vElement) {
+        this.type = PatchType.REPLACE;
+        this.node = vElement;
+    }
+}
+export class ReorderPatch {
+    constructor() {
+        this.type = PatchType.REORDER;
+    }
+}
+export class PropsPatch {
+    constructor(props) {
+        this.type = PatchType.PROPS;
+        this.props = props;
+    }
+}
+export class TextPatch {
+    constructor(vElement) {
+        this.type = PatchType.TEXT;
+        this.content = vElement;
+    }
+}
 export function patch(node, patches) {
     const walker = { index: 0 };
     dfsWalk(node, walker, patches);

@@ -1,10 +1,5 @@
-// var _ = require('./util')
-// var patch = require('./patch')
-// var listDiff = require('list-diff2')
-
-
 import {_each, _isString} from "./util";
-import {Patch, PatchType} from "./patch";
+import {Patch, PatchType, PropsPatch, ReplacePatch, TextPatch} from "./patch";
 import {Element} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
@@ -26,7 +21,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
   // TextNode content replacing
   } else if (_isString(oldNode) && _isString(newNode)) {
     if (newNode !== oldNode) {
-      currentPatch.push({ type: PatchType.TEXT, content: newNode })
+      currentPatch.push(new TextPatch(newNode))
     }
   // Nodes are the same, diff old node's props and children
   } else if (
@@ -36,7 +31,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
     // Diff props
     var propsPatches = diffProps(oldNode, newNode)
     if (propsPatches) {
-      currentPatch.push({ type: PatchType.PROPS, props: propsPatches })
+      currentPatch.push(new PropsPatch(propsPatches))
     }
     // Diff children. If the node has a `ignore` property, do not diff children
     if (!isIgnoreChildren(newNode)) {
@@ -50,7 +45,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
     }
   // Nodes are not the same, replace the old node with new node
   } else {
-    currentPatch.push({ type: PatchType.REPLACE, node: newNode })
+    currentPatch.push(new ReplacePatch(newNode))
   }
 
   if (currentPatch.length) {
@@ -79,7 +74,7 @@ function diffChildren(oldChildren: (Element|string)[], newChildren: (Element|str
   })
 }
 
-function diffProps (oldNode: Element, newNode: Element) {
+function diffProps (oldNode: Element, newNode: Element): {[key: string]: string} | null {
   var count = 0
   var oldProps = oldNode.props
   var newProps = newNode.props
@@ -113,6 +108,6 @@ function diffProps (oldNode: Element, newNode: Element) {
   return propsPatches
 }
 
-function isIgnoreChildren (node: Element) {
+function isIgnoreChildren (node: Element): boolean {
   return (node.props && node.props.hasOwnProperty('ignore'))
 }
