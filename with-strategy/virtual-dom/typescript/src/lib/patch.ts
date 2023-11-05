@@ -1,5 +1,5 @@
 import {_each, _setAttr, _toArray} from "./util";
-import {Element as VElement, PropsType} from "./element";
+import {Element as VElement, PropsType, VElementChildType} from "./element";
 
 export enum PatchType {
   REPLACE, // node
@@ -14,9 +14,9 @@ export interface Patch {
 
 export class ReplacePatch implements Patch {
   type: PatchType = PatchType.REPLACE;
-  node: VElement | string;
+  node: VElementChildType;
 
-  constructor(vElement: VElement | string) {
+  constructor(vElement: VElementChildType) {
     this.node = vElement;
   }
 }
@@ -37,9 +37,9 @@ export class PropsPatch implements Patch {
 
 export class TextPatch implements Patch {
   type: PatchType = PatchType.TEXT;
-  content: VElement | string;
+  content: VElementChildType;
 
-  constructor(vElement: VElement | string) {
+  constructor(vElement: VElementChildType) {
     this.content = vElement;
   }
 }
@@ -48,7 +48,7 @@ export interface Walker {
   index: number;
 }
 
-export function patch (node: Node, patches: Patch[][]) {
+export function patch (node: Node, patches: Patch[][]): void {
   const walker: Walker = {index: 0};
   dfsWalk(node, walker, patches);
 }
@@ -108,11 +108,11 @@ export function setProps (node: HTMLElement, props: PropsType): void {
   });
 }
 
-export function reorderChildren (node: HTMLElement, moves: any) {
+export function reorderChildren (node: HTMLElement, moves: any): void {
   const staticNodeList = _toArray(node.childNodes)
   let maps: any = {};
 
-  _each(staticNodeList, function (node: HTMLElement) {
+  _each(staticNodeList, (node: HTMLElement): void => {
     if (node.nodeType === 1) {
       const key = node.getAttribute('key');
       if (key) {
@@ -121,7 +121,7 @@ export function reorderChildren (node: HTMLElement, moves: any) {
     }
   })
 
-  _each(moves, function (move: any) {
+  _each(moves, (move: any): void => {
     const index = move.index
     if (move.type === 0) { // remove item
       if (staticNodeList[index] === node.childNodes[index]) { // maybe have been removed for inserting

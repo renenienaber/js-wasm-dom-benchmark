@@ -1,15 +1,16 @@
 import {_each, _setAttr} from "./util";
 
 export type PropsType = Map<string, string>;
+export type VElementChildType = Element | string
 
 export class Element {
   tagName: string = '';
   props: PropsType = new Map<string, string>();
-  children: (Element | string)[] = [];
+  children: VElementChildType[] = [];
   key: string | null = null;
   count: number = 0;
 
-  constructor(tagName: string, props: PropsType, children: (Element|string)[]) {
+  constructor(tagName: string, props: PropsType, children: VElementChildType[]) {
     this.tagName = tagName;
     this.props = props;
     this.children = children;
@@ -19,7 +20,7 @@ export class Element {
 
     let count = 0;
 
-    _each(this.children, (child: Element | string, i: number): void => {
+    _each(this.children, (child: VElementChildType, i: number): void => {
       if (child instanceof Element) {
         count += child.count
       } else {
@@ -39,7 +40,7 @@ export class Element {
       _setAttr(el, key, value);
     });
 
-    _each(this.children, (child: Element | string): void => {
+    _each(this.children, (child: VElementChildType): void => {
       const childEl = (child instanceof Element)
           ? child.render()
           : document.createTextNode(child);

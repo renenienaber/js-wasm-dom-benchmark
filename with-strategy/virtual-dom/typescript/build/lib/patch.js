@@ -89,7 +89,7 @@ export function setProps(node, props) {
 export function reorderChildren(node, moves) {
     const staticNodeList = _toArray(node.childNodes);
     let maps = {};
-    _each(staticNodeList, function (node) {
+    _each(staticNodeList, (node) => {
         if (node.nodeType === 1) {
             const key = node.getAttribute('key');
             if (key) {
@@ -97,7 +97,7 @@ export function reorderChildren(node, moves) {
             }
         }
     });
-    _each(moves, function (move) {
+    _each(moves, (move) => {
         const index = move.index;
         if (move.type === 0) {
             if (staticNodeList[index] === node.childNodes[index]) {

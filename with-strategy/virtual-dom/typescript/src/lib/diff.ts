@@ -1,18 +1,18 @@
 import {_each, _isString} from "./util";
 import {Patch, PatchType, PropsPatch, ReplacePatch, TextPatch} from "./patch";
-import {Element, PropsType} from "./element";
+import {Element as VElement, VElementChildType, PropsType} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
 
 
-export function diff (oldTree: Element, newTree: Element): Patch[][] {
+export function diff (oldTree: VElement, newTree: VElement): Patch[][] {
   const index: number = 0;
   const patches: Patch[][] = [];
   dfsWalk(oldTree, newTree, index, patches);
   return patches;
 }
 
-function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Patch[][]): void {
+function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: Patch[][]): void {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
@@ -53,7 +53,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
   }
 }
 
-function diffChildren(oldChildren: (Element | string)[], newChildren: (Element | string)[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: VElementChildType[], newChildren: (VElementChildType | null)[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
   var diffs = listDiff(oldChildren, newChildren, 'key')
   newChildren = diffs.children
 
@@ -62,10 +62,10 @@ function diffChildren(oldChildren: (Element | string)[], newChildren: (Element |
     currentPatch.push(reorderPatch)
   }
 
-  var leftNode: any = null
+  var leftNode: VElement | null = null
   var currentNodeIndex = index
-  _each(oldChildren, function (child: Element, i: number) {
-    var newChild = newChildren[i] as Element;
+  _each(oldChildren, function (child: VElement, i: number) {
+    var newChild = newChildren[i] as VElement;
     currentNodeIndex = (leftNode && leftNode.count)
       ? currentNodeIndex + leftNode.count + 1
       : currentNodeIndex + 1
@@ -74,7 +74,7 @@ function diffChildren(oldChildren: (Element | string)[], newChildren: (Element |
   })
 }
 
-function diffProps (oldNode: Element, newNode: Element): PropsType {
+function diffProps (oldNode: VElement, newNode: VElement): PropsType {
   var count: number = 0
   var oldProps: PropsType = oldNode.props
   var newProps: PropsType = newNode.props
@@ -100,6 +100,6 @@ function diffProps (oldNode: Element, newNode: Element): PropsType {
   return propsPatches
 }
 
-function isIgnoreChildren (node: Element): boolean {
+function isIgnoreChildren (node: VElement): boolean {
   return (node.props && node.props.hasOwnProperty('ignore'))
 }
