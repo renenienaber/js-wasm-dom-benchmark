@@ -96,7 +96,7 @@ interface RowElement {
     label: string;
 }
 
-let vtree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
+let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
 const root: HTMLElement = vtree.render();
 document.querySelector('table')?.appendChild(root);
 
@@ -161,10 +161,10 @@ function _getTableRows(): RowElement[] {
 }
 
 function _createRow(data: RowElement): VElement {
-    return new VElement('tr', {}, [
-        new VElement('td', {}, [data.id.toString()]),
-        new VElement('td', {}, [
-            new VElement('a', {}, [data.label])
+    return new VElement('tr', new Map<string, string>(), [
+        new VElement('td', new Map<string, string>(), [data.id.toString()]),
+        new VElement('td', new Map<string, string>(), [
+            new VElement('a', new Map<string, string>(), [data.label])
         ])
     ]);
 }
@@ -179,15 +179,15 @@ function _appendRows(rowElements: RowElement[]): void {
         rows.push(tr);
     }
 
-    vtree = new VElement('tbody', {'id': 'tbody'}, rows);
+    vtree = new VElement('tbody', new Map<string, string>([['id', 'tbody']]), rows);
 }
 
 function _removeAllRows(): void {
-    vtree = new VElement('tbody', {'id': 'tbody'}, []);
+    vtree = new VElement('tbody', new Map<string, string>([['id', 'tbody']]), []);
 }
 
 // apply changes to Real DOM
-function _renderVTree(oldTree: VElement, newTree: VElement) {
+function _renderVTree(oldTree: VElement, newTree: VElement): void {
     const patches = diff(oldTree, newTree);
     patch(root, patches);
 }

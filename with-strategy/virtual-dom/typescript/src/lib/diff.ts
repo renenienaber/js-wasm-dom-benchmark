@@ -1,18 +1,18 @@
 import {_each, _isString} from "./util";
 import {Patch, PatchType, PropsPatch, ReplacePatch, TextPatch} from "./patch";
-import {Element} from "./element";
+import {Element, PropsType} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
 
 
-export function diff (oldTree: Element, newTree: Element) {
-  const index = 0;
+export function diff (oldTree: Element, newTree: Element): Patch[][] {
+  const index: number = 0;
   const patches: Patch[][] = [];
   dfsWalk(oldTree, newTree, index, patches);
   return patches;
 }
 
-function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Patch[][]) {
+function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Patch[][]): void {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
@@ -29,8 +29,8 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
       oldNode.key === newNode.key
     ) {
     // Diff props
-    var propsPatches = diffProps(oldNode, newNode)
-    if (propsPatches) {
+    var propsPatches: PropsType = diffProps(oldNode, newNode);
+    if (propsPatches.size > 0) {
       currentPatch.push(new PropsPatch(propsPatches))
     }
     // Diff children. If the node has a `ignore` property, do not diff children
@@ -53,7 +53,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
   }
 }
 
-function diffChildren(oldChildren: (Element|string)[], newChildren: (Element|string)[], index: number, patches: Patch[][], currentPatch: Patch[]) {
+function diffChildren(oldChildren: (Element | string)[], newChildren: (Element | string)[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
   var diffs = listDiff(oldChildren, newChildren, 'key')
   newChildren = diffs.children
 
@@ -74,36 +74,28 @@ function diffChildren(oldChildren: (Element|string)[], newChildren: (Element|str
   })
 }
 
-function diffProps (oldNode: Element, newNode: Element): {[key: string]: string} | null {
-  var count = 0
-  var oldProps = oldNode.props
-  var newProps = newNode.props
+function diffProps (oldNode: Element, newNode: Element): PropsType {
+  var count: number = 0
+  var oldProps: PropsType = oldNode.props
+  var newProps: PropsType = newNode.props
 
-  var key, value
-  var propsPatches: any = {}
+  var propsPatches: PropsType = new Map<string, string>();
 
   // Find out different properties
-  for (key in oldProps) {
-    value = oldProps[key]
-    if (newProps[key] !== value) {
-      count++
-      propsPatches[key] = newProps[key]
+  oldProps.forEach((value: string, key: string) => {
+    if(newProps.has(key) && newProps.get(key) !== value) {
+      count++;
+      propsPatches.set(key, newProps.get(key) as string);
     }
-  }
+  });
 
   // Find out new property
-  for (key in newProps) {
-    value = newProps[key]
-    if (!oldProps.hasOwnProperty(key)) {
-      count++
-      propsPatches[key] = newProps[key]
+  newProps.forEach((value: string, key: string) => {
+    if(oldProps.has(key)) {
+      count++;
+      propsPatches.set(key, newProps.get(key) as string);
     }
-  }
-
-  // If properties all are identical
-  if (count === 0) {
-    return null
-  }
+  });
 
   return propsPatches
 }

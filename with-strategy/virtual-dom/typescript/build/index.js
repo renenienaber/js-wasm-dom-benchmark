@@ -59,7 +59,7 @@ function swapRows() {
         _appendRows(updatedData);
     });
 }
-let vtree = new VElement('tbody', { 'id': 'tbody' }, []);
+let vtree = new VElement('tbody', new Map([['id', 'body']]), []);
 const root = vtree.render();
 (_g = document.querySelector('table')) === null || _g === void 0 ? void 0 : _g.appendChild(root);
 function buildData(count = 1000, firstId = 1) {
@@ -105,10 +105,10 @@ function _getTableRows() {
     return rowElements;
 }
 function _createRow(data) {
-    return new VElement('tr', {}, [
-        new VElement('td', {}, [data.id.toString()]),
-        new VElement('td', {}, [
-            new VElement('a', {}, [data.label])
+    return new VElement('tr', new Map(), [
+        new VElement('td', new Map(), [data.id.toString()]),
+        new VElement('td', new Map(), [
+            new VElement('a', new Map(), [data.label])
         ])
     ]);
 }
@@ -118,10 +118,10 @@ function _appendRows(rowElements) {
         const tr = _createRow(rowElements[i]);
         rows.push(tr);
     }
-    vtree = new VElement('tbody', { 'id': 'tbody' }, rows);
+    vtree = new VElement('tbody', new Map([['id', 'tbody']]), rows);
 }
 function _removeAllRows() {
-    vtree = new VElement('tbody', { 'id': 'tbody' }, []);
+    vtree = new VElement('tbody', new Map([['id', 'tbody']]), []);
 }
 function _renderVTree(oldTree, newTree) {
     const patches = diff(oldTree, newTree);

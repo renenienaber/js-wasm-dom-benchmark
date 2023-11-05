@@ -2,17 +2,18 @@ import { _each, _setAttr } from "./util.js";
 export class Element {
     constructor(tagName, props, children) {
         this.tagName = '';
-        this.props = {};
+        this.props = new Map();
         this.children = [];
+        this.key = null;
         this.count = 0;
         this.tagName = tagName;
         this.props = props;
         this.children = children;
-        this.key = props
-            ? props.key
-            : void 666;
+        if (props.has('key')) {
+            this.key = this.props.get('key') || null;
+        }
         let count = 0;
-        _each(this.children, function (child, i) {
+        _each(this.children, (child, i) => {
             if (child instanceof Element) {
                 count += child.count;
             }
@@ -26,11 +27,10 @@ export class Element {
     render() {
         const el = document.createElement(this.tagName);
         const props = this.props;
-        for (const propName in props) {
-            const propValue = props[propName];
-            _setAttr(el, propName, propValue);
-        }
-        _each(this.children, function (child) {
+        props.forEach((value, key) => {
+            _setAttr(el, key, value);
+        });
+        _each(this.children, (child) => {
             const childEl = (child instanceof Element)
                 ? child.render()
                 : document.createTextNode(child);

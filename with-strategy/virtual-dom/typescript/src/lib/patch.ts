@@ -1,5 +1,5 @@
 import {_each, _setAttr, _toArray} from "./util";
-import {Element as VElement} from "./element";
+import {Element as VElement, PropsType} from "./element";
 
 export enum PatchType {
   REPLACE, // node
@@ -28,18 +28,18 @@ export class ReorderPatch implements Patch {
 
 export class PropsPatch implements Patch {
   type: PatchType = PatchType.PROPS;
-  props: {[key: string]: string};
+  props: PropsType;
 
-  constructor(props: {[key: string]: string}) {
+  constructor(props: PropsType) {
     this.props = props;
   }
 }
 
 export class TextPatch implements Patch {
   type: PatchType = PatchType.TEXT;
-  content: VElement|string;
+  content: VElement | string;
 
-  constructor(vElement: VElement|string) {
+  constructor(vElement: VElement | string) {
     this.content = vElement;
   }
 }
@@ -83,7 +83,7 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
         reorderChildren(node as HTMLElement, (currentPatch as ReorderPatch).moves)
         break;
       case PatchType.PROPS:
-        setProps(node as HTMLElement, (currentPatch as PropsPatch).props as {[key: string]: string})
+        setProps(node as HTMLElement, (currentPatch as PropsPatch).props)
         break;
       case PatchType.TEXT:
         if (node.textContent) {
@@ -98,15 +98,14 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
   })
 }
 
-export function setProps (node: HTMLElement, props: {[key: string]: string}): void {
-  for (const key in props) {
-    if (props[key] === void 666) {
-      node.removeAttribute(key)
+export function setProps (node: HTMLElement, props: PropsType): void {
+  props.forEach((value, key, map) => {
+    if (!props.has(key)) {
+      node.removeAttribute(key);
     } else {
-      const value = props[key]
-      _setAttr(node, key, value)
+      _setAttr(node, key, value);
     }
-  }
+  });
 }
 
 export function reorderChildren (node: HTMLElement, moves: any) {

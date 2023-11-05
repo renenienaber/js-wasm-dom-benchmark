@@ -77,15 +77,14 @@ export function applyPatches(node, currentPatches) {
     });
 }
 export function setProps(node, props) {
-    for (const key in props) {
-        if (props[key] === void 666) {
+    props.forEach((value, key, map) => {
+        if (!props.has(key)) {
             node.removeAttribute(key);
         }
         else {
-            const value = props[key];
             _setAttr(node, key, value);
         }
-    }
+    });
 }
 export function reorderChildren(node, moves) {
     const staticNodeList = _toArray(node.childNodes);

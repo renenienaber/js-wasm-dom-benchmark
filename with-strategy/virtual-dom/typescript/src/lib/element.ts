@@ -1,23 +1,25 @@
 import {_each, _setAttr} from "./util";
 
+export type PropsType = Map<string, string>;
+
 export class Element {
   tagName: string = '';
-  props: {[key: string]: string} = {};
-  children: (Element|string)[] = [];
-  key: any;
+  props: PropsType = new Map<string, string>();
+  children: (Element | string)[] = [];
+  key: string | null = null;
   count: number = 0;
 
-  constructor(tagName: string, props: {[key: string]: string}, children: (Element|string)[]) {
+  constructor(tagName: string, props: PropsType, children: (Element|string)[]) {
     this.tagName = tagName;
-    this.props = props //|| {};
-    this.children = children //|| [];
-    this.key = props
-        ? props.key
-        : void 666;
+    this.props = props;
+    this.children = children;
+    if(props.has('key')) {
+      this.key = this.props.get('key') || null;
+    }
 
     let count = 0;
 
-    _each(this.children, function (child: Element | string, i: number) {
+    _each(this.children, (child: Element | string, i: number): void => {
       if (child instanceof Element) {
         count += child.count
       } else {
@@ -33,12 +35,11 @@ export class Element {
     const el = document.createElement(this.tagName);
     const props = this.props;
 
-    for (const propName in props) {
-      const propValue = props[propName];
-      _setAttr(el, propName, propValue);
-    }
+    props.forEach((value: string, key: string) => {
+      _setAttr(el, key, value);
+    });
 
-    _each(this.children, function (child: Element | string) {
+    _each(this.children, (child: Element | string): void => {
       const childEl = (child instanceof Element)
           ? child.render()
           : document.createTextNode(child);
