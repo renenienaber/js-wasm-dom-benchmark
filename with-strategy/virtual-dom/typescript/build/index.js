@@ -18,29 +18,46 @@ function doBenchmark(fn) {
     const t1 = performance.now();
     _displayBenchmark(t1 - t0);
 }
+function mutateAndRerender(fn) {
+    const oldTree = vtree;
+    fn();
+    _renderVTree(oldTree, vtree);
+}
 function run() {
-    _removeAllRows();
-    _appendRows(buildData());
+    mutateAndRerender(() => {
+        _removeAllRows();
+        _appendRows(buildData());
+    });
 }
 function runLots() {
-    _removeAllRows();
-    _appendRows(buildData(10000));
+    mutateAndRerender(() => {
+        _removeAllRows();
+        _appendRows(buildData(10000));
+    });
 }
 function add() {
-    _appendRows(buildData(1000, _getTableRowCount() + 1));
+    mutateAndRerender(() => {
+        _appendRows(buildData(1000, _getTableRowCount() + 1));
+    });
 }
 function update() {
-    const updatedData = updateData(_getTableRows());
-    _removeAllRows();
-    _appendRows(updatedData);
+    mutateAndRerender(() => {
+        const updatedData = updateData(_getTableRows());
+        _removeAllRows();
+        _appendRows(updatedData);
+    });
 }
 function clearRows() {
-    _removeAllRows();
+    mutateAndRerender(() => {
+        _removeAllRows();
+    });
 }
 function swapRows() {
-    const updatedData = updateDataForSwap(_getTableRows());
-    _removeAllRows();
-    _appendRows(updatedData);
+    mutateAndRerender(() => {
+        const updatedData = updateDataForSwap(_getTableRows());
+        _removeAllRows();
+        _appendRows(updatedData);
+    });
 }
 let vtree = new VElement('tbody', { 'id': 'tbody' }, []);
 const root = vtree.render();
@@ -101,15 +118,12 @@ function _appendRows(rowElements) {
         const tr = _createRow(rowElements[i]);
         rows.push(tr);
     }
-    const newTree = new VElement('tbody', { 'id': 'tbody' }, rows);
-    _renderVTree(newTree);
+    vtree = new VElement('tbody', { 'id': 'tbody' }, rows);
 }
 function _removeAllRows() {
-    const newTree = new VElement('tbody', { 'id': 'tbody' }, []);
-    _renderVTree(newTree);
+    vtree = new VElement('tbody', { 'id': 'tbody' }, []);
 }
-function _renderVTree(newTree) {
-    const patches = diff(vtree, newTree);
+function _renderVTree(oldTree, newTree) {
+    const patches = diff(oldTree, newTree);
     patch(root, patches);
-    vtree = newTree;
 }

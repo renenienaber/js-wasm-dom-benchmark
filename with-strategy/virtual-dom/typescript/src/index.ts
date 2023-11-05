@@ -3,6 +3,7 @@ import { diff } from './lib/diff'
 import { patch } from './lib/patch'
 
 
+
 // add event-listener for clicking buttons
 document.getElementById('run')?.addEventListener("click", () => doBenchmark(run), false);
 document.getElementById('runLots')?.addEventListener("click", () => doBenchmark(runLots), false);
@@ -31,36 +32,60 @@ function doBenchmark(fn: () => void): void {
 
 // click handler
 
+function mutateAndRerender(fn: () => void): void {
+    const oldTree = vtree;
+    fn();
+    _renderVTree(oldTree, vtree);
+}
+
 function run(): void {
-    _removeAllRows();
-    _appendRows(buildData());
+    mutateAndRerender(() => {
+        _removeAllRows();
+        _appendRows(buildData());
+    });
+
 }
 
 function runLots(): void {
-    _removeAllRows();
-    _appendRows(buildData(10000));
+    mutateAndRerender(() => {
+        _removeAllRows();
+        _appendRows(buildData(10000));
+    });
+
 }
 
 function add(): void {
-    _appendRows(buildData(1000, _getTableRowCount()+1));
+    mutateAndRerender(() => {
+        _appendRows(buildData(1000, _getTableRowCount()+1));
+    });
+
 }
 
 function update(): void {
-    const updatedData = updateData(_getTableRows());
+    mutateAndRerender(() => {
+        const updatedData = updateData(_getTableRows());
 
-    _removeAllRows();
-    _appendRows(updatedData);
+        _removeAllRows();
+        _appendRows(updatedData);
+    });
+
 }
 
 function clearRows(): void {
-    _removeAllRows();
+    mutateAndRerender(() => {
+        _removeAllRows();
+    });
+
 }
 
 function swapRows(): void {
-    const updatedData = updateDataForSwap(_getTableRows());
+    mutateAndRerender(() => {
+        const updatedData = updateDataForSwap(_getTableRows());
 
-    _removeAllRows();
-    _appendRows(updatedData);
+        _removeAllRows();
+        _appendRows(updatedData);
+    });
+
 }
 
 
@@ -154,17 +179,15 @@ function _appendRows(rowElements: RowElement[]): void {
         rows.push(tr);
     }
 
-    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, rows);
-    _renderVTree(newTree);
+    vtree = new VElement('tbody', {'id': 'tbody'}, rows);
 }
 
 function _removeAllRows(): void {
-    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
-    _renderVTree(newTree);
+    vtree = new VElement('tbody', {'id': 'tbody'}, []);
 }
 
-function _renderVTree(newTree: VElement) {
-    const patches = diff(vtree, newTree);
+// apply changes to Real DOM
+function _renderVTree(oldTree: VElement, newTree: VElement) {
+    const patches = diff(oldTree, newTree);
     patch(root, patches);
-    vtree = newTree;
 }
