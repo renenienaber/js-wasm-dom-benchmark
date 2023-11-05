@@ -13,8 +13,9 @@ export class ReplacePatch {
     }
 }
 export class ReorderPatch {
-    constructor() {
+    constructor(moves) {
         this.type = PatchType.REORDER;
+        this.moves = moves;
     }
 }
 export class PropsPatch {

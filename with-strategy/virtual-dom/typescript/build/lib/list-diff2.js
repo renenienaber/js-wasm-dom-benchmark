@@ -1,3 +1,4 @@
+import { Element as VElement } from "./element.js";
 export function diff(oldList, newList, key) {
     var oldMap = makeKeyIndexAndFree(oldList, key);
     var newMap = makeKeyIndexAndFree(newList, key);
@@ -112,8 +113,9 @@ export function makeKeyIndexAndFree(list, key) {
 }
 function getItemKey(item, key) {
     if (!item || !key)
-        return void 666;
-    return typeof key === 'string'
-        ? item[key]
-        : key(item);
+        return null;
+    if (item instanceof VElement) {
+        return item[key];
+    }
+    return null;
 }

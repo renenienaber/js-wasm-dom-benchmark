@@ -1,5 +1,5 @@
 import {_each, _isString} from "./util";
-import {Patch, PatchType, PropsPatch, ReplacePatch, TextPatch} from "./patch";
+import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
 import {Element as VElement, VElementChildType, PropsType} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
@@ -58,7 +58,7 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: (VElementCh
   newChildren = diffs.children
 
   if (diffs.moves.length) {
-    var reorderPatch = { type: PatchType.REORDER, moves: diffs.moves }
+    var reorderPatch: ReorderPatch = new ReorderPatch(diffs.moves);
     currentPatch.push(reorderPatch)
   }
 

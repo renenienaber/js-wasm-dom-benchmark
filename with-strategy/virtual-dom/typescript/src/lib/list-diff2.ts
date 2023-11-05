@@ -1,5 +1,7 @@
 import {Element as VElement, VElementChildType} from "./element";
 
+
+
 /**
  * Diff two list in O(N).
  * @param {Array} oldList - Original List
@@ -7,12 +9,12 @@ import {Element as VElement, VElementChildType} from "./element";
  * @return {Object} - {moves: <Array>}
  *                  - moves is a list of actions that telling how to remove and insert
  */
-interface DiffResult {
+export interface DiffResult {
   moves: Move[];
   children: (VElementChildType | null)[];
 }
 
-interface Move {
+export interface Move {
   index: number;
   type: number;
   item?: VElementChildType | null;
@@ -162,17 +164,17 @@ export function makeKeyIndexAndFree (list: (VElementChildType | null)[], key: st
   }
 }
 
-function getItemKey (item: any, key: any) {
-  if (!item || !key) return void 666
-  return typeof key === 'string'
-    ? item[key]
-    : key(item)
-}
-// function getItemKey (item: (VElementChildType), key: string): any | null {
-//   if (!item || !key) return null;
-//   if(item instanceof VElement) {
-//     // @ts-ignore
-//     return item[key];
-//   }
-//   return null;
+// function getItemKey (item: any, key: any) {
+//   if (!item || !key) return void 666
+//   return typeof key === 'string'
+//     ? item[key]
+//     : key(item)
 // }
+function getItemKey (item: (VElementChildType | null), key: string): any | null {
+  if (!item || !key) return null;
+  if(item instanceof VElement) {
+    // @ts-ignore
+    return item[key];
+  }
+  return null;
+}

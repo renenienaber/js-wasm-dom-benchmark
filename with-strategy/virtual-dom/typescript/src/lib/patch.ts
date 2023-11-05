@@ -1,5 +1,8 @@
 import {_each, _setAttr, _toArray} from "./util";
 import {Element as VElement, PropsType, VElementChildType} from "./element";
+import {Move} from "./list-diff2";
+
+
 
 export enum PatchType {
   REPLACE, // node
@@ -23,7 +26,11 @@ export class ReplacePatch implements Patch {
 
 export class ReorderPatch implements Patch {
   type: PatchType = PatchType.REORDER;
-  moves: any;
+  moves: Move[];
+
+  constructor(moves: Move[]) {
+    this.moves = moves;
+  }
 }
 
 export class PropsPatch implements Patch {
@@ -108,7 +115,7 @@ export function setProps (node: HTMLElement, props: PropsType): void {
   });
 }
 
-export function reorderChildren (node: HTMLElement, moves: any): void {
+export function reorderChildren (node: HTMLElement, moves: Move[]): void {
   const staticNodeList = _toArray(node.childNodes)
   let maps: any = {};
 

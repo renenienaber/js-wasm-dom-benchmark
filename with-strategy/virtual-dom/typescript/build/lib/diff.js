@@ -1,5 +1,5 @@
 import { _each, _isString } from "./util.js";
-import { PatchType, PropsPatch, ReplacePatch, TextPatch } from "./patch.js";
+import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./patch.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
     const index = 0;
@@ -37,7 +37,7 @@ function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
     var diffs = listDiff(oldChildren, newChildren, 'key');
     newChildren = diffs.children;
     if (diffs.moves.length) {
-        var reorderPatch = { type: PatchType.REORDER, moves: diffs.moves };
+        var reorderPatch = new ReorderPatch(diffs.moves);
         currentPatch.push(reorderPatch);
     }
     var leftNode = null;
