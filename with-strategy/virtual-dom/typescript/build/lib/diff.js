@@ -1,4 +1,4 @@
-import { _each } from "./util.js";
+import { _each, _isString } from "./util.js";
 import { PatchType, PropsPatch, ReplacePatch, TextPatch } from "./patch.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
@@ -11,15 +11,15 @@ function dfsWalk(oldNode, newNode, index, patches) {
     const currentPatch = [];
     if (newNode === null) {
     }
-    else if (oldNode.isTextNode() && newNode.isTextNode()) {
+    else if (_isString(oldNode) && _isString(newNode)) {
         if (newNode !== oldNode) {
             currentPatch.push(new TextPatch(newNode));
         }
     }
     else if (oldNode.tagName === newNode.tagName &&
         oldNode.key === newNode.key) {
-        const propsPatches = diffProps(oldNode, newNode);
-        if (propsPatches.size > 0) {
+        var propsPatches = diffProps(oldNode, newNode);
+        if (propsPatches) {
             currentPatch.push(new PropsPatch(propsPatches));
         }
         if (!isIgnoreChildren(newNode)) {
@@ -55,19 +55,25 @@ function diffProps(oldNode, newNode) {
     var count = 0;
     var oldProps = oldNode.props;
     var newProps = newNode.props;
-    var propsPatches = new Map();
-    oldProps.forEach((value, key) => {
-        if (newProps.has(key) && newProps.get(key) !== value) {
+    var key, value;
+    var propsPatches = {};
+    for (key in oldProps) {
+        value = oldProps[key];
+        if (newProps[key] !== value) {
             count++;
-            propsPatches.set(key, newProps.get(key));
+            propsPatches[key] = newProps[key];
         }
-    });
-    newProps.forEach((value, key) => {
-        if (oldProps.has(key)) {
+    }
+    for (key in newProps) {
+        value = newProps[key];
+        if (!oldProps.hasOwnProperty(key)) {
             count++;
-            propsPatches.set(key, newProps.get(key));
+            propsPatches[key] = newProps[key];
         }
-    });
+    }
+    if (count === 0) {
+        return null;
+    }
     return propsPatches;
 }
 function isIgnoreChildren(node) {

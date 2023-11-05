@@ -52,8 +52,8 @@ export function applyPatches(node, currentPatches) {
         var _a;
         switch (currentPatch.type) {
             case PatchType.REPLACE:
-                const newNode = (currentPatch.node.isTextNode())
-                    ? document.createTextNode(currentPatch.node.text)
+                const newNode = (typeof currentPatch.node === 'string')
+                    ? document.createTextNode(currentPatch.node)
                     : currentPatch.node.render();
                 (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.replaceChild(newNode, node);
                 break;
@@ -65,10 +65,10 @@ export function applyPatches(node, currentPatches) {
                 break;
             case PatchType.TEXT:
                 if (node.textContent) {
-                    node.textContent = currentPatch.content.text;
+                    node.textContent = currentPatch.content;
                 }
                 else {
-                    node.nodeValue = currentPatch.content.text;
+                    node.nodeValue = currentPatch.content;
                 }
                 break;
             default:
@@ -77,14 +77,15 @@ export function applyPatches(node, currentPatches) {
     });
 }
 export function setProps(node, props) {
-    props.forEach((value, key, map) => {
-        if (!props.has(key)) {
+    for (const key in props) {
+        if (props[key] === void 666) {
             node.removeAttribute(key);
         }
         else {
+            const value = props[key];
             _setAttr(node, key, value);
         }
-    });
+    }
 }
 export function reorderChildren(node, moves) {
     const staticNodeList = _toArray(node.childNodes);

@@ -2,47 +2,40 @@ import { _each, _setAttr } from "./util.js";
 export class Element {
     constructor(tagName, props, children) {
         this.tagName = '';
-        this.props = new Map();
+        this.props = {};
         this.children = [];
-        this.text = '';
-        this.key = null;
         this.count = 0;
         this.tagName = tagName;
         this.props = props;
         this.children = children;
-        if (props.has('key')) {
-            this.key = props.get('key');
-        }
+        this.key = props
+            ? props.key
+            : void 666;
         let count = 0;
-        _each(this.children, (child, i) => {
-            if (child.text !== '') {
+        _each(this.children, function (child, i) {
+            if (child instanceof Element) {
                 count += child.count;
+            }
+            else {
+                children[i] = '' + child;
             }
             count++;
         });
         this.count = count;
     }
-    isTextNode() {
-        return this.text !== '';
-    }
     render() {
         const el = document.createElement(this.tagName);
         const props = this.props;
-        props.forEach((value, key) => {
-            _setAttr(el, key, value);
-        });
-        _each(this.children, (child) => {
-            const childEl = (!child.isTextNode())
+        for (const propName in props) {
+            const propValue = props[propName];
+            _setAttr(el, propName, propValue);
+        }
+        _each(this.children, function (child) {
+            const childEl = (child instanceof Element)
                 ? child.render()
-                : document.createTextNode(child.text);
+                : document.createTextNode(child);
             el.appendChild(childEl);
         });
         return el;
-    }
-}
-export class TextElement extends Element {
-    constructor(text) {
-        super('', new Map(), []);
-        this.text = text;
     }
 }

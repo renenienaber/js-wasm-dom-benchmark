@@ -1,25 +1,25 @@
-import {_each} from "./util";
+import {_each, _isString} from "./util";
 import {Patch, PatchType, PropsPatch, ReplacePatch, TextPatch} from "./patch";
-import {Element, PropsType} from "./element";
+import {Element} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
 
 
-export function diff (oldTree: Element, newTree: Element): Patch[][] {
-  const index: number = 0;
+export function diff (oldTree: Element, newTree: Element) {
+  const index = 0;
   const patches: Patch[][] = [];
   dfsWalk(oldTree, newTree, index, patches);
   return patches;
 }
 
-function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Patch[][]): void {
+function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Patch[][]) {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
   if (newNode === null) {
     // Real DOM node will be removed when perform reordering, so has no needs to do anything in here
   // TextNode content replacing
-  } else if (oldNode.isTextNode() && newNode.isTextNode()) {
+  } else if (_isString(oldNode) && _isString(newNode)) {
     if (newNode !== oldNode) {
       currentPatch.push(new TextPatch(newNode))
     }
@@ -29,9 +29,9 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
       oldNode.key === newNode.key
     ) {
     // Diff props
-    const propsPatches = diffProps(oldNode, newNode)
-    if (propsPatches.size > 0) {
-      currentPatch.push(new PropsPatch(propsPatches));
+    var propsPatches = diffProps(oldNode, newNode)
+    if (propsPatches) {
+      currentPatch.push(new PropsPatch(propsPatches))
     }
     // Diff children. If the node has a `ignore` property, do not diff children
     if (!isIgnoreChildren(newNode)) {
@@ -53,7 +53,7 @@ function dfsWalk (oldNode: Element, newNode: Element, index: number, patches: Pa
   }
 }
 
-function diffChildren(oldChildren: Element[], newChildren: Element[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: (Element|string)[], newChildren: (Element|string)[], index: number, patches: Patch[][], currentPatch: Patch[]) {
   var diffs = listDiff(oldChildren, newChildren, 'key')
   newChildren = diffs.children
 
@@ -74,47 +74,36 @@ function diffChildren(oldChildren: Element[], newChildren: Element[], index: num
   })
 }
 
-function diffProps (oldNode: Element, newNode: Element): PropsType {
-  var count: number = 0
-  var oldProps: PropsType = oldNode.props
-  var newProps: PropsType = newNode.props
+function diffProps (oldNode: Element, newNode: Element): {[key: string]: string} | null {
+  var count = 0
+  var oldProps = oldNode.props
+  var newProps = newNode.props
 
-  var propsPatches: PropsType = new Map<string, string>();
+  var key, value
+  var propsPatches: any = {}
 
   // Find out different properties
-  // for (key in oldProps) {
-  //   value = oldProps[key]
-  //   if (newProps[key] !== value) {
-  //     count++
-  //     propsPatches[key] = newProps[key]
-  //   }
-  // }
-  oldProps.forEach((value: string, key: string) => {
-    if(newProps.has(key) && newProps.get(key) !== value) {
-      count++;
-      propsPatches.set(key, newProps.get(key) as string);
+  for (key in oldProps) {
+    value = oldProps[key]
+    if (newProps[key] !== value) {
+      count++
+      propsPatches[key] = newProps[key]
     }
-  });
+  }
 
   // Find out new property
-  // for (key in newProps) {
-  //   value = newProps[key]
-  //   if (!oldProps.hasOwnProperty(key)) {
-  //     count++
-  //     propsPatches[key] = newProps[key]
-  //   }
-  // }
-  newProps.forEach((value: string, key: string) => {
-    if(oldProps.has(key)) {
-      count++;
-      propsPatches.set(key, newProps.get(key) as string);
+  for (key in newProps) {
+    value = newProps[key]
+    if (!oldProps.hasOwnProperty(key)) {
+      count++
+      propsPatches[key] = newProps[key]
     }
-  });
+  }
 
   // If properties all are identical
-  // if (count === 0) {
-  //   return null
-  // }
+  if (count === 0) {
+    return null
+  }
 
   return propsPatches
 }

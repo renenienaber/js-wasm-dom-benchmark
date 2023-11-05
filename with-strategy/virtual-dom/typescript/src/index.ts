@@ -1,4 +1,4 @@
-import {Element as VElement, TextElement} from './lib/element'
+import {Element as VElement} from './lib/element'
 import { diff } from './lib/diff'
 import { patch } from './lib/patch'
 
@@ -71,7 +71,7 @@ interface RowElement {
     label: string;
 }
 
-let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
+let vtree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
 const root: HTMLElement = vtree.render();
 document.querySelector('table')?.appendChild(root);
 
@@ -130,20 +130,16 @@ function _getTableRows(): RowElement[] {
         const tr: VElement = vtree.children[i] as VElement;
         const td1: VElement = tr.children[0] as VElement;
         const a2: VElement = (((vtree.children[i] as VElement).children[1] as VElement).children[0] as VElement) as VElement;
-        rowElements.push({id: parseInt(td1.children[0].text), label: a2.children[0].text});
+        rowElements.push({id: parseInt(td1.children[0] as string), label: a2.children[0] as string});
     }
     return rowElements;
 }
 
 function _createRow(data: RowElement): VElement {
-    return new VElement('tr', new Map<string, string>(), [
-        new VElement('td', new Map<string, string>(), [
-            new TextElement(data.id.toString())
-        ]),
-        new VElement('td', new Map<string, string>(), [
-            new VElement('a', new Map<string, string>(), [
-                new TextElement(data.label)
-            ])
+    return new VElement('tr', {}, [
+        new VElement('td', {}, [data.id.toString()]),
+        new VElement('td', {}, [
+            new VElement('a', {}, [data.label])
         ])
     ]);
 }
@@ -158,16 +154,16 @@ function _appendRows(rowElements: RowElement[]): void {
         rows.push(tr);
     }
 
-    const newTree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), rows);
+    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, rows);
     _renderVTree(newTree);
 }
 
 function _removeAllRows(): void {
-    const newTree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
+    const newTree: VElement = new VElement('tbody', {'id': 'tbody'}, []);
     _renderVTree(newTree);
 }
 
-function _renderVTree(newTree: VElement): void {
+function _renderVTree(newTree: VElement) {
     const patches = diff(vtree, newTree);
     patch(root, patches);
     vtree = newTree;

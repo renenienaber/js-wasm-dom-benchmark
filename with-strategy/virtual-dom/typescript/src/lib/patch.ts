@@ -1,5 +1,5 @@
 import {_each, _setAttr, _toArray} from "./util";
-import {Element as VElement, PropsType} from "./element";
+import {Element as VElement} from "./element";
 
 export enum PatchType {
   REPLACE, // node
@@ -14,9 +14,9 @@ export interface Patch {
 
 export class ReplacePatch implements Patch {
   type: PatchType = PatchType.REPLACE;
-  node: VElement;
+  node: VElement | string;
 
-  constructor(vElement: VElement) {
+  constructor(vElement: VElement | string) {
     this.node = vElement;
   }
 }
@@ -28,18 +28,18 @@ export class ReorderPatch implements Patch {
 
 export class PropsPatch implements Patch {
   type: PatchType = PatchType.PROPS;
-  props: PropsType;
+  props: {[key: string]: string};
 
-  constructor(props: PropsType) {
+  constructor(props: {[key: string]: string}) {
     this.props = props;
   }
 }
 
 export class TextPatch implements Patch {
   type: PatchType = PatchType.TEXT;
-  content: VElement;
+  content: VElement|string;
 
-  constructor(vElement: VElement) {
+  constructor(vElement: VElement|string) {
     this.content = vElement;
   }
 }
@@ -74,8 +74,8 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
   _each(currentPatches, function (currentPatch: Patch) {
     switch (currentPatch.type) {
       case PatchType.REPLACE:
-        const newNode = ((currentPatch as ReplacePatch).node.isTextNode())
-          ? document.createTextNode((currentPatch as ReplacePatch).node.text)
+        const newNode = (typeof (currentPatch as ReplacePatch).node === 'string')
+          ? document.createTextNode((currentPatch as ReplacePatch).node as string)
           : ((currentPatch as ReplacePatch).node as VElement).render();
         node.parentNode?.replaceChild(newNode, node);
         break;
@@ -83,13 +83,13 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
         reorderChildren(node as HTMLElement, (currentPatch as ReorderPatch).moves)
         break;
       case PatchType.PROPS:
-        setProps(node as HTMLElement, (currentPatch as PropsPatch).props)
+        setProps(node as HTMLElement, (currentPatch as PropsPatch).props as {[key: string]: string})
         break;
       case PatchType.TEXT:
         if (node.textContent) {
-          node.textContent = (currentPatch as TextPatch).content.text
+          node.textContent = (currentPatch as TextPatch).content as string
         } else {
-          node.nodeValue = (currentPatch as TextPatch).content.text
+          node.nodeValue = (currentPatch as TextPatch).content as string
         }
         break;
       default:
@@ -98,22 +98,15 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
   })
 }
 
-export function setProps (node: HTMLElement, props: PropsType): void {
-  // for (const key in props) {
-  //   if (props[key] === void 666) {
-  //     node.removeAttribute(key)
-  //   } else {
-  //     const value = props[key]
-  //     _setAttr(node, key, value)
-  //   }
-  // }
-  props.forEach((value, key, map) => {
-    if (!props.has(key)) {
-      node.removeAttribute(key);
+export function setProps (node: HTMLElement, props: {[key: string]: string}): void {
+  for (const key in props) {
+    if (props[key] === void 666) {
+      node.removeAttribute(key)
     } else {
-      _setAttr(node, key, value);
+      const value = props[key]
+      _setAttr(node, key, value)
     }
-  });
+  }
 }
 
 export function reorderChildren (node: HTMLElement, moves: any) {
