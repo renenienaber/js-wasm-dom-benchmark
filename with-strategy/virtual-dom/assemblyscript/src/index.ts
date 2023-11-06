@@ -1,6 +1,7 @@
 import {VElement} from './lib/models/element'
 import {patch, renderVElement} from './lib/patch'
 import {Patch} from "./lib/models/patch.model";
+import { buildData, buildData2, buildData3, updateData, updateData2 } from "../build/main"
 
 
 
@@ -40,40 +41,63 @@ function getDiffAndRerender(fn: (oldTree: VElement) => Patch[][]): void {
 }
 
 function run(): void {
-    getDiffAndRerender(() => {
-        return run(vtree);
-    })
+    // getDiffAndRerender(() => {
+    //     return doRun(vtree);
+    // })
+
+    const dummyRowElements: RowElement[] = [
+        {id: 1, label: 'test'},
+        {id: 2, label: 'test2'},
+        {id: 3, label: 'test3'},
+    ];
+    const dummyRowElements2: RowElement2[] = [
+        new RowElement2(1, 'test'),
+        new RowElement2(2, 'test2'),
+        new RowElement2(3, 'test3'),
+    ];
+
+    const buildData1 = buildData(5, 1); // good
+    const buildDataTest = buildData2(5, 1); // pointers
+    const buildDataTest2 = buildData3(5, 1); // good
+    const updateData1 = updateData(dummyRowElements, 2); // good
+    const updateDataTest = updateData2(dummyRowElements, 2); // pointers
+    const updateDataTest2 = updateData(dummyRowElements2, 2); // good
+    console.log(buildData1);
+    console.log(buildDataTest);
+    console.log(buildDataTest2);
+    console.log(updateData1);
+    console.log(updateDataTest);
+    console.log(updateDataTest2);
 }
 
 function runLots(): void {
-    getDiffAndRerender(() => {
-        return runLots(vtree);
-    })
+    // getDiffAndRerender(() => {
+    //     return doRunLots(vtree);
+    // })
 }
 
 function add(): void {
-    getDiffAndRerender(() => {
-        return add(vtree);
-    })
+    // getDiffAndRerender(() => {
+    //     return doAdd(vtree);
+    // })
 }
 
 function update(): void {
-    getDiffAndRerender(() => {
-        return update(vtree);
-    })
+    // getDiffAndRerender(() => {
+    //     return doUpdate(vtree);
+    // })
 }
 
 function clearRows(): void {
-    getDiffAndRerender(() => {
-        return clearRows(vtree);
-    })
+    // getDiffAndRerender(() => {
+    //     return doClearRows(vtree);
+    // })
 }
 
 function swapRows(): void {
-    getDiffAndRerender(() => {
-        return swapRows(vtree);
-    });
-
+    // getDiffAndRerender(() => {
+    //     return doSwapRows(vtree);
+    // });
 }
 
 
@@ -82,6 +106,17 @@ function swapRows(): void {
 interface RowElement {
     id: number;
     label: string;
+}
+
+// TODO: testing - class instead of interface (check interop with AS)
+class RowElement2 {
+    id: number;
+    label: string;
+
+    constructor(id: number, label: string) {
+        this.id = id;
+        this.label = label;
+    }
 }
 
 let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);

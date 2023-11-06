@@ -1,6 +1,3 @@
-
-
-
 // click handler
 
 import {EmptyVElement, TextVElement, VElement} from "./lib/models/element";
@@ -14,14 +11,16 @@ function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     return diff(oldTree, vtree);
 }
 
-export function run(vtree: VElement): Patch[][] {
-    return mutateAndGetDiff(vtree, () => {
+export function doRun(vtree: VElement): Patch[][] {
+    const test = new VElement(vtree.tagName, vtree.props, vtree.children);
+
+    return mutateAndGetDiff(test, () => {
         _removeAllRows();
         _appendRows(buildData());
     });
 }
 
-export function runLots(vtree: VElement): Patch[][] {
+export function doRunLots(vtree: VElement): Patch[][] {
     return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
         _appendRows(buildData(10000));
@@ -29,14 +28,14 @@ export function runLots(vtree: VElement): Patch[][] {
 
 }
 
-export function add(vtree: VElement): Patch[][] {
+export function doAdd(vtree: VElement): Patch[][] {
     return mutateAndGetDiff(vtree, () => {
         _appendRows(buildData(1000, _getTableRowCount()+1));
     });
 
 }
 
-export function update(vtree: VElement): Patch[][] {
+export function doUpdate(vtree: VElement): Patch[][] {
     return mutateAndGetDiff(vtree, () => {
         const updatedData = updateData(_getTableRows());
 
@@ -46,14 +45,14 @@ export function update(vtree: VElement): Patch[][] {
 
 }
 
-export function clearRows(vtree: VElement): Patch[][] {
+export function doClearRows(vtree: VElement): Patch[][] {
     return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
     });
 
 }
 
-export function swapRows(vtree: VElement): Patch[][] {
+export function doSwapRows(vtree: VElement): Patch[][] {
     return mutateAndGetDiff(vtree, () => {
         const updatedData = updateDataForSwap(_getTableRows());
 
@@ -67,6 +66,14 @@ export function swapRows(vtree: VElement): Patch[][] {
 // setup
 
 class RowElement {
+    // @ts-ignore
+    id: i32;
+    // @ts-ignore
+    label: string;
+}
+
+// TODO: testing - using opaque pointers?
+class RowElement2 {
     id: i32;
     label: string;
 
@@ -87,21 +94,68 @@ export function buildData(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
     const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
     const data: RowElement[] = new Array<RowElement>(count);
     for (let i: i32 = 0; i < count; i++) {
-        const newRowElement: RowElement = new RowElement(firstId+i, adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]);
-        data[i] = newRowElement;
+        data[i] = {
+            id: firstId+i,
+            label: adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]
+        };
     }
     return data;
 }
 
+// TODO: testing - for class instead of 'interface'
+export function buildData2(count: i32 = 1000, firstId: i32 = 1): RowElement2[] {
+    const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
+    const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
+    const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
+    const data: RowElement2[] = new Array<RowElement2>(count);
+    for (let i: i32 = 0; i < count; i++) {
+        data[i] = new RowElement2(firstId+i, adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]);;
+    }
+    return data;
+}
+
+// TODO: testing - process as class, return as 'interface'
+export function buildData3(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
+    const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
+    const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
+    const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
+    const data: RowElement2[] = new Array<RowElement2>(count);
+    for (let i: i32 = 0; i < count; i++) {
+        data[i] = new RowElement2(firstId+i, adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]);;
+    }
+
+    const returnData: RowElement[] = new Array<RowElement>(count);
+    for (let i: i32 = 0; i < count; i++) {
+        returnData[i] = {
+            id: data[i].id,
+            label: data[i].label
+        };
+    }
+    return returnData;
+}
+
 export function updateData(rowElements: RowElement[], mod: i32 = 10): RowElement[] {
-    const updatedElements = rowElements;
-    for (let i=0; i < updatedElements.length; i+=mod) {
+    const updatedElements: RowElement[] = rowElements;
+    for (let i: i32 = 0; i < updatedElements.length; i+=mod) {
         updatedElements[i].label += ' !!!';
     }
     return updatedElements;
 }
 
-export function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
+// TODO: testing - for class instead of 'interface'
+export function updateData2(rowElements: RowElement[], mod: i32 = 10): RowElement2[] {
+    const updatedElements: RowElement2[] = [];
+    for (let i: i32 = 0; i < rowElements.length; i+=mod) {
+        const rowEl: RowElement = rowElements[i];
+        updatedElements[i] = new RowElement2(rowEl.id, rowEl.label);
+    }
+    for (let i: i32 = 0; i < updatedElements.length; i+=mod) {
+        updatedElements[i].label += ' !!!';
+    }
+    return updatedElements;
+}
+
+function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
     const length = rowElements.length;
     if (length < 2) {
         return rowElements;
@@ -135,8 +189,10 @@ function _getTableRows(): RowElement[] {
         const tr: VElement = vtree.children[i] as VElement;
         const td1: VElement = tr.children[0] as VElement;
         const a2: VElement = (((vtree.children[i] as VElement).children[1] as VElement).children[0] as VElement) as VElement;
-        const newRowElement: RowElement = new RowElement(<i32>parseInt(td1.children[0].text), a2.children[0].text)
-        rowElements[i] = (newRowElement);
+        rowElements[i] = {
+            id: <i32>parseInt(td1.children[0].text),
+            label: a2.children[0].text
+        };
     }
     return rowElements;
 }

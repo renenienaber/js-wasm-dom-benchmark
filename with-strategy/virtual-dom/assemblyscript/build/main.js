@@ -24,51 +24,62 @@ async function instantiate(module, imports = {}) {
   const { exports } = await WebAssembly.instantiate(module, adaptedImports);
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
-    run(vtree) {
-      // assembly/main/run(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doRun(vtree) {
+      // assembly/main/doRun(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.run(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(vtree) >>> 0);
     },
-    runLots(vtree) {
-      // assembly/main/runLots(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doRunLots(vtree) {
+      // assembly/main/doRunLots(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.runLots(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(vtree) >>> 0);
     },
-    add(vtree) {
-      // assembly/main/add(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doAdd(vtree) {
+      // assembly/main/doAdd(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.add(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(vtree) >>> 0);
     },
-    update(vtree) {
-      // assembly/main/update(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doUpdate(vtree) {
+      // assembly/main/doUpdate(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.update(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(vtree) >>> 0);
     },
-    clearRows(vtree) {
-      // assembly/main/clearRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doClearRows(vtree) {
+      // assembly/main/doClearRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.clearRows(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(vtree) >>> 0);
     },
-    swapRows(vtree) {
-      // assembly/main/swapRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+    doSwapRows(vtree) {
+      // assembly/main/doSwapRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.swapRows(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord9(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(vtree) >>> 0);
     },
     buildData(count, firstId) {
       // assembly/main/buildData(i32?, i32?) => ~lib/array/Array<assembly/main/RowElement>
       exports.__setArgumentsLength(arguments.length);
-      return __liftArray(pointer => __liftInternref(__getU32(pointer)), 2, exports.buildData(count, firstId) >>> 0);
+      return __liftArray(pointer => __liftRecord12(__getU32(pointer)), 2, exports.buildData(count, firstId) >>> 0);
+    },
+    buildData2(count, firstId) {
+      // assembly/main/buildData2(i32?, i32?) => ~lib/array/Array<assembly/main/RowElement2>
+      exports.__setArgumentsLength(arguments.length);
+      return __liftArray(pointer => __liftInternref(__getU32(pointer)), 2, exports.buildData2(count, firstId) >>> 0);
+    },
+    buildData3(count, firstId) {
+      // assembly/main/buildData3(i32?, i32?) => ~lib/array/Array<assembly/main/RowElement>
+      exports.__setArgumentsLength(arguments.length);
+      return __liftArray(pointer => __liftRecord12(__getU32(pointer)), 2, exports.buildData3(count, firstId) >>> 0);
     },
     updateData(rowElements, mod) {
       // assembly/main/updateData(~lib/array/Array<assembly/main/RowElement>, i32?) => ~lib/array/Array<assembly/main/RowElement>
-      rowElements = __lowerArray((pointer, value) => { __setU32(pointer, __lowerInternref(value) || __notnull()); }, 13, 2, rowElements) || __notnull();
+      rowElements = __lowerArray((pointer, value) => { __setU32(pointer, __lowerRecord12(value) || __notnull()); }, 13, 2, rowElements) || __notnull();
       exports.__setArgumentsLength(arguments.length);
-      return __liftArray(pointer => __liftInternref(__getU32(pointer)), 2, exports.updateData(rowElements, mod) >>> 0);
+      return __liftArray(pointer => __liftRecord12(__getU32(pointer)), 2, exports.updateData(rowElements, mod) >>> 0);
     },
-    updateDataForSwap(rowElements) {
-      // assembly/main/updateDataForSwap(~lib/array/Array<assembly/main/RowElement>) => ~lib/array/Array<assembly/main/RowElement>
-      rowElements = __lowerArray((pointer, value) => { __setU32(pointer, __lowerInternref(value) || __notnull()); }, 13, 2, rowElements) || __notnull();
-      return __liftArray(pointer => __liftInternref(__getU32(pointer)), 2, exports.updateDataForSwap(rowElements) >>> 0);
+    updateData2(rowElements, mod) {
+      // assembly/main/updateData2(~lib/array/Array<assembly/main/RowElement>, i32?) => ~lib/array/Array<assembly/main/RowElement2>
+      rowElements = __lowerArray((pointer, value) => { __setU32(pointer, __lowerRecord12(value) || __notnull()); }, 13, 2, rowElements) || __notnull();
+      exports.__setArgumentsLength(arguments.length);
+      return __liftArray(pointer => __liftInternref(__getU32(pointer)), 2, exports.updateData2(rowElements, mod) >>> 0);
     },
   }, exports);
   function __liftRecord9(pointer) {
@@ -77,6 +88,25 @@ async function instantiate(module, imports = {}) {
     if (!pointer) return null;
     return {
     };
+  }
+  function __liftRecord12(pointer) {
+    // assembly/main/RowElement
+    // Hint: Opt-out from lifting as a record by providing an empty constructor
+    if (!pointer) return null;
+    return {
+      id: __getI32(pointer + 0),
+      label: __liftString(__getU32(pointer + 4)),
+    };
+  }
+  function __lowerRecord12(value) {
+    // assembly/main/RowElement
+    // Hint: Opt-out from lowering as a record by providing an empty constructor
+    if (value == null) return 0;
+    const pointer = exports.__pin(exports.__new(8, 12));
+    __setU32(pointer + 0, value.id);
+    __setU32(pointer + 4, __lowerString(value.label) || __notnull());
+    exports.__unpin(pointer);
+    return pointer;
   }
   function __liftString(pointer) {
     if (!pointer) return null;
@@ -88,6 +118,15 @@ async function instantiate(module, imports = {}) {
       string = "";
     while (end - start > 1024) string += String.fromCharCode(...memoryU16.subarray(start, start += 1024));
     return string + String.fromCharCode(...memoryU16.subarray(start, end));
+  }
+  function __lowerString(value) {
+    if (value == null) return 0;
+    const
+      length = value.length,
+      pointer = exports.__new(length << 1, 2) >>> 0,
+      memoryU16 = new Uint16Array(memory.buffer);
+    for (let i = 0; i < length; ++i) memoryU16[(pointer >>> 1) + i] = value.charCodeAt(i);
+    return pointer;
   }
   function __liftArray(liftElement, align, pointer) {
     if (!pointer) return null;
@@ -155,6 +194,14 @@ async function instantiate(module, imports = {}) {
       __dataview.setUint32(pointer, value, true);
     }
   }
+  function __getI32(pointer) {
+    try {
+      return __dataview.getInt32(pointer, true);
+    } catch {
+      __dataview = new DataView(memory.buffer);
+      return __dataview.getInt32(pointer, true);
+    }
+  }
   function __getU32(pointer) {
     try {
       return __dataview.getUint32(pointer, true);
@@ -167,15 +214,17 @@ async function instantiate(module, imports = {}) {
 }
 export const {
   memory,
-  run,
-  runLots,
-  add,
-  update,
-  clearRows,
-  swapRows,
+  doRun,
+  doRunLots,
+  doAdd,
+  doUpdate,
+  doClearRows,
+  doSwapRows,
   buildData,
+  buildData2,
+  buildData3,
   updateData,
-  updateDataForSwap,
+  updateData2,
 } = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
