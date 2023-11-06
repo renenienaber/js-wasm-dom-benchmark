@@ -1,4 +1,4 @@
-import {_setAttr, _toArray} from "./util";
+import {_setAttr} from "./util";
 import {Element as VElement, PropsType, VElementChildType} from "./element";
 import {Move} from "./list-diff2";
 
@@ -117,7 +117,13 @@ export function setProps (node: HTMLElement, props: PropsType): void {
 }
 
 export function reorderChildren (node: HTMLElement, moves: Move[]): void {
-  const staticNodeList = _toArray(node.childNodes)
+  const staticNodeList: ChildNode[] = [];
+  if(node.childNodes) {
+    for (let i = 0; i < node.childNodes.length; i++) {
+      staticNodeList.push(node.childNodes[i]);
+    }
+  }
+
   let maps: any = {};
 
   for (let i = 0; i < staticNodeList.length; i++) {

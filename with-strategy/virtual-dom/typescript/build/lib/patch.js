@@ -1,4 +1,4 @@
-import { _setAttr, _toArray } from "./util.js";
+import { _setAttr } from "./util.js";
 export var PatchType;
 (function (PatchType) {
     PatchType[PatchType["REPLACE"] = 0] = "REPLACE";
@@ -89,7 +89,12 @@ export function setProps(node, props) {
     });
 }
 export function reorderChildren(node, moves) {
-    const staticNodeList = _toArray(node.childNodes);
+    const staticNodeList = [];
+    if (node.childNodes) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            staticNodeList.push(node.childNodes[i]);
+        }
+    }
     let maps = {};
     for (let i = 0; i < staticNodeList.length; i++) {
         const node = staticNodeList[i];

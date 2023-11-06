@@ -1,17 +1,3 @@
-export const _toArray = function toArray (listLike: NodeListOf<ChildNode>): ChildNode[] {
-  if (!listLike) {
-    return [];
-  }
-
-  const list = [];
-
-  for (let i = 0, len = listLike.length; i < len; i++) {
-    list.push(listLike[i]);
-  }
-
-  return list
-}
-
 export const _setAttr = function setAttr (node: HTMLElement, key: string, value: string): void {
   switch (key) {
     case 'style':
