@@ -1,3 +1,4 @@
+import { EmptyVElement } from "./element.js";
 export function diff(oldList, newList) {
     var moves = [];
     var children = [];
@@ -39,7 +40,7 @@ export function diff(oldList, newList) {
         remove(k + i);
     }
     function remove(index) {
-        var move = { index: index, type: 0 };
+        var move = { index: index, type: 0, item: new EmptyVElement() };
         moves.push(move);
     }
     function insert(index, item) {

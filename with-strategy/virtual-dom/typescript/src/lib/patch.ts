@@ -136,7 +136,7 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
   }
 
   for (let i = 0; i < moves.length; i++) {
-    const move: any = moves[i];
+    const move: Move = moves[i];
     const index = move.index
     if (move.type === 0) { // remove item
       if (staticNodeList[index] === node.childNodes[index]) { // maybe have been removed for inserting
@@ -144,9 +144,7 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
       }
       staticNodeList.splice(index, 1)
     } else if (move.type === 1) { // insert item
-      var insertNode = (typeof move.item === 'object')
-              ? renderVElement(move.item)
-              : document.createTextNode(move.item)
+      var insertNode = renderVElement(move.item);
       staticNodeList.splice(index, 0, insertNode as ChildNode)
       node.insertBefore(insertNode, node.childNodes[index] || null)
     }

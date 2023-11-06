@@ -1,4 +1,4 @@
-import {VElementChildType} from "./element";
+import {EmptyVElement, VElementChildType} from "./element";
 
 
 
@@ -17,7 +17,7 @@ export interface DiffResult {
 export interface Move {
   index: number;
   type: number;
-  item?: VElementChildType | null;
+  item: VElementChildType;
 }
 
 export function diff (oldList: VElementChildType[], newList: VElementChildType[]): DiffResult {
@@ -77,11 +77,11 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
 
 
   function remove (index: number): void {
-    var move: Move = {index: index, type: 0};
+    var move: Move = {index: index, type: 0, item: new EmptyVElement()};
     moves.push(move);
   }
 
-  function insert (index: number, item: VElementChildType | null): void {
+  function insert (index: number, item: VElementChildType): void {
     var move: Move = {index: index, item: item, type: 1};
     moves.push(move);
   }
