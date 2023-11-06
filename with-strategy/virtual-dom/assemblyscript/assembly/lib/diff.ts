@@ -83,24 +83,31 @@ function diffProps (oldNode: VElement, newNode: VElement): PropsType {
   const propsPatches: PropsType = new Map<string, string>();
 
   // Find out different properties
-  oldProps.forEach((value: string, key: string) => {
+  const oldPropsKeys = oldProps.keys();
+  for (let i: number = 0; i < oldPropsKeys.length; i++) {
+    const key: string = oldPropsKeys[i];
+    const value: string = oldProps.get(key);
+
     if(newProps.has(key) && newProps.get(key) !== value) {
       count++;
-      propsPatches.set(key, newProps.get(key) as string);
+      propsPatches.set(key, newProps.get(key));
     }
-  });
+  }
 
   // Find out new property
-  newProps.forEach((value: string, key: string) => {
+  const newPropsKeys = newProps.keys();
+  for (let i: number = 0; i < newPropsKeys.length; i++) {
+    const key: string = newPropsKeys[i];
+
     if(oldProps.has(key)) {
       count++;
-      propsPatches.set(key, newProps.get(key) as string);
+      propsPatches.set(key, newProps.get(key));
     }
-  });
+  }
 
   return propsPatches
 }
 
 function isIgnoreChildren (node: VElement): boolean {
-  return (node.props && node.props.hasOwnProperty('ignore'))
+  return (node.props && !!node.props.has('ignore'));
 }
