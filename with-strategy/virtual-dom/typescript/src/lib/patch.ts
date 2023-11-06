@@ -1,4 +1,3 @@
-import {_setAttr} from "./util";
 import {Element as VElement, PropsType, VElementChildType} from "./element";
 import {Move} from "./list-diff2";
 
@@ -84,7 +83,7 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
       case PatchType.REPLACE:
         const newNode = ((currentPatch as ReplacePatch).node.isText())
             ? document.createTextNode((currentPatch as ReplacePatch).node.text)
-            : ((currentPatch as ReplacePatch).node as VElement).render();
+            : renderVElement((currentPatch as ReplacePatch).node);
         node.parentNode?.replaceChild(newNode, node);
         break;
       case PatchType.REORDER:
@@ -148,10 +147,52 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
       var insertNode = maps[move.item.key]
           ? maps[move.item.key].cloneNode(true) // reuse old item
           : (typeof move.item === 'object')
-              ? move.item.render()
+              ? renderVElement(move.item)
               : document.createTextNode(move.item)
       staticNodeList.splice(index, 0, insertNode)
       node.insertBefore(insertNode, node.childNodes[index] || null)
     }
+  }
+}
+
+export function renderVElement(element: VElement): HTMLElement {
+  const el = document.createElement(element.tagName);
+  const props = element.props;
+
+  props.forEach((value: string, key: string) => {
+    _setAttr(el, key, value);
+  });
+
+  for (let i = 0; i < element.children.length; i++) {
+    const child = element.children[i];
+    const childEl = (!child.isText())
+        ? renderVElement(child)
+        : document.createTextNode(child.text);
+    el.appendChild(childEl);
+  }
+
+  return el;
+}
+
+function _setAttr (node: HTMLElement, key: string, value: string): void {
+  switch (key) {
+    case 'style':
+      node.style.cssText = value
+      break
+    case 'value':
+      let tagName = node.tagName || ''
+      tagName = tagName.toLowerCase()
+      if (
+          tagName === 'input' || tagName === 'textarea'
+      ) {
+        (node as (HTMLInputElement | HTMLTextAreaElement)).value = value
+      } else {
+        // if it is not a input or textarea, use `setAttribute` to set
+        node.setAttribute(key, value)
+      }
+      break
+    default:
+      node.setAttribute(key, value)
+      break
   }
 }

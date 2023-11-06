@@ -1,7 +1,7 @@
 var _a, _b, _c, _d, _e, _f, _g;
 import { Element as VElement, TextVElement } from './lib/element.js';
 import { diff } from './lib/diff.js';
-import { patch } from './lib/patch.js';
+import { patch, renderVElement } from './lib/patch.js';
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
 (_b = document.getElementById('runLots')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => doBenchmark(runLots), false);
 (_c = document.getElementById('add')) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => doBenchmark(add), false);
@@ -60,7 +60,7 @@ function swapRows() {
     });
 }
 let vtree = new VElement('tbody', new Map([['id', 'body']]), []);
-const root = vtree.render();
+const root = renderVElement(vtree);
 (_g = document.querySelector('table')) === null || _g === void 0 ? void 0 : _g.appendChild(root);
 function buildData(count = 1000, firstId = 1) {
     const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];

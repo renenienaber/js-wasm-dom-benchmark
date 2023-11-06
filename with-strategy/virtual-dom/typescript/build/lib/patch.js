@@ -1,4 +1,3 @@
-import { _setAttr } from "./util.js";
 export var PatchType;
 (function (PatchType) {
     PatchType[PatchType["REPLACE"] = 0] = "REPLACE";
@@ -56,7 +55,7 @@ export function applyPatches(node, currentPatches) {
             case PatchType.REPLACE:
                 const newNode = (currentPatch.node.isText())
                     ? document.createTextNode(currentPatch.node.text)
-                    : currentPatch.node.render();
+                    : renderVElement(currentPatch.node);
                 (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.replaceChild(newNode, node);
                 break;
             case PatchType.REORDER:
@@ -118,10 +117,45 @@ export function reorderChildren(node, moves) {
             var insertNode = maps[move.item.key]
                 ? maps[move.item.key].cloneNode(true)
                 : (typeof move.item === 'object')
-                    ? move.item.render()
+                    ? renderVElement(move.item)
                     : document.createTextNode(move.item);
             staticNodeList.splice(index, 0, insertNode);
             node.insertBefore(insertNode, node.childNodes[index] || null);
         }
+    }
+}
+export function renderVElement(element) {
+    const el = document.createElement(element.tagName);
+    const props = element.props;
+    props.forEach((value, key) => {
+        _setAttr(el, key, value);
+    });
+    for (let i = 0; i < element.children.length; i++) {
+        const child = element.children[i];
+        const childEl = (!child.isText())
+            ? renderVElement(child)
+            : document.createTextNode(child.text);
+        el.appendChild(childEl);
+    }
+    return el;
+}
+function _setAttr(node, key, value) {
+    switch (key) {
+        case 'style':
+            node.style.cssText = value;
+            break;
+        case 'value':
+            let tagName = node.tagName || '';
+            tagName = tagName.toLowerCase();
+            if (tagName === 'input' || tagName === 'textarea') {
+                node.value = value;
+            }
+            else {
+                node.setAttribute(key, value);
+            }
+            break;
+        default:
+            node.setAttribute(key, value);
+            break;
     }
 }

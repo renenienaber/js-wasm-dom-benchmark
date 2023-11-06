@@ -1,7 +1,3 @@
-import {_setAttr} from "./util";
-
-
-
 export type PropsType = Map<string, string>;
 export type VElementChildType = Element;
 
@@ -30,25 +26,6 @@ export class Element {
       count++
     }
     this.count = count;
-  }
-
-  render(): HTMLElement {
-    const el = document.createElement(this.tagName);
-    const props = this.props;
-
-    props.forEach((value: string, key: string) => {
-      _setAttr(el, key, value);
-    });
-
-    for (let i = 0; i < this.children.length; i++) {
-      const child = this.children[i];
-      const childEl = (!child.isText())
-          ? child.render()
-          : document.createTextNode(child.text);
-      el.appendChild(childEl);
-    }
-
-    return el;
   }
 
   isText(): boolean {

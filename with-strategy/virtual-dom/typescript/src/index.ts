@@ -1,6 +1,6 @@
 import {Element as VElement, TextVElement} from './lib/element'
 import { diff } from './lib/diff'
-import { patch } from './lib/patch'
+import {patch, renderVElement} from './lib/patch'
 
 
 
@@ -97,7 +97,7 @@ interface RowElement {
 }
 
 let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
-const root: HTMLElement = vtree.render();
+const root: HTMLElement = renderVElement(vtree);
 document.querySelector('table')?.appendChild(root);
 
 
