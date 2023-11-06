@@ -34,8 +34,9 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   i = 0
   while (i < simulateList.length) {
     if (simulateList[i] === null) {
-      remove(i)
-      removeSimulate(i)
+      const move: Move = new Move(i, new EmptyVElement(), 0);
+      moves.push(move);
+      simulateList.splice(i, 1);
     } else {
       i++
     }
@@ -51,7 +52,8 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
     if (simulateItem) {
       j++;
     } else {
-      insert(i, item)
+      const move: Move = new Move(i, item, 1);
+      moves.push(move);
     }
 
     i++
@@ -61,26 +63,9 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   let k: i32 = simulateList.length - j
   while (j++ < simulateList.length) {
     k--
-    remove(k + i)
-  }
-
-
-  function remove (index: i32): void {
-    const move: Move = {index: index, type: 0, item: new EmptyVElement()};
+    const move: Move = new Move(k+i, new EmptyVElement(), 0);
     moves.push(move);
   }
 
-  function insert (index: i32, item: VElementChildType): void {
-    const move: Move = {index: index, item: item, type: 1};
-    moves.push(move);
-  }
-
-  function removeSimulate (index: i32): void {
-    simulateList.splice(index, 1);
-  }
-
-  return {
-    moves: moves,
-    children: children
-  }
+  return new DiffResult(moves, children);
 }
