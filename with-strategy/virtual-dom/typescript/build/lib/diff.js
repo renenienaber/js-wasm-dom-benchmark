@@ -1,5 +1,5 @@
-import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./patch.js";
-import { EmptyVElement } from "./element.js";
+import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./models/patch.model.js";
+import { EmptyVElement } from "./models/element.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
     const index = 0;

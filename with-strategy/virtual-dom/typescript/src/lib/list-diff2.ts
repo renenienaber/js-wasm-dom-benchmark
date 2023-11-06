@@ -1,4 +1,5 @@
-import {VElement, EmptyVElement, VElementChildType} from "./element";
+import {VElement, EmptyVElement, VElementChildType} from "./models/element";
+import {DiffResult, Move} from "./models/list-diff2.model";
 
 
 
@@ -9,17 +10,6 @@ import {VElement, EmptyVElement, VElementChildType} from "./element";
  * @return {Object} - {moves: <Array>}
  *                  - moves is a list of actions that telling how to remove and insert
  */
-export interface DiffResult {
-  moves: Move[];
-  children: VElementChildType[];
-}
-
-export interface Move {
-  index: number;
-  type: number;
-  item: VElementChildType;
-}
-
 export function diff (oldList: VElementChildType[], newList: VElementChildType[]): DiffResult {
   const moves: Move[] = [];
 

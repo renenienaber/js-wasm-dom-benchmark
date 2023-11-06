@@ -1,6 +1,7 @@
-import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
-import {VElement, VElementChildType, PropsType, EmptyVElement} from "./element";
-import {diff as listDiff, DiffResult} from "./list-diff2";
+import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./models/patch.model";
+import {VElement, VElementChildType, PropsType, EmptyVElement} from "./models/element";
+import {diff as listDiff} from "./list-diff2";
+import {DiffResult} from "./models/list-diff2.model";
 
 
 
