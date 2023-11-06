@@ -17,7 +17,7 @@ function dfsWalk(oldNode, newNode, index, patches) {
         }
     }
     else if (oldNode.tagName === newNode.tagName) {
-        var propsPatches = diffProps(oldNode, newNode);
+        const propsPatches = diffProps(oldNode, newNode);
         if (propsPatches.size > 0) {
             currentPatch.push(new PropsPatch(propsPatches));
         }
@@ -33,17 +33,17 @@ function dfsWalk(oldNode, newNode, index, patches) {
     }
 }
 function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
-    var diffs = listDiff(oldChildren, newChildren);
+    const diffs = listDiff(oldChildren, newChildren);
     newChildren = diffs.children;
     if (diffs.moves.length) {
-        var reorderPatch = new ReorderPatch(diffs.moves);
+        const reorderPatch = new ReorderPatch(diffs.moves);
         currentPatch.push(reorderPatch);
     }
-    var leftNode = new EmptyVElement();
-    var currentNodeIndex = index;
+    let leftNode = new EmptyVElement();
+    let currentNodeIndex = index;
     for (let i = 0; i < oldChildren.length; i++) {
         const child = oldChildren[i];
-        var newChild = newChildren[i];
+        const newChild = newChildren[i];
         currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
             ? currentNodeIndex + leftNode.count + 1
             : currentNodeIndex + 1;
@@ -52,10 +52,10 @@ function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
     }
 }
 function diffProps(oldNode, newNode) {
-    var count = 0;
-    var oldProps = oldNode.props;
-    var newProps = newNode.props;
-    var propsPatches = new Map();
+    let count = 0;
+    const oldProps = oldNode.props;
+    const newProps = newNode.props;
+    const propsPatches = new Map();
     oldProps.forEach((value, key) => {
         if (newProps.has(key) && newProps.get(key) !== value) {
             count++;

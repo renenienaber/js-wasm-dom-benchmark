@@ -60,13 +60,13 @@ export function patch (node: Node, patches: Patch[][]): void {
 }
 
 export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]): void {
-  const currentPatches = patches[walker.index];
+  const currentPatches: Patch[] = patches[walker.index];
 
-  const len = node.childNodes
+  const len: number = node.childNodes
     ? node.childNodes.length
     : 0
-  for (let i = 0; i < len; i++) {
-    const child = node.childNodes[i]
+  for (let i: number = 0; i < len; i++) {
+    const child: ChildNode = node.childNodes[i]
     walker.index++
     dfsWalk(child, walker, patches)
   }
@@ -77,11 +77,11 @@ export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]): void {
 }
 
 export function applyPatches (node: Node, currentPatches: Patch[]): void {
-  for (let i = 0; i < currentPatches.length; i++) {
-    const currentPatch = currentPatches[i];
+  for (let i: number = 0; i < currentPatches.length; i++) {
+    const currentPatch: Patch = currentPatches[i];
     switch (currentPatch.type) {
       case PatchType.REPLACE:
-        const newNode = ((currentPatch as ReplacePatch).node.isText())
+        const newNode: HTMLElement | Text = ((currentPatch as ReplacePatch).node.isText())
             ? document.createTextNode((currentPatch as ReplacePatch).node.text)
             : renderVElement((currentPatch as ReplacePatch).node);
         node.parentNode?.replaceChild(newNode, node);
@@ -118,33 +118,33 @@ export function setProps (node: HTMLElement, props: PropsType): void {
 export function reorderChildren (node: HTMLElement, moves: Move[]): void {
   const staticNodeList: ChildNode[] = [];
   if(node.childNodes) {
-    for (let i = 0; i < node.childNodes.length; i++) {
+    for (let i: number = 0; i < node.childNodes.length; i++) {
       staticNodeList.push(node.childNodes[i]);
     }
   }
 
   const maps: Map<string, HTMLElement> = new Map<string, HTMLElement>();
 
-  for (let i = 0; i < staticNodeList.length; i++) {
+  for (let i: number = 0; i < staticNodeList.length; i++) {
     const node: HTMLElement = staticNodeList[i] as HTMLElement;
     if (node.nodeType === 1) {
-      const key = node.getAttribute('key');
+      const key: string | null = node.getAttribute('key');
       if (key) {
         maps.set(key, node);
       }
     }
   }
 
-  for (let i = 0; i < moves.length; i++) {
+  for (let i: number = 0; i < moves.length; i++) {
     const move: Move = moves[i];
-    const index = move.index
+    const index: number = move.index
     if (move.type === 0) { // remove item
       if (staticNodeList[index] === node.childNodes[index]) { // maybe have been removed for inserting
         node.removeChild(node.childNodes[index])
       }
       staticNodeList.splice(index, 1)
     } else if (move.type === 1) { // insert item
-      var insertNode = renderVElement(move.item);
+      const insertNode: HTMLElement = renderVElement(move.item);
       staticNodeList.splice(index, 0, insertNode as ChildNode)
       node.insertBefore(insertNode, node.childNodes[index] || null)
     }
@@ -152,16 +152,16 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
 }
 
 export function renderVElement(element: VElement): HTMLElement {
-  const el = document.createElement(element.tagName);
-  const props = element.props;
+  const el: HTMLElement = document.createElement(element.tagName);
+  const props: PropsType = element.props;
 
   props.forEach((value: string, key: string) => {
     _setAttr(el, key, value);
   });
 
-  for (let i = 0; i < element.children.length; i++) {
-    const child = element.children[i];
-    const childEl = (!child.isText())
+  for (let i: number = 0; i < element.children.length; i++) {
+    const child: VElement = element.children[i];
+    const childEl: HTMLElement | Text = (!child.isText())
         ? renderVElement(child)
         : document.createTextNode(child.text);
     el.appendChild(childEl);
@@ -176,7 +176,7 @@ function _setAttr (node: HTMLElement, key: string, value: string): void {
       node.style.cssText = value
       break
     case 'value':
-      let tagName = node.tagName || ''
+      let tagName: string = node.tagName || ''
       tagName = tagName.toLowerCase()
       if (
           tagName === 'input' || tagName === 'textarea'

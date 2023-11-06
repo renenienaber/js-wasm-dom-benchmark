@@ -114,7 +114,7 @@ export function reorderChildren(node, moves) {
             staticNodeList.splice(index, 1);
         }
         else if (move.type === 1) {
-            var insertNode = renderVElement(move.item);
+            const insertNode = renderVElement(move.item);
             staticNodeList.splice(index, 0, insertNode);
             node.insertBefore(insertNode, node.childNodes[index] || null);
         }

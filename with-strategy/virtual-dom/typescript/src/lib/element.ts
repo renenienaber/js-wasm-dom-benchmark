@@ -15,9 +15,9 @@ export class Element {
     this.props = props;
     this.children = children;
 
-    let count = 0;
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
+    let count: number = 0;
+    for (let i: number = 0; i < children.length; i++) {
+      const child: Element = children[i];
       if (!child.isText()) {
         count += child.count
       } else {

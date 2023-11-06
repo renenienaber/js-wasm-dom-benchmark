@@ -1,6 +1,6 @@
 import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
 import {Element as VElement, VElementChildType, PropsType, EmptyVElement} from "./element";
-import {diff as listDiff} from "./list-diff2";
+import {diff as listDiff, DiffResult} from "./list-diff2";
 
 
 
@@ -27,7 +27,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
       oldNode.tagName === newNode.tagName
     ) {
     // Diff props
-    var propsPatches: PropsType = diffProps(oldNode, newNode);
+    const propsPatches: PropsType = diffProps(oldNode, newNode);
     if (propsPatches.size > 0) {
       currentPatch.push(new PropsPatch(propsPatches))
     }
@@ -52,20 +52,20 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
 }
 
 function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
-  var diffs = listDiff(oldChildren, newChildren)
+  const diffs: DiffResult = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 
   if (diffs.moves.length) {
-    var reorderPatch: ReorderPatch = new ReorderPatch(diffs.moves);
+    const reorderPatch: ReorderPatch = new ReorderPatch(diffs.moves);
     currentPatch.push(reorderPatch)
   }
 
-  var leftNode: VElement = new EmptyVElement();
-  var currentNodeIndex = index
+  let leftNode: VElement = new EmptyVElement();
+  let currentNodeIndex: number = index;
 
-  for (let i = 0; i < oldChildren.length; i++) {
-    const child = oldChildren[i];
-    var newChild = newChildren[i] as VElement;
+  for (let i: number = 0; i < oldChildren.length; i++) {
+    const child: VElement = oldChildren[i];
+    const newChild: VElement = newChildren[i] as VElement;
     currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
         ? currentNodeIndex + leftNode.count + 1
         : currentNodeIndex + 1
@@ -75,11 +75,11 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
 }
 
 function diffProps (oldNode: VElement, newNode: VElement): PropsType {
-  var count: number = 0
-  var oldProps: PropsType = oldNode.props
-  var newProps: PropsType = newNode.props
+  let count: number = 0
+  const oldProps: PropsType = oldNode.props
+  const newProps: PropsType = newNode.props
 
-  var propsPatches: PropsType = new Map<string, string>();
+  const propsPatches: PropsType = new Map<string, string>();
 
   // Find out different properties
   oldProps.forEach((value: string, key: string) => {

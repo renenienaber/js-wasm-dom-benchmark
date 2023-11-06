@@ -1,4 +1,4 @@
-import {EmptyVElement, VElementChildType} from "./element";
+import {Element as VElement, EmptyVElement, VElementChildType} from "./element";
 
 
 
@@ -21,24 +21,24 @@ export interface Move {
 }
 
 export function diff (oldList: VElementChildType[], newList: VElementChildType[]): DiffResult {
-  var moves: Move[] = [];
+  const moves: Move[] = [];
 
   // a simulate list to manipulate
-  var children: VElementChildType[] = [];
-  var i: number = 0;
-  var item: VElementChildType;
-  var freeIndex: number = 0;
+  const children: VElementChildType[] = [];
+  let i: number = 0;
+  let item: VElementChildType;
+  let freeIndex: number = 0;
 
   // first pass to check item in old list: if it's removed or not
   while (i < oldList.length) {
     item = oldList[i]
-    var freeItem = newList[freeIndex++]
+    const freeItem: VElement = newList[freeIndex++];
     children.push(freeItem || null);
     // children.push(freeItem)
     i++
   }
 
-  var simulateList = children.slice(0)
+  const simulateList: VElement[] = children.slice(0);
 
   // remove items no longer exist
   i = 0
@@ -53,12 +53,11 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
 
   // i is cursor pointing to a item in new list
   // j is cursor pointing to a item in simulateList
-  var j = i = 0
+  let j: number = i = 0;
   while (i < newList.length) {
     item = newList[i]
 
-    var simulateItem = simulateList[j]
-
+    const simulateItem: VElement = simulateList[j];
     if (simulateItem) {
       j++;
     } else {
@@ -69,7 +68,7 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   }
 
   //if j is not remove to the end, remove all the rest item
-  var k = simulateList.length - j
+  let k: number = simulateList.length - j
   while (j++ < simulateList.length) {
     k--
     remove(k + i)
@@ -77,12 +76,12 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
 
 
   function remove (index: number): void {
-    var move: Move = {index: index, type: 0, item: new EmptyVElement()};
+    const move: Move = {index: index, type: 0, item: new EmptyVElement()};
     moves.push(move);
   }
 
   function insert (index: number, item: VElementChildType): void {
-    var move: Move = {index: index, item: item, type: 1};
+    const move: Move = {index: index, item: item, type: 1};
     moves.push(move);
   }
 
