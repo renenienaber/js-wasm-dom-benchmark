@@ -1,4 +1,4 @@
-import {Element as VElement, PropsType, VElementChildType} from "./element";
+import {VElement, PropsType, VElementChildType} from "./element";
 import {Move} from "./list-diff2";
 
 

@@ -1,4 +1,4 @@
-import {Element as VElement, EmptyVElement, VElementChildType} from "./element";
+import {VElement, EmptyVElement, VElementChildType} from "./element";
 
 
 

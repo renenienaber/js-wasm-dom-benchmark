@@ -1,5 +1,5 @@
 var _a, _b, _c, _d, _e, _f, _g;
-import { Element as VElement, TextVElement } from './lib/element.js';
+import { VElement, TextVElement } from './lib/element.js';
 import { diff } from './lib/diff.js';
 import { patch, renderVElement } from './lib/patch.js';
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);

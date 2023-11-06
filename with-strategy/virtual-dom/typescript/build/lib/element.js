@@ -1,4 +1,4 @@
-export class Element {
+export class VElement {
     constructor(tagName, props, children) {
         this.tagName = '';
         this.props = new Map();
@@ -29,13 +29,13 @@ export class Element {
         return this.empty;
     }
 }
-export class TextVElement extends Element {
+export class TextVElement extends VElement {
     constructor(text) {
         super('', new Map(), []);
         this.text = text;
     }
 }
-export class EmptyVElement extends Element {
+export class EmptyVElement extends VElement {
     constructor() {
         super('', new Map(), []);
     }

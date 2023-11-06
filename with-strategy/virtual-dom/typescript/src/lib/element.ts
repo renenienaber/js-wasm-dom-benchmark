@@ -1,7 +1,7 @@
 export type PropsType = Map<string, string>;
-export type VElementChildType = Element;
+export type VElementChildType = VElement;
 
-export class Element {
+export class VElement {
   tagName: string = '';
   props: PropsType = new Map<string, string>();
   children: VElementChildType[] = [];
@@ -17,7 +17,7 @@ export class Element {
 
     let count: number = 0;
     for (let i: number = 0; i < children.length; i++) {
-      const child: Element = children[i];
+      const child: VElement = children[i];
       if (!child.isText()) {
         count += child.count
       } else {
@@ -37,14 +37,14 @@ export class Element {
   }
 }
 
-export class TextVElement extends Element {
+export class TextVElement extends VElement {
   constructor(text: string) {
     super('', new Map<string, string>(), []);
     this.text = text;
   }
 }
 
-export class EmptyVElement extends Element {
+export class EmptyVElement extends VElement {
   constructor() {
     super('', new Map<string, string>(), []);
   }
