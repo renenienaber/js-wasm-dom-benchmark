@@ -52,7 +52,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
   }
 }
 
-function diffChildren(oldChildren: VElementChildType[], newChildren: (VElementChildType | null)[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
   var diffs = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 
