@@ -1,5 +1,5 @@
 import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
-import {Element as VElement, VElementChildType, PropsType} from "./element";
+import {Element as VElement, VElementChildType, PropsType, EmptyVElement} from "./element";
 import {diff as listDiff} from "./list-diff2";
 
 
@@ -60,13 +60,13 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
     currentPatch.push(reorderPatch)
   }
 
-  var leftNode: VElement | null = null
+  var leftNode: VElement = new EmptyVElement();
   var currentNodeIndex = index
 
   for (let i = 0; i < oldChildren.length; i++) {
     const child = oldChildren[i];
     var newChild = newChildren[i] as VElement;
-    currentNodeIndex = (leftNode && leftNode.count)
+    currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
         ? currentNodeIndex + leftNode.count + 1
         : currentNodeIndex + 1
     dfsWalk(child, newChild, currentNodeIndex, patches)

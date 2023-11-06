@@ -1,4 +1,5 @@
 import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./patch.js";
+import { EmptyVElement } from "./element.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
     const index = 0;
@@ -38,12 +39,12 @@ function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
         var reorderPatch = new ReorderPatch(diffs.moves);
         currentPatch.push(reorderPatch);
     }
-    var leftNode = null;
+    var leftNode = new EmptyVElement();
     var currentNodeIndex = index;
     for (let i = 0; i < oldChildren.length; i++) {
         const child = oldChildren[i];
         var newChild = newChildren[i];
-        currentNodeIndex = (leftNode && leftNode.count)
+        currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
             ? currentNodeIndex + leftNode.count + 1
             : currentNodeIndex + 1;
         dfsWalk(child, newChild, currentNodeIndex, patches);
