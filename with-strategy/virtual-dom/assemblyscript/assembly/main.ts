@@ -1,20 +1,23 @@
-// click handler
-
 import {EmptyVElement, TextVElement, VElement} from "./lib/models/element";
 import {Patch} from "./lib/models/patch.model";
 import {diff} from "./lib/diff";
 
+
+
+// click handler
+
 function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     vtree = vElement;
     const oldTree = vtree;
+
     fn();
-    return diff(oldTree, vtree);
+
+    const patches = diff(oldTree, vtree);
+    return patches;
 }
 
 export function doRun(vtree: VElement): Patch[][] {
-    const test = new VElement(vtree.tagName, vtree.props, vtree.children);
-
-    return mutateAndGetDiff(test, () => {
+    return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
         _appendRows(buildData());
     });
@@ -59,7 +62,6 @@ export function doSwapRows(vtree: VElement): Patch[][] {
         _removeAllRows();
         _appendRows(updatedData);
     });
-
 }
 
 
@@ -72,23 +74,12 @@ class RowElement {
     label: string;
 }
 
-// TODO: testing - using opaque pointers?
-class RowElement2 {
-    id: i32;
-    label: string;
-
-    constructor(id: i32, label: string) {
-        this.id = id;
-        this.label = label;
-    }
-}
-
 let vtree: VElement = new EmptyVElement();
 
 
 // RowElement functions
 
-export function buildData(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
+function buildData(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
     const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
@@ -102,53 +93,8 @@ export function buildData(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
     return data;
 }
 
-// TODO: testing - for class instead of 'interface'
-export function buildData2(count: i32 = 1000, firstId: i32 = 1): RowElement2[] {
-    const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
-    const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
-    const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
-    const data: RowElement2[] = new Array<RowElement2>(count);
-    for (let i: i32 = 0; i < count; i++) {
-        data[i] = new RowElement2(firstId+i, adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]);;
-    }
-    return data;
-}
-
-// TODO: testing - process as class, return as 'interface'
-export function buildData3(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
-    const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
-    const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
-    const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
-    const data: RowElement2[] = new Array<RowElement2>(count);
-    for (let i: i32 = 0; i < count; i++) {
-        data[i] = new RowElement2(firstId+i, adjectives[_random(adjectives.length)] + " " + colours[_random(colours.length)] + " " + nouns[_random(nouns.length)]);;
-    }
-
-    const returnData: RowElement[] = new Array<RowElement>(count);
-    for (let i: i32 = 0; i < count; i++) {
-        returnData[i] = {
-            id: data[i].id,
-            label: data[i].label
-        };
-    }
-    return returnData;
-}
-
-export function updateData(rowElements: RowElement[], mod: i32 = 10): RowElement[] {
+function updateData(rowElements: RowElement[], mod: i32 = 10): RowElement[] {
     const updatedElements: RowElement[] = rowElements;
-    for (let i: i32 = 0; i < updatedElements.length; i+=mod) {
-        updatedElements[i].label += ' !!!';
-    }
-    return updatedElements;
-}
-
-// TODO: testing - for class instead of 'interface'
-export function updateData2(rowElements: RowElement[], mod: i32 = 10): RowElement2[] {
-    const updatedElements: RowElement2[] = [];
-    for (let i: i32 = 0; i < rowElements.length; i+=mod) {
-        const rowEl: RowElement = rowElements[i];
-        updatedElements[i] = new RowElement2(rowEl.id, rowEl.label);
-    }
     for (let i: i32 = 0; i < updatedElements.length; i+=mod) {
         updatedElements[i].label += ' !!!';
     }
