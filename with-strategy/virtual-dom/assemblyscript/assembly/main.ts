@@ -67,7 +67,7 @@ export function swapRows(vtree: VElement): Patch[][] {
 // setup
 
 interface RowElement {
-    id: number;
+    id: i32;
     label: string;
 }
 
@@ -76,7 +76,7 @@ let vtree = new EmptyVElement();
 
 // RowElement functions
 
-export function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
+export function buildData(count: i32 = 1000, firstId: i32 = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
     const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
@@ -86,7 +86,7 @@ export function buildData(count: number = 1000, firstId: number = 1): RowElement
     return data;
 }
 
-export function updateData(rowElements: RowElement[], mod: number = 10): RowElement[] {
+export function updateData(rowElements: RowElement[], mod: i32 = 10): RowElement[] {
     const updatedElements = rowElements;
     for (let i=0; i < updatedElements.length; i+=mod) {
         updatedElements[i].label += ' !!!';
@@ -110,14 +110,14 @@ export function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
 
 // functions using built-in APIs
 
-function _random(max: number): number {
+function _random(max: i32): i32 {
     return Math.round(Math.random()*1000)%max;
 }
 
 
 // interaction with Virtual DOM (using lib)
 
-function _getTableRowCount(): number {
+function _getTableRowCount(): i32 {
     return vtree.children.length;
 }
 
