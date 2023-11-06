@@ -6,7 +6,7 @@ export interface DiffResult {
 }
 
 export interface Move {
-    index: number;
-    type: number;
+    index: i32;
+    type: i32;
     item: VElementChildType;
 }

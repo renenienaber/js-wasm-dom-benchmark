@@ -49,5 +49,5 @@ export class TextPatch implements Patch {
 }
 
 export interface Walker {
-    index: number;
+    index: i32;
 }

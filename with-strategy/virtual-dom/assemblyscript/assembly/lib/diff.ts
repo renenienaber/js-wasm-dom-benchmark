@@ -6,13 +6,13 @@ import {DiffResult} from "./models/list-diff2.model";
 
 
 export function diff (oldTree: VElement, newTree: VElement): Patch[][] {
-  const index: number = 0;
+  const index: i32 = 0;
   const patches: Patch[][] = [];
   dfsWalk(oldTree, newTree, index, patches);
   return patches;
 }
 
-function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: Patch[][]): void {
+function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: Patch[][]): void {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
@@ -52,7 +52,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
   }
 }
 
-function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: i32, patches: Patch[][], currentPatch: Patch[]): void {
   const diffs: DiffResult = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 
@@ -62,9 +62,9 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
   }
 
   let leftNode: VElement = new EmptyVElement();
-  let currentNodeIndex: number = index;
+  let currentNodeIndex: i32 = index;
 
-  for (let i: number = 0; i < oldChildren.length; i++) {
+  for (let i: i32 = 0; i < oldChildren.length; i++) {
     const child: VElement = oldChildren[i];
     const newChild: VElement = newChildren[i] as VElement;
     currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
@@ -76,7 +76,7 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
 }
 
 function diffProps (oldNode: VElement, newNode: VElement): PropsType {
-  let count: number = 0
+  let count: i32 = 0
   const oldProps: PropsType = oldNode.props
   const newProps: PropsType = newNode.props
 
@@ -84,7 +84,7 @@ function diffProps (oldNode: VElement, newNode: VElement): PropsType {
 
   // Find out different properties
   const oldPropsKeys = oldProps.keys();
-  for (let i: number = 0; i < oldPropsKeys.length; i++) {
+  for (let i: i32 = 0; i < oldPropsKeys.length; i++) {
     const key: string = oldPropsKeys[i];
     const value: string = oldProps.get(key);
 
@@ -96,7 +96,7 @@ function diffProps (oldNode: VElement, newNode: VElement): PropsType {
 
   // Find out new property
   const newPropsKeys = newProps.keys();
-  for (let i: number = 0; i < newPropsKeys.length; i++) {
+  for (let i: i32 = 0; i < newPropsKeys.length; i++) {
     const key: string = newPropsKeys[i];
 
     if(oldProps.has(key)) {

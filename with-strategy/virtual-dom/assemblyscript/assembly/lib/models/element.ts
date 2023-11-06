@@ -5,7 +5,7 @@ export class VElement {
   tagName: string = '';
   props: PropsType = new Map<string, string>();
   children: VElementChildType[] = [];
-  count: number = 0;
+  count: i32 = 0;
 
   text: string = '';
   empty: boolean = false;
@@ -15,8 +15,8 @@ export class VElement {
     this.props = props;
     this.children = children;
 
-    let count: number = 0;
-    for (let i: number = 0; i < children.length; i++) {
+    let count: i32 = 0;
+    for (let i: i32 = 0; i < children.length; i++) {
       const child: VElement = children[i];
       if (!child.isText()) {
         count += child.count
