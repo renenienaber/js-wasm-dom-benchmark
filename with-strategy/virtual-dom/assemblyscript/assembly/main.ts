@@ -3,37 +3,41 @@
 
 // click handler
 
-function mutateAndRerender(fn: () => void): void {
+import {EmptyVElement, TextVElement, VElement} from "./lib/models/element";
+import {Patch} from "./lib/models/patch.model";
+import {diff} from "./lib/diff";
+
+function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
+    vtree = vElement;
     const oldTree = vtree;
     fn();
-    _renderVTree(oldTree, vtree);
+    return diff(oldTree, vtree);
 }
 
-function run(): void {
-    mutateAndRerender(() => {
+export function run(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
         _appendRows(buildData());
     });
-
 }
 
-function runLots(): void {
-    mutateAndRerender(() => {
+export function runLots(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
         _appendRows(buildData(10000));
     });
 
 }
 
-function add(): void {
-    mutateAndRerender(() => {
+export function add(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         _appendRows(buildData(1000, _getTableRowCount()+1));
     });
 
 }
 
-function update(): void {
-    mutateAndRerender(() => {
+export function update(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         const updatedData = updateData(_getTableRows());
 
         _removeAllRows();
@@ -42,15 +46,15 @@ function update(): void {
 
 }
 
-function clearRows(): void {
-    mutateAndRerender(() => {
+export function clearRows(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
     });
 
 }
 
-function swapRows(): void {
-    mutateAndRerender(() => {
+export function swapRows(vtree: VElement): Patch[][] {
+    return mutateAndGetDiff(vtree, () => {
         const updatedData = updateDataForSwap(_getTableRows());
 
         _removeAllRows();
@@ -67,10 +71,12 @@ interface RowElement {
     label: string;
 }
 
+let vtree = new EmptyVElement();
+
 
 // RowElement functions
 
-function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
+export function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     const adjectives: string[] = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
     const colours: string[] = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
     const nouns: string[] = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
@@ -80,7 +86,7 @@ function buildData(count: number = 1000, firstId: number = 1): RowElement[] {
     return data;
 }
 
-function updateData(rowElements: RowElement[], mod: number = 10): RowElement[] {
+export function updateData(rowElements: RowElement[], mod: number = 10): RowElement[] {
     const updatedElements = rowElements;
     for (let i=0; i < updatedElements.length; i+=mod) {
         updatedElements[i].label += ' !!!';
@@ -88,7 +94,7 @@ function updateData(rowElements: RowElement[], mod: number = 10): RowElement[] {
     return updatedElements;
 }
 
-function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
+export function updateDataForSwap(rowElements: RowElement[]): RowElement[] {
     const length = rowElements.length;
     if (length < 2) {
         return rowElements;
@@ -150,9 +156,13 @@ function _appendRows(rowElements: RowElement[]): void {
         rows.push(tr);
     }
 
-    vtree = new VElement('tbody', new Map<string, string>([['id', 'tbody']]), rows);
+    const newMap: Map<string, string> = new Map<string, string>();
+    newMap.set('id', 'tbody');
+    vtree = new VElement('tbody', newMap, rows);
 }
 
 function _removeAllRows(): void {
-    vtree = new VElement('tbody', new Map<string, string>([['id', 'tbody']]), []);
+    const newMap: Map<string, string> = new Map<string, string>();
+    newMap.set('id', 'tbody');
+    vtree = new VElement('tbody', newMap, []);
 }

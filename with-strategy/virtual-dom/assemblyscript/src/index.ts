@@ -1,6 +1,6 @@
 import {VElement} from './lib/models/element'
-import { diff } from './lib/diff'
 import {patch, renderVElement} from './lib/patch'
+import {Patch} from "./lib/models/patch.model";
 
 
 
@@ -32,58 +32,46 @@ function doBenchmark(fn: () => void): void {
 
 // click handler
 
-function mutateAndRerender(fn: () => void): void {
-    const oldTree = vtree;
-    fn();
-    _renderVTree(oldTree, vtree);
+function getDiffAndRerender(fn: (oldTree: VElement) => Patch[][]): void {
+    const patches = fn(vtree);
+
+    // apply changes to Real DOM
+    patch(root, patches);
 }
 
 function run(): void {
-    mutateAndRerender(() => {
-        _removeAllRows();
-        _appendRows(buildData());
-    });
-
+    getDiffAndRerender(() => {
+        return run(vtree);
+    })
 }
 
 function runLots(): void {
-    mutateAndRerender(() => {
-        _removeAllRows();
-        _appendRows(buildData(10000));
-    });
-
+    getDiffAndRerender(() => {
+        return runLots(vtree);
+    })
 }
 
 function add(): void {
-    mutateAndRerender(() => {
-        _appendRows(buildData(1000, _getTableRowCount()+1));
-    });
-
+    getDiffAndRerender(() => {
+        return add(vtree);
+    })
 }
 
 function update(): void {
-    mutateAndRerender(() => {
-        const updatedData = updateData(_getTableRows());
-
-        _removeAllRows();
-        _appendRows(updatedData);
-    });
-
+    getDiffAndRerender(() => {
+        return update(vtree);
+    })
 }
 
 function clearRows(): void {
-    mutateAndRerender(() => {
-        _removeAllRows();
-    });
-
+    getDiffAndRerender(() => {
+        return clearRows(vtree);
+    })
 }
 
 function swapRows(): void {
-    mutateAndRerender(() => {
-        const updatedData = updateDataForSwap(_getTableRows());
-
-        _removeAllRows();
-        _appendRows(updatedData);
+    getDiffAndRerender(() => {
+        return swapRows(vtree);
     });
 
 }
@@ -99,9 +87,3 @@ interface RowElement {
 let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
 const root: HTMLElement = renderVElement(vtree);
 document.querySelector('table')?.appendChild(root);
-
-// apply changes to Real DOM
-function _renderVTree(oldTree: VElement, newTree: VElement): void {
-    const patches = diff(oldTree, newTree);
-    patch(root, patches);
-}
