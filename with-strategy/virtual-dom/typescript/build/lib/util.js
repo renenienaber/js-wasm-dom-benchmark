@@ -1,9 +1,3 @@
-export const _type = function (obj) {
-    return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
-};
-export const _isString = function isString(list) {
-    return _type(list) === 'String';
-};
 export const _each = function each(array, fn) {
     for (let i = 0, len = array.length; i < len; i++) {
         fn(array[i], i);

@@ -1,13 +1,3 @@
-import {Element as VElement} from "./element";
-
-export const _type = function (obj: VElement): string {
-  return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '')
-}
-
-export const _isString = function isString (list: VElement): boolean {
-  return _type(list) === 'String'
-}
-
 export const _each = function each (array: any[], fn: (arr: any, index: number) => void): void {
   for (let i = 0, len = array.length; i < len; i++) {
     fn(array[i], i);

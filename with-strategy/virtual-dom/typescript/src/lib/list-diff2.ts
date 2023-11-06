@@ -1,4 +1,4 @@
-import {Element as VElement, VElementChildType} from "./element";
+import {VElementChildType} from "./element";
 
 
 
@@ -25,14 +25,10 @@ interface KeyIndexAndFree {
   free: (VElementChildType | null)[];
 }
 
-export function diff (oldList: VElementChildType[], newList: (VElementChildType | null)[], key: string): DiffResult {
-  var oldMap: KeyIndexAndFree = makeKeyIndexAndFree(oldList, key);
-  var newMap: KeyIndexAndFree = makeKeyIndexAndFree(newList, key);
+export function diff (oldList: VElementChildType[], newList: (VElementChildType | null)[]): DiffResult {
+  var newMap: KeyIndexAndFree = makeKeyIndexAndFree(newList);
 
   var newFree: (VElementChildType | null)[] = newMap.free;
-
-  var oldKeyIndex = oldMap.keyIndex;
-  var newKeyIndex = newMap.keyIndex;
 
   var moves: Move[] = [];
 
@@ -40,25 +36,14 @@ export function diff (oldList: VElementChildType[], newList: (VElementChildType 
   var children: (VElementChildType | null)[] = [];
   var i: number = 0;
   var item: VElementChildType | null;
-  var itemKey;
   var freeIndex: number = 0;
 
   // first pass to check item in old list: if it's removed or not
   while (i < oldList.length) {
     item = oldList[i]
-    itemKey = getItemKey(item, key)
-    if (itemKey) {
-      if (!newKeyIndex.hasOwnProperty(itemKey)) {
-        children.push(null)
-      } else {
-        var newItemIndex = newKeyIndex[itemKey]
-        children.push(newList[newItemIndex])
-      }
-    } else {
-      var freeItem = newFree[freeIndex++]
-      children.push(freeItem || null)
-      // children.push(freeItem)
-    }
+    var freeItem = newFree[freeIndex++]
+    children.push(freeItem || null)
+    // children.push(freeItem)
     i++
   }
 
@@ -80,32 +65,11 @@ export function diff (oldList: VElementChildType[], newList: (VElementChildType 
   var j = i = 0
   while (i < newList.length) {
     item = newList[i]
-    itemKey = getItemKey(item, key)
 
     var simulateItem = simulateList[j]
-    var simulateItemKey = getItemKey(simulateItem, key)
 
     if (simulateItem) {
-      if (itemKey === simulateItemKey) {
-        j++
-      } else {
-        // new item, just inesrt it
-        if (!oldKeyIndex.hasOwnProperty(itemKey)) {
-          insert(i, item)
-        } else {
-          // if remove current simulateItem make item in right place
-          // then just remove it
-          var nextItemKey = getItemKey(simulateList[j + 1], key)
-          if (nextItemKey === itemKey) {
-            remove(i)
-            removeSimulate(j)
-            j++ // after removing, current j is right, just jump to next one
-          } else {
-            // else insert item
-            insert(i, item)
-          }
-        }
-      }
+      j++;
     } else {
       insert(i, item)
     }
@@ -146,35 +110,15 @@ export function diff (oldList: VElementChildType[], newList: (VElementChildType 
  * @param {Array} list
  * @param {String|Function} key
  */
-export function makeKeyIndexAndFree (list: (VElementChildType | null)[], key: string): KeyIndexAndFree {
+export function makeKeyIndexAndFree (list: (VElementChildType | null)[]): KeyIndexAndFree {
   var keyIndex: any = {}
   var free: (VElementChildType | null)[] = []
   for (var i = 0, len = list.length; i < len; i++) {
     var item = list[i]
-    var itemKey = getItemKey(item, key)
-    if (itemKey) {
-      keyIndex[itemKey] = i
-    } else {
-      free.push(item)
-    }
+    free.push(item)
   }
   return {
     keyIndex: keyIndex,
     free: free
   }
-}
-
-// function getItemKey (item: any, key: any) {
-//   if (!item || !key) return void 666
-//   return typeof key === 'string'
-//     ? item[key]
-//     : key(item)
-// }
-function getItemKey (item: (VElementChildType | null), key: string): any | null {
-  if (!item || !key) return null;
-  if(item instanceof VElement) {
-    // @ts-ignore
-    return item[key];
-  }
-  return null;
 }

@@ -1,32 +1,15 @@
-import { Element as VElement } from "./element.js";
-export function diff(oldList, newList, key) {
-    var oldMap = makeKeyIndexAndFree(oldList, key);
-    var newMap = makeKeyIndexAndFree(newList, key);
+export function diff(oldList, newList) {
+    var newMap = makeKeyIndexAndFree(newList);
     var newFree = newMap.free;
-    var oldKeyIndex = oldMap.keyIndex;
-    var newKeyIndex = newMap.keyIndex;
     var moves = [];
     var children = [];
     var i = 0;
     var item;
-    var itemKey;
     var freeIndex = 0;
     while (i < oldList.length) {
         item = oldList[i];
-        itemKey = getItemKey(item, key);
-        if (itemKey) {
-            if (!newKeyIndex.hasOwnProperty(itemKey)) {
-                children.push(null);
-            }
-            else {
-                var newItemIndex = newKeyIndex[itemKey];
-                children.push(newList[newItemIndex]);
-            }
-        }
-        else {
-            var freeItem = newFree[freeIndex++];
-            children.push(freeItem || null);
-        }
+        var freeItem = newFree[freeIndex++];
+        children.push(freeItem || null);
         i++;
     }
     var simulateList = children.slice(0);
@@ -43,29 +26,9 @@ export function diff(oldList, newList, key) {
     var j = i = 0;
     while (i < newList.length) {
         item = newList[i];
-        itemKey = getItemKey(item, key);
         var simulateItem = simulateList[j];
-        var simulateItemKey = getItemKey(simulateItem, key);
         if (simulateItem) {
-            if (itemKey === simulateItemKey) {
-                j++;
-            }
-            else {
-                if (!oldKeyIndex.hasOwnProperty(itemKey)) {
-                    insert(i, item);
-                }
-                else {
-                    var nextItemKey = getItemKey(simulateList[j + 1], key);
-                    if (nextItemKey === itemKey) {
-                        remove(i);
-                        removeSimulate(j);
-                        j++;
-                    }
-                    else {
-                        insert(i, item);
-                    }
-                }
-            }
+            j++;
         }
         else {
             insert(i, item);
@@ -93,29 +56,15 @@ export function diff(oldList, newList, key) {
         children: children
     };
 }
-export function makeKeyIndexAndFree(list, key) {
+export function makeKeyIndexAndFree(list) {
     var keyIndex = {};
     var free = [];
     for (var i = 0, len = list.length; i < len; i++) {
         var item = list[i];
-        var itemKey = getItemKey(item, key);
-        if (itemKey) {
-            keyIndex[itemKey] = i;
-        }
-        else {
-            free.push(item);
-        }
+        free.push(item);
     }
     return {
         keyIndex: keyIndex,
         free: free
     };
-}
-function getItemKey(item, key) {
-    if (!item || !key)
-        return null;
-    if (item instanceof VElement) {
-        return item[key];
-    }
-    return null;
 }

@@ -9,7 +9,6 @@ export class Element {
   tagName: string = '';
   props: PropsType = new Map<string, string>();
   children: VElementChildType[] = [];
-  key: string | null = null;
   count: number = 0;
 
   text: string = '';
@@ -19,9 +18,6 @@ export class Element {
     this.tagName = tagName;
     this.props = props;
     this.children = children;
-    if(props.has('key')) {
-      this.key = this.props.get('key') || null;
-    }
 
     let count = 0;
 

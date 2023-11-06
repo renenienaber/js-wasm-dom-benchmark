@@ -4,16 +4,12 @@ export class Element {
         this.tagName = '';
         this.props = new Map();
         this.children = [];
-        this.key = null;
         this.count = 0;
         this.text = '';
         this.empty = false;
         this.tagName = tagName;
         this.props = props;
         this.children = children;
-        if (props.has('key')) {
-            this.key = this.props.get('key') || null;
-        }
         let count = 0;
         _each(this.children, (child, i) => {
             if (!child.isText()) {

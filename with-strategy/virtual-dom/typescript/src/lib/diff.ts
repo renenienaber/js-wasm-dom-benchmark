@@ -25,8 +25,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
     }
   // Nodes are the same, diff old node's props and children
   } else if (
-      oldNode.tagName === newNode.tagName &&
-      oldNode.key === newNode.key
+      oldNode.tagName === newNode.tagName
     ) {
     // Diff props
     var propsPatches: PropsType = diffProps(oldNode, newNode);
@@ -54,7 +53,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
 }
 
 function diffChildren(oldChildren: VElementChildType[], newChildren: (VElementChildType | null)[], index: number, patches: Patch[][], currentPatch: Patch[]): void {
-  var diffs = listDiff(oldChildren, newChildren, 'key')
+  var diffs = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 
   if (diffs.moves.length) {

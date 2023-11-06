@@ -16,8 +16,7 @@ function dfsWalk(oldNode, newNode, index, patches) {
             currentPatch.push(new TextPatch(newNode));
         }
     }
-    else if (oldNode.tagName === newNode.tagName &&
-        oldNode.key === newNode.key) {
+    else if (oldNode.tagName === newNode.tagName) {
         var propsPatches = diffProps(oldNode, newNode);
         if (propsPatches.size > 0) {
             currentPatch.push(new PropsPatch(propsPatches));
@@ -34,7 +33,7 @@ function dfsWalk(oldNode, newNode, index, patches) {
     }
 }
 function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
-    var diffs = listDiff(oldChildren, newChildren, 'key');
+    var diffs = listDiff(oldChildren, newChildren);
     newChildren = diffs.children;
     if (diffs.moves.length) {
         var reorderPatch = new ReorderPatch(diffs.moves);
