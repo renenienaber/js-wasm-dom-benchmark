@@ -20,16 +20,7 @@ export interface Move {
   item?: VElementChildType | null;
 }
 
-interface KeyIndexAndFree {
-  keyIndex: any;
-  free: VElementChildType[];
-}
-
 export function diff (oldList: VElementChildType[], newList: VElementChildType[]): DiffResult {
-  var newMap: KeyIndexAndFree = makeKeyIndexAndFree(newList);
-
-  var newFree: VElementChildType[] = newMap.free;
-
   var moves: Move[] = [];
 
   // a simulate list to manipulate
@@ -41,7 +32,7 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   // first pass to check item in old list: if it's removed or not
   while (i < oldList.length) {
     item = oldList[i]
-    var freeItem = newFree[freeIndex++]
+    var freeItem = newList[freeIndex++]
     children.push(freeItem || null);
     // children.push(freeItem)
     i++
@@ -102,23 +93,5 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   return {
     moves: moves,
     children: children
-  }
-}
-
-/**
- * Convert list to key-item keyIndex object.
- * @param {Array} list
- * @param {String|Function} key
- */
-export function makeKeyIndexAndFree (list: VElementChildType[]): KeyIndexAndFree {
-  var keyIndex: any = {}
-  var free: VElementChildType[] = []
-  for (var i = 0, len = list.length; i < len; i++) {
-    var item = list[i]
-    free.push(item)
-  }
-  return {
-    keyIndex: keyIndex,
-    free: free
   }
 }

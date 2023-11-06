@@ -1,6 +1,4 @@
 export function diff(oldList, newList) {
-    var newMap = makeKeyIndexAndFree(newList);
-    var newFree = newMap.free;
     var moves = [];
     var children = [];
     var i = 0;
@@ -8,7 +6,7 @@ export function diff(oldList, newList) {
     var freeIndex = 0;
     while (i < oldList.length) {
         item = oldList[i];
-        var freeItem = newFree[freeIndex++];
+        var freeItem = newList[freeIndex++];
         children.push(freeItem || null);
         i++;
     }
@@ -54,17 +52,5 @@ export function diff(oldList, newList) {
     return {
         moves: moves,
         children: children
-    };
-}
-export function makeKeyIndexAndFree(list) {
-    var keyIndex = {};
-    var free = [];
-    for (var i = 0, len = list.length; i < len; i++) {
-        var item = list[i];
-        free.push(item);
-    }
-    return {
-        keyIndex: keyIndex,
-        free: free
     };
 }
