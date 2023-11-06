@@ -1,4 +1,4 @@
-import {_each, _setAttr} from "./util";
+import {_setAttr} from "./util";
 
 
 
@@ -20,16 +20,15 @@ export class Element {
     this.children = children;
 
     let count = 0;
-
-    _each(this.children, (child: VElementChildType, i: number): void => {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
       if (!child.isText()) {
         count += child.count
       } else {
         children[i].text = '' + child.text
       }
       count++
-    })
-
+    }
     this.count = count;
   }
 
@@ -41,12 +40,13 @@ export class Element {
       _setAttr(el, key, value);
     });
 
-    _each(this.children, (child: VElementChildType): void => {
+    for (let i = 0; i < this.children.length; i++) {
+      const child = this.children[i];
       const childEl = (!child.isText())
           ? child.render()
           : document.createTextNode(child.text);
       el.appendChild(childEl);
-    })
+    }
 
     return el;
   }

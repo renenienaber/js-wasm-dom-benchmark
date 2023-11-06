@@ -1,8 +1,3 @@
-export const _each = function each(array, fn) {
-    for (let i = 0, len = array.length; i < len; i++) {
-        fn(array[i], i);
-    }
-};
 export const _toArray = function toArray(listLike) {
     if (!listLike) {
         return [];

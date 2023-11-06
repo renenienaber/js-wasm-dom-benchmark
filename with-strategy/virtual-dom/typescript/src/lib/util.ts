@@ -1,9 +1,3 @@
-export const _each = function each (array: any[], fn: (arr: any, index: number) => void): void {
-  for (let i = 0, len = array.length; i < len; i++) {
-    fn(array[i], i);
-  }
-}
-
 export const _toArray = function toArray (listLike: NodeListOf<ChildNode>): ChildNode[] {
   if (!listLike) {
     return [];

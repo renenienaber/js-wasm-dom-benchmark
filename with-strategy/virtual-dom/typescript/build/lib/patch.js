@@ -1,4 +1,4 @@
-import { _each, _setAttr, _toArray } from "./util.js";
+import { _setAttr, _toArray } from "./util.js";
 export var PatchType;
 (function (PatchType) {
     PatchType[PatchType["REPLACE"] = 0] = "REPLACE";
@@ -49,8 +49,9 @@ export function dfsWalk(node, walker, patches) {
     }
 }
 export function applyPatches(node, currentPatches) {
-    _each(currentPatches, function (currentPatch) {
-        var _a;
+    var _a;
+    for (let i = 0; i < currentPatches.length; i++) {
+        const currentPatch = currentPatches[i];
         switch (currentPatch.type) {
             case PatchType.REPLACE:
                 const newNode = (currentPatch.node.isText())
@@ -75,7 +76,7 @@ export function applyPatches(node, currentPatches) {
             default:
                 throw new Error('Unknown patch type ' + currentPatch.type);
         }
-    });
+    }
 }
 export function setProps(node, props) {
     props.forEach((value, key, map) => {
@@ -90,15 +91,17 @@ export function setProps(node, props) {
 export function reorderChildren(node, moves) {
     const staticNodeList = _toArray(node.childNodes);
     let maps = {};
-    _each(staticNodeList, (node) => {
+    for (let i = 0; i < staticNodeList.length; i++) {
+        const node = staticNodeList[i];
         if (node.nodeType === 1) {
             const key = node.getAttribute('key');
             if (key) {
                 maps[key] = node;
             }
         }
-    });
-    _each(moves, (move) => {
+    }
+    for (let i = 0; i < moves.length; i++) {
+        const move = moves[i];
         const index = move.index;
         if (move.type === 0) {
             if (staticNodeList[index] === node.childNodes[index]) {
@@ -115,5 +118,5 @@ export function reorderChildren(node, moves) {
             staticNodeList.splice(index, 0, insertNode);
             node.insertBefore(insertNode, node.childNodes[index] || null);
         }
-    });
+    }
 }

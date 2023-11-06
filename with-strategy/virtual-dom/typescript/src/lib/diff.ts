@@ -1,4 +1,3 @@
-import {_each} from "./util";
 import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
 import {Element as VElement, VElementChildType, PropsType} from "./element";
 import {diff as listDiff} from "./list-diff2";
@@ -63,14 +62,16 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
 
   var leftNode: VElement | null = null
   var currentNodeIndex = index
-  _each(oldChildren, function (child: VElement, i: number) {
+
+  for (let i = 0; i < oldChildren.length; i++) {
+    const child = oldChildren[i];
     var newChild = newChildren[i] as VElement;
     currentNodeIndex = (leftNode && leftNode.count)
-      ? currentNodeIndex + leftNode.count + 1
-      : currentNodeIndex + 1
+        ? currentNodeIndex + leftNode.count + 1
+        : currentNodeIndex + 1
     dfsWalk(child, newChild, currentNodeIndex, patches)
     leftNode = child
-  })
+  }
 }
 
 function diffProps (oldNode: VElement, newNode: VElement): PropsType {

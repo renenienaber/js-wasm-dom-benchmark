@@ -1,4 +1,3 @@
-import { _each } from "./util.js";
 import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./patch.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
@@ -41,14 +40,15 @@ function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
     }
     var leftNode = null;
     var currentNodeIndex = index;
-    _each(oldChildren, function (child, i) {
+    for (let i = 0; i < oldChildren.length; i++) {
+        const child = oldChildren[i];
         var newChild = newChildren[i];
         currentNodeIndex = (leftNode && leftNode.count)
             ? currentNodeIndex + leftNode.count + 1
             : currentNodeIndex + 1;
         dfsWalk(child, newChild, currentNodeIndex, patches);
         leftNode = child;
-    });
+    }
 }
 function diffProps(oldNode, newNode) {
     var count = 0;

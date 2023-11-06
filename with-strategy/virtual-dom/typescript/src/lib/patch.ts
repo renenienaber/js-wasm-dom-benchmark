@@ -1,4 +1,4 @@
-import {_each, _setAttr, _toArray} from "./util";
+import {_setAttr, _toArray} from "./util";
 import {Element as VElement, PropsType, VElementChildType} from "./element";
 import {Move} from "./list-diff2";
 
@@ -78,12 +78,13 @@ export function dfsWalk (node: Node, walker: Walker, patches: Patch[][]): void {
 }
 
 export function applyPatches (node: Node, currentPatches: Patch[]): void {
-  _each(currentPatches, function (currentPatch: Patch) {
+  for (let i = 0; i < currentPatches.length; i++) {
+    const currentPatch = currentPatches[i];
     switch (currentPatch.type) {
       case PatchType.REPLACE:
         const newNode = ((currentPatch as ReplacePatch).node.isText())
-          ? document.createTextNode((currentPatch as ReplacePatch).node.text)
-          : ((currentPatch as ReplacePatch).node as VElement).render();
+            ? document.createTextNode((currentPatch as ReplacePatch).node.text)
+            : ((currentPatch as ReplacePatch).node as VElement).render();
         node.parentNode?.replaceChild(newNode, node);
         break;
       case PatchType.REORDER:
@@ -102,7 +103,7 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
       default:
         throw new Error('Unknown patch type ' + currentPatch.type)
     }
-  })
+  }
 }
 
 export function setProps (node: HTMLElement, props: PropsType): void {
@@ -119,16 +120,18 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
   const staticNodeList = _toArray(node.childNodes)
   let maps: any = {};
 
-  _each(staticNodeList, (node: HTMLElement): void => {
+  for (let i = 0; i < staticNodeList.length; i++) {
+    const node: HTMLElement = staticNodeList[i] as HTMLElement;
     if (node.nodeType === 1) {
       const key = node.getAttribute('key');
       if (key) {
         maps[key] = node
       }
     }
-  })
+  }
 
-  _each(moves, (move: any): void => {
+  for (let i = 0; i < moves.length; i++) {
+    const move: any = moves[i];
     const index = move.index
     if (move.type === 0) { // remove item
       if (staticNodeList[index] === node.childNodes[index]) { // maybe have been removed for inserting
@@ -137,12 +140,12 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
       staticNodeList.splice(index, 1)
     } else if (move.type === 1) { // insert item
       var insertNode = maps[move.item.key]
-        ? maps[move.item.key].cloneNode(true) // reuse old item
-        : (typeof move.item === 'object')
-            ? move.item.render()
-            : document.createTextNode(move.item)
+          ? maps[move.item.key].cloneNode(true) // reuse old item
+          : (typeof move.item === 'object')
+              ? move.item.render()
+              : document.createTextNode(move.item)
       staticNodeList.splice(index, 0, insertNode)
       node.insertBefore(insertNode, node.childNodes[index] || null)
     }
-  })
+  }
 }
