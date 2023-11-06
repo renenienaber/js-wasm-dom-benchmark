@@ -123,14 +123,14 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
     }
   }
 
-  let maps: any = {};
+  const maps: Map<string, HTMLElement> = new Map<string, HTMLElement>();
 
   for (let i = 0; i < staticNodeList.length; i++) {
     const node: HTMLElement = staticNodeList[i] as HTMLElement;
     if (node.nodeType === 1) {
       const key = node.getAttribute('key');
       if (key) {
-        maps[key] = node
+        maps.set(key, node);
       }
     }
   }
@@ -144,12 +144,10 @@ export function reorderChildren (node: HTMLElement, moves: Move[]): void {
       }
       staticNodeList.splice(index, 1)
     } else if (move.type === 1) { // insert item
-      var insertNode = maps[move.item.key]
-          ? maps[move.item.key].cloneNode(true) // reuse old item
-          : (typeof move.item === 'object')
+      var insertNode = (typeof move.item === 'object')
               ? renderVElement(move.item)
               : document.createTextNode(move.item)
-      staticNodeList.splice(index, 0, insertNode)
+      staticNodeList.splice(index, 0, insertNode as ChildNode)
       node.insertBefore(insertNode, node.childNodes[index] || null)
     }
   }

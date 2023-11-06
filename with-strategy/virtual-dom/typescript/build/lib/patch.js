@@ -94,13 +94,13 @@ export function reorderChildren(node, moves) {
             staticNodeList.push(node.childNodes[i]);
         }
     }
-    let maps = {};
+    const maps = new Map();
     for (let i = 0; i < staticNodeList.length; i++) {
         const node = staticNodeList[i];
         if (node.nodeType === 1) {
             const key = node.getAttribute('key');
             if (key) {
-                maps[key] = node;
+                maps.set(key, node);
             }
         }
     }
@@ -114,11 +114,9 @@ export function reorderChildren(node, moves) {
             staticNodeList.splice(index, 1);
         }
         else if (move.type === 1) {
-            var insertNode = maps[move.item.key]
-                ? maps[move.item.key].cloneNode(true)
-                : (typeof move.item === 'object')
-                    ? renderVElement(move.item)
-                    : document.createTextNode(move.item);
+            var insertNode = (typeof move.item === 'object')
+                ? renderVElement(move.item)
+                : document.createTextNode(move.item);
             staticNodeList.splice(index, 0, insertNode);
             node.insertBefore(insertNode, node.childNodes[index] || null);
         }
