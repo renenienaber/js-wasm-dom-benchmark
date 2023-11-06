@@ -6,6 +6,8 @@ export class Element {
         this.children = [];
         this.key = null;
         this.count = 0;
+        this.text = '';
+        this.empty = false;
         this.tagName = tagName;
         this.props = props;
         this.children = children;
@@ -14,11 +16,11 @@ export class Element {
         }
         let count = 0;
         _each(this.children, (child, i) => {
-            if (child instanceof Element) {
+            if (!child.isText()) {
                 count += child.count;
             }
             else {
-                children[i] = '' + child;
+                children[i].text = '' + child.text;
             }
             count++;
         });
@@ -31,11 +33,28 @@ export class Element {
             _setAttr(el, key, value);
         });
         _each(this.children, (child) => {
-            const childEl = (child instanceof Element)
+            const childEl = (!child.isText())
                 ? child.render()
-                : document.createTextNode(child);
+                : document.createTextNode(child.text);
             el.appendChild(childEl);
         });
         return el;
+    }
+    isText() {
+        return this.text !== '';
+    }
+    isEmpty() {
+        return this.empty;
+    }
+}
+export class TextVElement extends Element {
+    constructor(text) {
+        super('', new Map(), []);
+        this.text = text;
+    }
+}
+export class EmptyVElement extends Element {
+    constructor() {
+        super('', new Map(), []);
     }
 }

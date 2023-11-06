@@ -81,8 +81,8 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
   _each(currentPatches, function (currentPatch: Patch) {
     switch (currentPatch.type) {
       case PatchType.REPLACE:
-        const newNode = (typeof (currentPatch as ReplacePatch).node === 'string')
-          ? document.createTextNode((currentPatch as ReplacePatch).node as string)
+        const newNode = ((currentPatch as ReplacePatch).node.isText())
+          ? document.createTextNode((currentPatch as ReplacePatch).node.text)
           : ((currentPatch as ReplacePatch).node as VElement).render();
         node.parentNode?.replaceChild(newNode, node);
         break;
@@ -94,9 +94,9 @@ export function applyPatches (node: Node, currentPatches: Patch[]): void {
         break;
       case PatchType.TEXT:
         if (node.textContent) {
-          node.textContent = (currentPatch as TextPatch).content as string
+          node.textContent = (currentPatch as TextPatch).content.text
         } else {
-          node.nodeValue = (currentPatch as TextPatch).content as string
+          node.nodeValue = (currentPatch as TextPatch).content.text
         }
         break;
       default:

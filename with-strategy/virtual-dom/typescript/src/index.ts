@@ -1,4 +1,4 @@
-import {Element as VElement} from './lib/element'
+import {Element as VElement, TextVElement} from './lib/element'
 import { diff } from './lib/diff'
 import { patch } from './lib/patch'
 
@@ -155,16 +155,20 @@ function _getTableRows(): RowElement[] {
         const tr: VElement = vtree.children[i] as VElement;
         const td1: VElement = tr.children[0] as VElement;
         const a2: VElement = (((vtree.children[i] as VElement).children[1] as VElement).children[0] as VElement) as VElement;
-        rowElements.push({id: parseInt(td1.children[0] as string), label: a2.children[0] as string});
+        rowElements.push({id: parseInt(td1.children[0].text), label: a2.children[0].text});
     }
     return rowElements;
 }
 
 function _createRow(data: RowElement): VElement {
     return new VElement('tr', new Map<string, string>(), [
-        new VElement('td', new Map<string, string>(), [data.id.toString()]),
         new VElement('td', new Map<string, string>(), [
-            new VElement('a', new Map<string, string>(), [data.label])
+            new TextVElement(data.id.toString())
+        ]),
+        new VElement('td', new Map<string, string>(), [
+            new VElement('a', new Map<string, string>(), [
+                new TextVElement(data.label)
+            ])
         ])
     ]);
 }

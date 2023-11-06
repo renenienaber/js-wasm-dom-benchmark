@@ -3,7 +3,7 @@ import {_each, _setAttr} from "./util";
 
 
 export type PropsType = Map<string, string>;
-export type VElementChildType = Element | string
+export type VElementChildType = Element;
 
 export class Element {
   tagName: string = '';
@@ -11,6 +11,9 @@ export class Element {
   children: VElementChildType[] = [];
   key: string | null = null;
   count: number = 0;
+
+  text: string = '';
+  empty: boolean = false;
 
   constructor(tagName: string, props: PropsType, children: VElementChildType[]) {
     this.tagName = tagName;
@@ -23,10 +26,10 @@ export class Element {
     let count = 0;
 
     _each(this.children, (child: VElementChildType, i: number): void => {
-      if (child instanceof Element) {
+      if (!child.isText()) {
         count += child.count
       } else {
-        children[i] = '' + child
+        children[i].text = '' + child.text
       }
       count++
     })
@@ -43,12 +46,33 @@ export class Element {
     });
 
     _each(this.children, (child: VElementChildType): void => {
-      const childEl = (child instanceof Element)
+      const childEl = (!child.isText())
           ? child.render()
-          : document.createTextNode(child);
+          : document.createTextNode(child.text);
       el.appendChild(childEl);
     })
 
     return el;
+  }
+
+  isText(): boolean {
+    return this.text !== '';
+  }
+
+  isEmpty(): boolean {
+    return this.empty;
+  }
+}
+
+export class TextVElement extends Element {
+  constructor(text: string) {
+    super('', new Map<string, string>(), []);
+    this.text = text;
+  }
+}
+
+export class EmptyVElement extends Element {
+  constructor() {
+    super('', new Map<string, string>(), []);
   }
 }

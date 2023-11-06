@@ -1,4 +1,4 @@
-import { _each, _isString } from "./util.js";
+import { _each } from "./util.js";
 import { PropsPatch, ReorderPatch, ReplacePatch, TextPatch } from "./patch.js";
 import { diff as listDiff } from "./list-diff2.js";
 export function diff(oldTree, newTree) {
@@ -11,8 +11,8 @@ function dfsWalk(oldNode, newNode, index, patches) {
     const currentPatch = [];
     if (newNode === null) {
     }
-    else if (_isString(oldNode) && _isString(newNode)) {
-        if (newNode !== oldNode) {
+    else if (oldNode.isText() && newNode.isText()) {
+        if (newNode.text !== oldNode.text) {
             currentPatch.push(new TextPatch(newNode));
         }
     }

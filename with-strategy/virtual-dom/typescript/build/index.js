@@ -1,5 +1,5 @@
 var _a, _b, _c, _d, _e, _f, _g;
-import { Element as VElement } from './lib/element.js';
+import { Element as VElement, TextVElement } from './lib/element.js';
 import { diff } from './lib/diff.js';
 import { patch } from './lib/patch.js';
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
@@ -100,15 +100,19 @@ function _getTableRows() {
         const tr = vtree.children[i];
         const td1 = tr.children[0];
         const a2 = vtree.children[i].children[1].children[0];
-        rowElements.push({ id: parseInt(td1.children[0]), label: a2.children[0] });
+        rowElements.push({ id: parseInt(td1.children[0].text), label: a2.children[0].text });
     }
     return rowElements;
 }
 function _createRow(data) {
     return new VElement('tr', new Map(), [
-        new VElement('td', new Map(), [data.id.toString()]),
         new VElement('td', new Map(), [
-            new VElement('a', new Map(), [data.label])
+            new TextVElement(data.id.toString())
+        ]),
+        new VElement('td', new Map(), [
+            new VElement('a', new Map(), [
+                new TextVElement(data.label)
+            ])
         ])
     ]);
 }

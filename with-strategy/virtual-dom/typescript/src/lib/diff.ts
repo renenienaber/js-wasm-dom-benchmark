@@ -1,4 +1,4 @@
-import {_each, _isString} from "./util";
+import {_each} from "./util";
 import {Patch, PropsPatch, ReorderPatch, ReplacePatch, TextPatch} from "./patch";
 import {Element as VElement, VElementChildType, PropsType} from "./element";
 import {diff as listDiff} from "./list-diff2";
@@ -19,9 +19,9 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: number, patches: 
   if (newNode === null) {
     // Real DOM node will be removed when perform reordering, so has no needs to do anything in here
   // TextNode content replacing
-  } else if (_isString(oldNode) && _isString(newNode)) {
-    if (newNode !== oldNode) {
-      currentPatch.push(new TextPatch(newNode))
+  } else if (oldNode.isText() && newNode.isText()) {
+    if (newNode.text !== oldNode.text) {
+      currentPatch.push(new TextPatch(newNode));
     }
   // Nodes are the same, diff old node's props and children
   } else if (
