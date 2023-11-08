@@ -10,6 +10,7 @@ export class VElement {
         this.props = props;
         this.children = children;
         let count = 0;
+        console.log(children);
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
             if (!child.isText()) {

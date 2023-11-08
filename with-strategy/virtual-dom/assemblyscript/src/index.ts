@@ -45,8 +45,8 @@ function run(): void {
     //     return doRun(vtree);
     // })
 
-    // const result = doRun(visibleVTree);
-    // console.log(result);
+    const result = doRun(vtree);
+    console.log(result);
 }
 
 function runLots(): void {

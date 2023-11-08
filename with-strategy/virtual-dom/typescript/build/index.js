@@ -129,5 +129,6 @@ function _removeAllRows() {
 }
 function _renderVTree(oldTree, newTree) {
     const patches = diff(oldTree, newTree);
+    console.log(patches);
     patch(root, patches);
 }
