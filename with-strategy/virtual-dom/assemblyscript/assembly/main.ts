@@ -1,71 +1,10 @@
-import {EmptyVElement, TextVElement, VElement} from "./lib/models/element";
+import {EmptyVElement, TextVElement, toVElement, VElement, VisibleVElement} from "./lib/models/element";
 import {Patch} from "./lib/models/patch.model";
 import {diff} from "./lib/diff";
 
 
 
 // click handler
-class VisibleElement {
-    // @ts-ignore
-    tagName: string;
-    // @ts-ignore
-    // props: PropsType; // TODO: make props visible
-    // @ts-ignore
-    children: VisibleElement[];
-    // @ts-ignore
-    count: i32;
-    // @ts-ignore
-    text: string;
-    // @ts-ignore
-    empty: boolean;
-}
-
-function _toVElement(visibleElement: VisibleElement): VElement  {
-    const velement: VElement = new EmptyVElement();
-    velement.tagName = visibleElement.tagName;
-    // velement.props = visibleElement.props; // TODO: make props visible
-
-    const children: VisibleElement[] = visibleElement.children;
-    const lenChildren: i32 = children.length;
-    const newChildren: VElement[] = new Array<VElement>(lenChildren);
-    for (let i: i32 = 0; i < lenChildren; i++) {
-        const child: VisibleElement = children[i];
-        const childVElement: VElement = _toVElement(child);
-        newChildren[i] = childVElement;
-    }
-    velement.children = newChildren;
-
-    velement.count = visibleElement.count;
-    velement.text = visibleElement.text;
-    velement.empty = visibleElement.empty;
-
-    return velement;
-}
-
-function _toVisibleElement(vElement: VElement): VisibleElement {
-    const visibleElement: VisibleElement = {
-        tagName: vElement.tagName,
-        // props: vElement.props, // TODO: make props visible
-        children: [],
-        count: vElement.count,
-        text: vElement.text,
-        empty: vElement.empty
-    };
-
-    const children: VElement[] = vElement.children;
-    const lenChildren: i32 = children.length;
-    const newChildren: VisibleElement[] = new Array<VisibleElement>(lenChildren);
-    for (let i: i32 = 0; i < lenChildren; i++) {
-        const child: VElement = children[i];
-        const childVElement: VisibleElement = _toVisibleElement(child);
-        newChildren[i] = childVElement;
-    }
-    visibleElement.children = newChildren;
-
-    return visibleElement;
-}
-
-
 function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     vtree = vElement;
     const oldTree = vtree;
@@ -84,8 +23,8 @@ function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
 //     return result;
 // }
 
-export function doRun(visibleElement: VisibleElement): Patch[][] {
-    const velement: VElement = _toVElement(visibleElement);
+export function doRun(visibleElement: VisibleVElement): Patch[][] {
+    const velement: VElement = toVElement(visibleElement);
 
     const diff = mutateAndGetDiff(velement, () => {
         _removeAllRows();

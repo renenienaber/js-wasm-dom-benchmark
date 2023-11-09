@@ -2,7 +2,7 @@
 export declare const memory: WebAssembly.Memory;
 /**
  * assembly/main/doRun
- * @param visibleElement `assembly/main/VisibleElement`
+ * @param visibleElement `assembly/lib/models/element/VisibleVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
 export declare function doRun(visibleElement: __Record9<undefined>): Array<Array<__Record11<never>>>;
@@ -36,11 +36,11 @@ export declare function doClearRows(vtree: __Internref4): Array<Array<__Record11
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
 export declare function doSwapRows(vtree: __Internref4): Array<Array<__Record11<never>>>;
-/** assembly/main/VisibleElement */
+/** assembly/lib/models/element/VisibleVElement */
 declare interface __Record9<TOmittable> {
   /** @type `~lib/string/String` */
   tagName: string;
-  /** @type `~lib/array/Array<assembly/main/VisibleElement>` */
+  /** @type `~lib/array/Array<assembly/lib/models/element/VisibleVElement>` */
   children: Array<__Record9<undefined>>;
   /** @type `i32` */
   count: number | TOmittable;

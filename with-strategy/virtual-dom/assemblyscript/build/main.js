@@ -25,7 +25,7 @@ async function instantiate(module, imports = {}) {
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
     doRun(visibleElement) {
-      // assembly/main/doRun(assembly/main/VisibleElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
+      // assembly/main/doRun(assembly/lib/models/element/VisibleVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       visibleElement = __lowerRecord9(visibleElement) || __notnull();
       return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(visibleElement) >>> 0);
     },
@@ -56,7 +56,7 @@ async function instantiate(module, imports = {}) {
     },
   }, exports);
   function __lowerRecord9(value) {
-    // assembly/main/VisibleElement
+    // assembly/lib/models/element/VisibleVElement
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
     const pointer = exports.__pin(exports.__new(17, 9));

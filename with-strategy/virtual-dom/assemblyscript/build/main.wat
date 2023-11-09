@@ -2230,7 +2230,7 @@
           block $assembly/lib/models/list-diff2.model/DiffResult
            block $~lib/function/Function<%28%29=>void>
             block $assembly/lib/models/patch.model/Patch
-             block $assembly/main/VisibleElement
+             block $assembly/lib/models/element/VisibleVElement
               block $~lib/array/Array<i32>
                block $~lib/map/Map<~lib/string/String,~lib/string/String>
                 block $~lib/arraybuffer/ArrayBufferView
@@ -2241,7 +2241,7 @@
                     i32.const 8
                     i32.sub
                     i32.load $0
-                    br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner1 $~lib/map/Map<~lib/string/String,~lib/string/String> $folding-inner2 $folding-inner1 $~lib/array/Array<i32> $assembly/main/VisibleElement $folding-inner2 $assembly/lib/models/patch.model/Patch $folding-inner2 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner2 $folding-inner1 $~lib/function/Function<%28%29=>void> $folding-inner3 $folding-inner3 $assembly/lib/models/list-diff2.model/DiffResult $assembly/lib/models/list-diff2.model/Move $folding-inner2 $folding-inner3 $folding-inner3 $invalid
+                    br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner1 $~lib/map/Map<~lib/string/String,~lib/string/String> $folding-inner2 $folding-inner1 $~lib/array/Array<i32> $assembly/lib/models/element/VisibleVElement $folding-inner2 $assembly/lib/models/patch.model/Patch $folding-inner2 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner2 $folding-inner1 $~lib/function/Function<%28%29=>void> $folding-inner3 $folding-inner3 $assembly/lib/models/list-diff2.model/DiffResult $assembly/lib/models/list-diff2.model/Move $folding-inner2 $folding-inner3 $folding-inner3 $invalid
                    end
                    return
                   end
@@ -3795,7 +3795,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $assembly/main/_toVElement (param $0 i32) (result i32)
+ (func $assembly/lib/models/element/toVElement (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3887,7 +3887,7 @@
     i32.store $0 offset=4
     global.get $~lib/memory/__stack_pointer
     local.get $6
-    call $assembly/main/_toVElement
+    call $assembly/lib/models/element/toVElement
     local.tee $6
     i32.store $0 offset=28
     global.get $~lib/memory/__stack_pointer
@@ -8751,7 +8751,7 @@
    i32.store $0
    local.get $1
    local.get $0
-   call $assembly/main/_toVElement
+   call $assembly/lib/models/element/toVElement
    local.tee $0
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
