@@ -5,41 +5,50 @@ export declare const memory: WebAssembly.Memory;
  * @param visibleElement `assembly/lib/models/element/VisibleVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doRun(visibleElement: __Record9<undefined>): Array<Array<__Record11<never>>>;
+export declare function doRun(visibleElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doRunLots
  * @param vtree `assembly/lib/models/element/VElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doRunLots(vtree: __Internref4): Array<Array<__Record11<never>>>;
+export declare function doRunLots(vtree: __Internref4): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doAdd
  * @param vtree `assembly/lib/models/element/VElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doAdd(vtree: __Internref4): Array<Array<__Record11<never>>>;
+export declare function doAdd(vtree: __Internref4): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doUpdate
  * @param vtree `assembly/lib/models/element/VElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doUpdate(vtree: __Internref4): Array<Array<__Record11<never>>>;
+export declare function doUpdate(vtree: __Internref4): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doClearRows
  * @param vtree `assembly/lib/models/element/VElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doClearRows(vtree: __Internref4): Array<Array<__Record11<never>>>;
+export declare function doClearRows(vtree: __Internref4): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doSwapRows
  * @param vtree `assembly/lib/models/element/VElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>`
  */
-export declare function doSwapRows(vtree: __Internref4): Array<Array<__Record11<never>>>;
+export declare function doSwapRows(vtree: __Internref4): Array<Array<__Record13<never>>>;
+/** assembly/lib/models/element/VisiblePropsType */
+declare interface __Record10<TOmittable> {
+  /** @type `~lib/array/Array<~lib/string/String>` */
+  keys: Array<string>;
+  /** @type `~lib/array/Array<~lib/string/String>` */
+  values: Array<string>;
+}
 /** assembly/lib/models/element/VisibleVElement */
 declare interface __Record9<TOmittable> {
   /** @type `~lib/string/String` */
   tagName: string;
+  /** @type `assembly/lib/models/element/VisiblePropsType` */
+  props: __Record10<undefined>;
   /** @type `~lib/array/Array<assembly/lib/models/element/VisibleVElement>` */
   children: Array<__Record9<undefined>>;
   /** @type `i32` */
@@ -50,7 +59,7 @@ declare interface __Record9<TOmittable> {
   empty: boolean | TOmittable;
 }
 /** assembly/lib/models/patch.model/Patch */
-declare interface __Record11<TOmittable> {
+declare interface __Record13<TOmittable> {
 }
 /** assembly/lib/models/element/VElement */
 declare class __Internref4 extends Number {

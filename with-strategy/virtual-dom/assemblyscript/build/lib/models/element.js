@@ -40,3 +40,39 @@ export class EmptyVElement extends VElement {
         super('', new Map(), []);
     }
 }
+export function toVisibleVElement(vElement) {
+    return Object.assign(Object.assign({}, vElement), { props: _toVisiblePropsType(vElement.props), children: vElement.children.map(el => (toVisibleVElement(el))) });
+}
+export function toVElement(visibleVElement) {
+    const newVElement = new EmptyVElement();
+    newVElement.tagName = visibleVElement.tagName;
+    newVElement.props = _toPropsType(visibleVElement.props);
+    newVElement.children = visibleVElement.children.map(el => (toVElement(el)));
+    newVElement.count = visibleVElement.count;
+    newVElement.text = visibleVElement.text;
+    newVElement.empty = visibleVElement.empty;
+    return newVElement;
+}
+function _toVisiblePropsType(propsType) {
+    const keys = [];
+    const values = [];
+    for (let [key, value] of propsType) {
+        keys.push(key);
+        values.push(value);
+    }
+    return {
+        keys,
+        values
+    };
+}
+function _toPropsType(visiblePropsType) {
+    const newMap = new Map();
+    const keys = visiblePropsType.keys;
+    const values = visiblePropsType.values;
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = values[i];
+        newMap.set(key, value);
+    }
+    return newMap;
+}

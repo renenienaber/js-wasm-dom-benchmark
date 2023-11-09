@@ -27,48 +27,59 @@ async function instantiate(module, imports = {}) {
     doRun(visibleElement) {
       // assembly/main/doRun(assembly/lib/models/element/VisibleVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       visibleElement = __lowerRecord9(visibleElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(visibleElement) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(visibleElement) >>> 0);
     },
     doRunLots(vtree) {
       // assembly/main/doRunLots(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(vtree) >>> 0);
     },
     doAdd(vtree) {
       // assembly/main/doAdd(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(vtree) >>> 0);
     },
     doUpdate(vtree) {
       // assembly/main/doUpdate(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(vtree) >>> 0);
     },
     doClearRows(vtree) {
       // assembly/main/doClearRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(vtree) >>> 0);
     },
     doSwapRows(vtree) {
       // assembly/main/doSwapRows(assembly/lib/models/element/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.model/Patch>>
       vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord11(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(vtree) >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(vtree) >>> 0);
     },
   }, exports);
+  function __lowerRecord10(value) {
+    // assembly/lib/models/element/VisiblePropsType
+    // Hint: Opt-out from lowering as a record by providing an empty constructor
+    if (value == null) return 0;
+    const pointer = exports.__pin(exports.__new(8, 10));
+    __setU32(pointer + 0, __lowerArray((pointer, value) => { __setU32(pointer, __lowerString(value) || __notnull()); }, 11, 2, value.keys) || __notnull());
+    __setU32(pointer + 4, __lowerArray((pointer, value) => { __setU32(pointer, __lowerString(value) || __notnull()); }, 11, 2, value.values) || __notnull());
+    exports.__unpin(pointer);
+    return pointer;
+  }
   function __lowerRecord9(value) {
     // assembly/lib/models/element/VisibleVElement
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const pointer = exports.__pin(exports.__new(17, 9));
+    const pointer = exports.__pin(exports.__new(21, 9));
     __setU32(pointer + 0, __lowerString(value.tagName) || __notnull());
-    __setU32(pointer + 4, __lowerArray((pointer, value) => { __setU32(pointer, __lowerRecord9(value) || __notnull()); }, 10, 2, value.children) || __notnull());
-    __setU32(pointer + 8, value.count);
-    __setU32(pointer + 12, __lowerString(value.text) || __notnull());
-    __setU8(pointer + 16, value.empty ? 1 : 0);
+    __setU32(pointer + 4, __lowerRecord10(value.props) || __notnull());
+    __setU32(pointer + 8, __lowerArray((pointer, value) => { __setU32(pointer, __lowerRecord9(value) || __notnull()); }, 12, 2, value.children) || __notnull());
+    __setU32(pointer + 12, value.count);
+    __setU32(pointer + 16, __lowerString(value.text) || __notnull());
+    __setU8(pointer + 20, value.empty ? 1 : 0);
     exports.__unpin(pointer);
     return pointer;
   }
-  function __liftRecord11(pointer) {
+  function __liftRecord13(pointer) {
     // assembly/lib/models/patch.model/Patch
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;

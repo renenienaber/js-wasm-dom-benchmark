@@ -1,4 +1,4 @@
-import {VElement} from './lib/models/element.js'
+import {toVisibleVElement, VElement} from './lib/models/element.js'
 import {patch, renderVElement} from './lib/patch.js'
 import {Patch} from "./lib/models/patch.model.js";
 import { doRun } from "../build/main.js"
@@ -58,7 +58,8 @@ function run(): void {
     // const result = test(newTestVTree);
     // console.log(result);
 
-    const result = doRun(vtree);
+    const visibleVTree = toVisibleVElement(vtree);
+    const result = doRun(visibleVTree);
     console.log(result);
 }
 

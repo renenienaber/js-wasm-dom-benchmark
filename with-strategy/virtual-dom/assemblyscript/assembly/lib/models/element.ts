@@ -54,7 +54,7 @@ export class VisibleVElement {
   // @ts-ignore
   tagName: string;
   // @ts-ignore
-  // props: PropsType;
+  props: VisiblePropsType;
   // @ts-ignore
   children: VisibleVElement[];
   // @ts-ignore
@@ -65,10 +65,18 @@ export class VisibleVElement {
   empty: boolean;
 }
 
+export class VisiblePropsType {
+  // @ts-ignore
+  keys: string[];
+  // @ts-ignore
+  values: string[];
+}
+
 export function toVElement(visibleElement: VisibleVElement): VElement  {
   const velement: VElement = new EmptyVElement();
   velement.tagName = visibleElement.tagName;
-  // velement.props = visibleElement.props;
+  velement.props = toPropsType(visibleElement.props);
+  velement.props = new Map<string, string>();
 
   const children: VisibleVElement[] = visibleElement.children;
   const lenChildren: i32 = children.length;
@@ -90,7 +98,7 @@ export function toVElement(visibleElement: VisibleVElement): VElement  {
 export function toVisibleVElement(vElement: VElement): VisibleVElement {
   const visibleElement: VisibleVElement = {
     tagName: vElement.tagName,
-    // props: vElement.props,
+    props: toVisiblePropsType(vElement.props),
     children: [],
     count: vElement.count,
     text: vElement.text,
@@ -108,4 +116,31 @@ export function toVisibleVElement(vElement: VElement): VisibleVElement {
   visibleElement.children = newChildren;
 
   return visibleElement;
+}
+
+export function toPropsType(visiblePropsType: VisiblePropsType): PropsType {
+  const keys: string[] = visiblePropsType.keys;
+  const values: string[] = visiblePropsType.values;
+  const lenKeys: i32 = keys.length;
+
+  const newMap: PropsType = new Map<string, string>();
+  for (let i: i32 = 0; i < lenKeys; i++) {
+    const key = keys[i];
+    const value = values[i];
+    newMap.set(key, value);
+  }
+
+  return newMap;
+}
+
+export function toVisiblePropsType(propsType: PropsType): VisiblePropsType {
+  const keys = propsType.keys();
+  const values = propsType.values();
+
+  const newPropsType: VisiblePropsType = {
+    keys: keys,
+    values: values
+  }
+
+  return newPropsType
 }
