@@ -3795,7 +3795,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $assembly/main/_getVElementByVisibleElement (param $0 i32) (result i32)
+ (func $assembly/main/_toVElement (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3887,7 +3887,7 @@
     i32.store $0 offset=4
     global.get $~lib/memory/__stack_pointer
     local.get $6
-    call $assembly/main/_getVElementByVisibleElement
+    call $assembly/main/_toVElement
     local.tee $6
     i32.store $0 offset=28
     global.get $~lib/memory/__stack_pointer
@@ -5228,7 +5228,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 28
   i32.sub
@@ -5244,87 +5243,35 @@
    i32.const 28
    memory.fill $0
    local.get $2
-   global.get $assembly/main/vtree
-   local.tee $3
-   i32.store $0 offset=4
-   local.get $2
-   local.get $3
-   i32.load $0 offset=8
-   local.tee $2
-   i32.store $0
-   local.get $2
-   call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store $0
    local.get $0
    call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-   local.set $6
+   local.set $2
    global.get $~lib/memory/__stack_pointer
-   local.get $5
-   local.get $6
-   i32.add
+   local.get $2
    call $~lib/array/Array<assembly/lib/models/element/VElement>#constructor
-   local.tee $2
-   i32.store $0 offset=8
+   local.tee $5
+   i32.store $0 offset=4
    loop $for-loop|0
     local.get $1
-    local.get $5
-    i32.lt_s
-    if
-     global.get $~lib/memory/__stack_pointer
-     local.tee $3
-     global.get $assembly/main/vtree
-     local.tee $4
-     i32.store $0 offset=4
-     local.get $3
-     local.get $4
-     i32.load $0 offset=8
-     local.tee $4
-     i32.store $0
-     local.get $3
-     local.get $4
-     local.get $1
-     call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
-     local.tee $3
-     i32.store $0 offset=12
-     global.get $~lib/memory/__stack_pointer
-     local.get $2
-     i32.store $0
-     global.get $~lib/memory/__stack_pointer
-     local.get $3
-     i32.store $0 offset=4
-     local.get $2
-     local.get $1
-     local.get $3
-     call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|0
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|1
-    local.get $1
-    local.get $6
+    local.get $2
     i32.lt_s
     if
      global.get $~lib/memory/__stack_pointer
      local.tee $3
      local.get $0
-     i32.store $0 offset=4
+     i32.store $0
+     local.get $3
      local.get $0
      local.get $1
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
-     local.set $7
+     local.tee $6
+     i32.store $0 offset=8
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $3
+     global.get $~lib/memory/__stack_pointer
      global.get $~lib/memory/__stack_pointer
      i32.const 76
      i32.sub
@@ -5342,9 +5289,9 @@
      i32.const 3936
      i32.store $0
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#constructor
-     local.set $8
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $7
      i32.store $0 offset=4
      global.get $~lib/memory/__stack_pointer
      i32.const 2
@@ -5370,64 +5317,64 @@
      i32.const 6
      i32.const 0
      call $~lib/rt/__newArray
-     local.tee $9
+     local.tee $8
      i32.store $0 offset=32
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $8
      i32.load $0 offset=4
      i32.store $0 offset=36
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0 offset=44
-     local.get $7
+     local.get $6
      i32.load $0
      call $~lib/number/I32#toString
-     local.set $10
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $10
-     i32.store $0 offset=40
      local.get $9
+     i32.store $0 offset=40
+     local.get $8
      i32.const 0
-     local.get $10
+     local.get $9
      call $assembly/lib/models/element/TextVElement#constructor
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $8
      i32.store $0 offset=28
      local.get $3
      i32.const 0
      i32.const 0
      i32.const 3968
      local.get $4
-     local.get $9
+     local.get $8
      call $assembly/lib/models/element/VElement#constructor
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      global.get $~lib/memory/__stack_pointer
      i32.const 3968
      i32.store $0 offset=20
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#constructor
-     local.set $9
+     local.set $8
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $8
      i32.store $0 offset=24
      global.get $~lib/memory/__stack_pointer
      i32.const 1
      i32.const 6
      i32.const 0
      call $~lib/rt/__newArray
-     local.tee $10
+     local.tee $9
      i32.store $0 offset=48
      global.get $~lib/memory/__stack_pointer
-     local.get $10
+     local.get $9
      i32.load $0 offset=4
      i32.store $0 offset=52
      global.get $~lib/memory/__stack_pointer
      i32.const 5808
      i32.store $0 offset=40
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#constructor
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=44
      global.get $~lib/memory/__stack_pointer
      i32.const 1
@@ -5441,38 +5388,38 @@
      i32.load $0 offset=4
      i32.store $0 offset=64
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0 offset=72
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.load $0 offset=4
-     local.tee $7
+     local.tee $6
      i32.store $0 offset=68
      local.get $4
      i32.const 0
-     local.get $7
+     local.get $6
      call $assembly/lib/models/element/TextVElement#constructor
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      global.get $~lib/memory/__stack_pointer
      local.get $4
      i32.store $0 offset=56
-     local.get $10
+     local.get $9
      i32.const 0
      i32.const 0
      i32.const 5808
-     local.get $11
+     local.get $10
      local.get $4
      call $assembly/lib/models/element/VElement#constructor
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      global.get $~lib/memory/__stack_pointer
-     local.get $10
+     local.get $9
      i32.store $0 offset=28
      local.get $3
      i32.const 1
      i32.const 0
      i32.const 3968
+     local.get $8
      local.get $9
-     local.get $10
      call $assembly/lib/models/element/VElement#constructor
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      global.get $~lib/memory/__stack_pointer
@@ -5480,7 +5427,7 @@
      i32.store $0 offset=8
      i32.const 0
      i32.const 3936
-     local.get $8
+     local.get $7
      local.get $3
      call $assembly/lib/models/element/VElement#constructor
      local.set $3
@@ -5489,27 +5436,23 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $3
-     i32.store $0 offset=16
+     i32.store $0 offset=12
      global.get $~lib/memory/__stack_pointer
      local.tee $4
-     local.get $2
+     local.get $5
      i32.store $0
      local.get $4
      local.get $3
-     i32.store $0 offset=4
-     local.get $2
-     local.get $1
+     i32.store $0 offset=16
      local.get $5
-     i32.add
-     i32.const 1
-     i32.add
+     local.get $1
      local.get $3
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__set
      local.get $1
      i32.const 1
      i32.add
      local.set $1
-     br $for-loop|1
+     br $for-loop|0
     end
    end
    global.get $~lib/memory/__stack_pointer
@@ -5521,7 +5464,7 @@
    i32.store $0
    global.get $~lib/memory/__stack_pointer
    i32.const 1840
-   i32.store $0 offset=4
+   i32.store $0 offset=16
    global.get $~lib/memory/__stack_pointer
    i32.const 1872
    i32.store $0 offset=24
@@ -5534,14 +5477,14 @@
    i32.store $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0 offset=4
+   i32.store $0 offset=16
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $5
    i32.store $0 offset=24
    i32.const 0
    i32.const 1872
    local.get $0
-   local.get $2
+   local.get $5
    call $assembly/lib/models/element/VElement#constructor
    global.set $assembly/main/vtree
    global.get $~lib/memory/__stack_pointer
@@ -5560,7 +5503,7 @@
  (func $assembly/main/doRun~anonymous|0
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -5575,20 +5518,22 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
+  i64.const 0
+  i64.store $0
   call $assembly/main/_removeAllRows
+  global.get $~lib/memory/__stack_pointer
   i32.const 1000
   i32.const 1
   call $assembly/main/buildData
-  local.set $0
+  local.tee $0
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store $0 offset=4
   local.get $0
   call $assembly/main/_appendRows
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -6326,8 +6271,9 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 44
+  i32.const 48
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -6338,21 +6284,21 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $3
    i32.const 0
-   i32.const 44
+   i32.const 48
    memory.fill $0
    local.get $3
    i32.const 0
    i32.const 23
    i32.const 6080
    call $~lib/rt/__newArray
-   local.tee $6
+   local.tee $7
    i32.store $0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 6
    i32.const 6112
    call $~lib/rt/__newArray
-   local.tee $4
+   local.tee $5
    i32.store $0 offset=4
    loop $while-continue|0
     global.get $~lib/memory/__stack_pointer
@@ -6360,7 +6306,7 @@
     i32.store $0 offset=8
     local.get $0
     call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-    local.get $7
+    local.get $8
     i32.gt_s
     if
      global.get $~lib/memory/__stack_pointer
@@ -6369,7 +6315,7 @@
      i32.store $0 offset=8
      local.get $3
      local.get $0
-     local.get $7
+     local.get $8
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
      i32.store $0 offset=12
      global.get $~lib/memory/__stack_pointer
@@ -6387,24 +6333,24 @@
      local.tee $3
      i32.store $0 offset=16
      global.get $~lib/memory/__stack_pointer
-     local.get $4
+     local.get $5
      i32.store $0 offset=8
      global.get $~lib/memory/__stack_pointer
      local.get $3
      i32.store $0 offset=20
-     local.get $4
+     local.get $5
      local.get $3
      call $~lib/array/Array<assembly/lib/models/patch.model/Patch>#push
-     local.get $7
+     local.get $8
      i32.const 1
      i32.add
-     local.set $7
+     local.set $8
      br $while-continue|0
     end
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   local.get $4
+   local.get $5
    i32.store $0 offset=8
    i32.const 1
    global.set $~argumentsLength
@@ -6428,11 +6374,11 @@
      unreachable
     end
     i32.const 2147483647
-    local.set $5
+    local.set $6
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $2
-   local.get $4
+   local.get $5
    i32.store $0
    local.get $2
    i32.const 8
@@ -6447,9 +6393,9 @@
    i64.const 0
    i64.store $0
    local.get $2
-   local.get $4
+   local.get $5
    i32.store $0
-   local.get $4
+   local.get $5
    i32.load $0 offset=12
    local.tee $3
    i32.const 0
@@ -6457,13 +6403,13 @@
    i32.const 0
    i32.le_s
    select
-   local.set $7
-   local.get $5
+   local.set $8
+   local.get $6
    i32.const 0
    i32.lt_s
    if (result i32)
     local.get $3
-    local.get $5
+    local.get $6
     i32.add
     local.tee $3
     i32.const 0
@@ -6472,19 +6418,19 @@
     i32.gt_s
     select
    else
-    local.get $5
+    local.get $6
     local.get $3
     local.get $3
-    local.get $5
+    local.get $6
     i32.gt_s
     select
    end
    local.set $3
    i32.const 0
-   local.set $5
+   local.set $6
    local.get $2
    local.get $3
-   local.get $7
+   local.get $8
    i32.sub
    local.tee $2
    i32.const 0
@@ -6499,51 +6445,51 @@
    local.tee $3
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
-   local.tee $8
+   local.tee $9
    local.get $3
    i32.store $0
    local.get $3
    i32.load $0 offset=4
-   local.set $9
+   local.set $10
+   local.get $9
+   local.get $5
+   i32.store $0
+   local.get $5
+   i32.load $0 offset=4
    local.get $8
-   local.get $4
-   i32.store $0
-   local.get $4
-   i32.load $0 offset=4
-   local.get $7
    i32.const 2
    i32.shl
    i32.add
-   local.set $7
+   local.set $8
    local.get $2
    i32.const 2
    i32.shl
    local.set $2
    loop $while-continue|01
     local.get $2
-    local.get $5
+    local.get $6
     i32.gt_u
     if
-     local.get $5
-     local.get $9
+     local.get $6
+     local.get $10
      i32.add
-     local.get $5
-     local.get $7
+     local.get $6
+     local.get $8
      i32.add
      i32.load $0
-     local.tee $8
+     local.tee $9
      i32.store $0
-     local.get $8
+     local.get $9
      if
       local.get $3
-      local.get $8
+      local.get $9
       i32.const 1
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
-     local.get $5
+     local.get $6
      i32.const 4
      i32.add
-     local.set $5
+     local.set $6
      br $while-continue|01
     end
    end
@@ -6559,27 +6505,27 @@
    local.get $3
    i32.store $0 offset=24
    i32.const 0
-   local.set $7
+   local.set $8
    loop $while-continue|1
     global.get $~lib/memory/__stack_pointer
     local.get $3
     i32.store $0 offset=8
     local.get $3
     call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-    local.get $7
+    local.get $8
     i32.gt_s
     if
      global.get $~lib/memory/__stack_pointer
      local.get $3
      i32.store $0 offset=8
      local.get $3
-     local.get $7
+     local.get $8
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
      if
-      local.get $7
+      local.get $8
       i32.const 1
       i32.add
-      local.set $7
+      local.set $8
      else
       global.get $~lib/memory/__stack_pointer
       local.set $0
@@ -6589,19 +6535,19 @@
       local.get $2
       i32.store $0 offset=8
       local.get $0
-      local.get $7
+      local.get $8
       local.get $2
       i32.const 0
       call $assembly/lib/models/list-diff2.model/Move#constructor
       local.tee $0
       i32.store $0 offset=28
       global.get $~lib/memory/__stack_pointer
-      local.get $6
+      local.get $7
       i32.store $0 offset=8
       global.get $~lib/memory/__stack_pointer
       local.get $0
       i32.store $0 offset=20
-      local.get $6
+      local.get $7
       local.get $0
       call $~lib/array/Array<assembly/lib/models/patch.model/Patch>#push
       global.get $~lib/memory/__stack_pointer
@@ -6627,12 +6573,12 @@
       local.get $3
       i32.load $0 offset=12
       local.tee $0
-      local.get $7
+      local.get $8
       i32.const 0
       i32.lt_s
       if (result i32)
        local.get $0
-       local.get $7
+       local.get $8
        i32.add
        local.tee $2
        i32.const 0
@@ -6641,64 +6587,64 @@
        i32.gt_s
        select
       else
-       local.get $7
+       local.get $8
        local.get $0
        local.get $0
-       local.get $7
+       local.get $8
        i32.gt_s
        select
       end
       local.tee $2
       i32.sub
-      local.tee $5
-      local.get $5
+      local.tee $6
+      local.get $6
       i32.const 1
       i32.gt_s
       select
-      local.tee $5
+      local.tee $6
       i32.const 0
-      local.get $5
+      local.get $6
       i32.const 0
       i32.gt_s
       select
-      local.tee $5
+      local.tee $6
       i32.const 6
       i32.const 0
       call $~lib/rt/__newArray
-      local.tee $8
+      local.tee $9
       i32.store $0 offset=4
       global.get $~lib/memory/__stack_pointer
-      local.tee $9
-      local.get $8
+      local.tee $10
+      local.get $9
       i32.store $0
-      local.get $8
+      local.get $9
       i32.load $0 offset=4
-      local.set $8
+      local.set $9
+      local.get $10
+      local.get $3
+      i32.store $0
       local.get $9
       local.get $3
-      i32.store $0
-      local.get $8
-      local.get $3
       i32.load $0 offset=4
-      local.tee $8
+      local.tee $9
       local.get $2
       i32.const 2
       i32.shl
       i32.add
-      local.tee $9
-      local.get $5
+      local.tee $10
+      local.get $6
       i32.const 2
       i32.shl
       memory.copy $0 $0
       local.get $2
-      local.get $5
+      local.get $6
       i32.add
       local.tee $2
       local.get $0
       i32.ne
       if
+       local.get $10
        local.get $9
-       local.get $8
        local.get $2
        i32.const 2
        i32.shl
@@ -6716,7 +6662,7 @@
       i32.store $0
       local.get $3
       local.get $0
-      local.get $5
+      local.get $6
       i32.sub
       i32.store $0 offset=12
       local.get $2
@@ -6728,16 +6674,14 @@
     end
    end
    i32.const 0
-   local.set $7
-   i32.const 0
-   local.set $2
+   local.set $8
    loop $while-continue|2
     global.get $~lib/memory/__stack_pointer
     local.get $1
     i32.store $0 offset=8
     local.get $1
     call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-    local.get $7
+    local.get $8
     i32.gt_s
     if
      global.get $~lib/memory/__stack_pointer
@@ -6746,51 +6690,82 @@
      i32.store $0 offset=8
      local.get $0
      local.get $1
-     local.get $7
+     local.get $8
      call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
      local.tee $0
      i32.store $0 offset=12
      global.get $~lib/memory/__stack_pointer
      local.get $3
      i32.store $0 offset=8
-     global.get $~lib/memory/__stack_pointer
      local.get $3
-     local.get $2
-     call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
-     local.tee $5
-     i32.store $0 offset=32
-     local.get $5
+     call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
+     local.get $4
+     i32.gt_s
      if
+      global.get $~lib/memory/__stack_pointer
+      local.tee $2
+      local.get $3
+      i32.store $0 offset=8
       local.get $2
-      i32.const 1
-      i32.add
-      local.set $2
+      local.get $3
+      local.get $4
+      call $~lib/array/Array<assembly/lib/models/element/VElement>#__get
+      local.tee $2
+      i32.store $0 offset=32
+      local.get $2
+      if
+       local.get $4
+       i32.const 1
+       i32.add
+       local.set $4
+      else
+       global.get $~lib/memory/__stack_pointer
+       local.tee $2
+       local.get $0
+       i32.store $0 offset=8
+       local.get $2
+       local.get $8
+       local.get $0
+       i32.const 1
+       call $assembly/lib/models/list-diff2.model/Move#constructor
+       local.tee $0
+       i32.store $0 offset=36
+       global.get $~lib/memory/__stack_pointer
+       local.get $7
+       i32.store $0 offset=8
+       global.get $~lib/memory/__stack_pointer
+       local.get $0
+       i32.store $0 offset=20
+       local.get $7
+       local.get $0
+       call $~lib/array/Array<assembly/lib/models/patch.model/Patch>#push
+      end
      else
       global.get $~lib/memory/__stack_pointer
-      local.tee $5
+      local.tee $2
       local.get $0
       i32.store $0 offset=8
-      local.get $5
-      local.get $7
+      local.get $2
+      local.get $8
       local.get $0
       i32.const 1
       call $assembly/lib/models/list-diff2.model/Move#constructor
       local.tee $0
-      i32.store $0 offset=36
+      i32.store $0 offset=40
       global.get $~lib/memory/__stack_pointer
-      local.get $6
+      local.get $7
       i32.store $0 offset=8
       global.get $~lib/memory/__stack_pointer
       local.get $0
       i32.store $0 offset=20
-      local.get $6
+      local.get $7
       local.get $0
       call $~lib/array/Array<assembly/lib/models/patch.model/Patch>#push
      end
-     local.get $7
+     local.get $8
      i32.const 1
      i32.add
-     local.set $7
+     local.set $8
      br $while-continue|2
     end
    end
@@ -6799,15 +6774,15 @@
    i32.store $0 offset=8
    local.get $3
    call $~lib/array/Array<assembly/lib/models/element/VElement>#get:length
-   local.get $2
+   local.get $4
    i32.sub
-   local.set $1
+   local.set $2
    loop $while-continue|3
-    local.get $2
+    local.get $4
     local.tee $0
     i32.const 1
     i32.add
-    local.set $2
+    local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $3
     i32.store $0 offset=8
@@ -6819,29 +6794,29 @@
      global.get $~lib/memory/__stack_pointer
      local.set $0
      call $assembly/lib/models/element/EmptyVElement#constructor
-     local.set $5
+     local.set $1
      global.get $~lib/memory/__stack_pointer
-     local.get $5
+     local.get $1
      i32.store $0 offset=8
      local.get $0
-     local.get $7
-     local.get $1
+     local.get $8
+     local.get $2
      i32.const 1
      i32.sub
-     local.tee $1
+     local.tee $2
      i32.add
-     local.get $5
+     local.get $1
      i32.const 0
      call $assembly/lib/models/list-diff2.model/Move#constructor
      local.tee $0
-     i32.store $0 offset=40
+     i32.store $0 offset=44
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=8
      global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store $0 offset=20
-     local.get $6
+     local.get $7
      local.get $0
      call $~lib/array/Array<assembly/lib/models/patch.model/Patch>#push
      br $while-continue|3
@@ -6849,10 +6824,10 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   local.get $6
+   local.get $7
    i32.store $0 offset=8
    local.get $0
-   local.get $4
+   local.get $5
    i32.store $0 offset=20
    local.get $0
    i32.const 12
@@ -6892,15 +6867,15 @@
    local.get $0
    i32.store $0 offset=4
    local.get $1
-   local.get $6
+   local.get $7
    i32.store $0 offset=8
    local.get $0
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    if
     local.get $0
-    local.get $6
+    local.get $7
     i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
@@ -6909,15 +6884,15 @@
    local.get $0
    i32.store $0 offset=4
    local.get $1
-   local.get $4
+   local.get $5
    i32.store $0 offset=8
    local.get $0
-   local.get $4
+   local.get $5
    i32.store $0 offset=4
-   local.get $4
+   local.get $5
    if
     local.get $0
-    local.get $4
+    local.get $5
     i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
@@ -6926,7 +6901,7 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 44
+   i32.const 48
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
@@ -8757,7 +8732,7 @@
    local.get $0
    i32.store $0
    local.get $1
-   i32.const 12
+   i32.const 16
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -8769,14 +8744,14 @@
    i64.const 0
    i64.store $0
    local.get $1
-   i32.const 0
-   i32.store $0 offset=8
+   i64.const 0
+   i64.store $0 offset=8
    local.get $1
    local.get $0
    i32.store $0
    local.get $1
    local.get $0
-   call $assembly/main/_getVElementByVisibleElement
+   call $assembly/main/_toVElement
    local.tee $0
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
@@ -8785,12 +8760,14 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 5840
    i32.store $0 offset=8
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.const 5840
    call $assembly/main/mutateAndGetDiff
-   local.set $0
+   local.tee $0
+   i32.store $0 offset=12
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 16
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer

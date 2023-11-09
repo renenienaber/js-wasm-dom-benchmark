@@ -48,13 +48,25 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
   while (i < newList.length) {
     item = newList[i]
 
-    const simulateItem: VElement = simulateList[j];
-    if (simulateItem) {
-      j++;
+    if(j < simulateList.length) {
+      const simulateItem: VElement = simulateList[j];
+      if (simulateItem) {
+        j++;
+      } else {
+        const move: Move = new Move(i, item, 1);
+        moves.push(move);
+      }
     } else {
       const move: Move = new Move(i, item, 1);
       moves.push(move);
     }
+    // const simulateItem: VElement = simulateList[j];
+    // if (simulateItem) {
+    //   j++;
+    // } else {
+    //   const move: Move = new Move(i, item, 1);
+    //   moves.push(move);
+    // }
 
     i++
   }

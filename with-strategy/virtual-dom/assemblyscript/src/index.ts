@@ -1,7 +1,7 @@
-import {VElement} from './lib/models/element'
-import {patch, renderVElement} from './lib/patch'
-import {Patch} from "./lib/models/patch.model";
-import { doRun } from "../build/main"
+import {VElement} from './lib/models/element.js'
+import {patch, renderVElement} from './lib/patch.js'
+import {Patch} from "./lib/models/patch.model.js";
+import { doRun } from "../build/main.js"
 
 
 
@@ -44,6 +44,19 @@ function run(): void {
     // getDiffAndRerender(() => {
     //     return doRun(vtree);
     // })
+
+    // const newTestVTree = new VElement('tr', new Map<string, string>(), [
+    //     new VElement('td', new Map<string, string>(), [
+    //         new TextVElement('test')
+    //     ]),
+    //     new VElement('td', new Map<string, string>(), [
+    //         new VElement('a', new Map<string, string>(), [
+    //             new TextVElement('test2')
+    //         ])
+    //     ])
+    // ]);
+    // const result = test(newTestVTree);
+    // console.log(result);
 
     const result = doRun(vtree);
     console.log(result);

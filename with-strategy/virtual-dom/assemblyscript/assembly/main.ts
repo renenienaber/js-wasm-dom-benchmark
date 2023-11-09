@@ -20,7 +20,7 @@ class VisibleElement {
     empty: boolean;
 }
 
-function _getVElementByVisibleElement(visibleElement: VisibleElement): VElement  {
+function _toVElement(visibleElement: VisibleElement): VElement  {
     const velement: VElement = new EmptyVElement();
     velement.tagName = visibleElement.tagName;
     // velement.props = visibleElement.props; // TODO: make props visible
@@ -30,7 +30,7 @@ function _getVElementByVisibleElement(visibleElement: VisibleElement): VElement 
     const newChildren: VElement[] = new Array<VElement>(lenChildren);
     for (let i: i32 = 0; i < lenChildren; i++) {
         const child: VisibleElement = children[i];
-        const childVElement: VElement = _getVElementByVisibleElement(child);
+        const childVElement: VElement = _toVElement(child);
         newChildren[i] = childVElement;
     }
     velement.children = newChildren;
@@ -40,6 +40,29 @@ function _getVElementByVisibleElement(visibleElement: VisibleElement): VElement 
     velement.empty = visibleElement.empty;
 
     return velement;
+}
+
+function _toVisibleElement(vElement: VElement): VisibleElement {
+    const visibleElement: VisibleElement = {
+        tagName: vElement.tagName,
+        // props: vElement.props, // TODO: make props visible
+        children: [],
+        count: vElement.count,
+        text: vElement.text,
+        empty: vElement.empty
+    };
+
+    const children: VElement[] = vElement.children;
+    const lenChildren: i32 = children.length;
+    const newChildren: VisibleElement[] = new Array<VisibleElement>(lenChildren);
+    for (let i: i32 = 0; i < lenChildren; i++) {
+        const child: VElement = children[i];
+        const childVElement: VisibleElement = _toVisibleElement(child);
+        newChildren[i] = childVElement;
+    }
+    visibleElement.children = newChildren;
+
+    return visibleElement;
 }
 
 
@@ -53,13 +76,24 @@ function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     return patches;
 }
 
-export function doRun(visibleElement: VisibleElement): Patch[][] {
-    const velement: VElement = _getVElementByVisibleElement(visibleElement);
+// export function test(visibleElement: VisibleElement): VisibleElement {
+//     const velement: VElement = _toVElement(visibleElement);
+//     velement.text = 'dies ist ein test';
+//
+//     const result = _toVisibleElement(velement);
+//     return result;
+// }
 
-    return mutateAndGetDiff(velement, () => {
+export function doRun(visibleElement: VisibleElement): Patch[][] {
+    const velement: VElement = _toVElement(visibleElement);
+
+    const diff = mutateAndGetDiff(velement, () => {
         _removeAllRows();
-        _appendRows(buildData());
+        const data: RowElement[] = buildData();
+        _appendRows(data);
     });
+
+    return diff;
 }
 
 export function doRunLots(vtree: VElement): Patch[][] {
@@ -199,19 +233,26 @@ function _createRow(data: RowElement): VElement {
 // mutating functions
 
 function _appendRows(rowElements: RowElement[]): void {
-    const lenVTreeChildren: i32 = vtree.children.length;
+    // const vTreeChildren: VElement[] = vtree.children;
+
+    // const lenVTreeChildren: i32 = vTreeChildren.length;
     const lenRowElements: i32 = rowElements.length;
+    // const fullLen: i32 = lenVTreeChildren + lenRowElements;
 
-    const rows: VElement[] = new Array<VElement>(lenVTreeChildren + lenRowElements);
+    const rows: VElement[] = new Array<VElement>(lenRowElements);
+    // const rows: VElement[] = new Array<VElement>(fullLen);
 
-    for(let i: i32 = 0; i < lenVTreeChildren; i++) {
-        const val: VElement = vtree.children[i];
-        rows[i] = val;
-    }
+    // for(let i: i32 = 0; i < lenVTreeChildren; i++) {
+    //     const val: VElement = vTreeChildren[i];
+    //     rows[i] = val;
+    // }
 
     for(let i: i32 = 0; i < lenRowElements; i++) {
-        const tr: VElement = _createRow(rowElements[i]);
-        rows[lenVTreeChildren + i + 1] = tr;
+        const el: RowElement = rowElements[i];
+        const tr: VElement = _createRow(el);
+        // const index: i32 = lenVTreeChildren + i + 1;
+        // rows[index] = tr;
+        rows[i] = tr;
     }
 
     const newMap: Map<string, string> = new Map<string, string>();
