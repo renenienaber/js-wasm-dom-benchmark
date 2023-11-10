@@ -1,4 +1,11 @@
-import {EmptyVElement, TextVElement, toVElement, VElement, VisibleVElement} from "./lib/models/element";
+import {
+    EmptyVElement,
+    TextVElement,
+    toVElement,
+    toVisibleVElement,
+    VElement,
+    VisibleVElement
+} from "./lib/models/element";
 import {Patch} from "./lib/models/patch.model";
 import {diff} from "./lib/diff";
 
@@ -15,18 +22,26 @@ function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     return patches;
 }
 
-// export function test(visibleElement: VisibleElement): VisibleElement {
-//     const velement: VElement = _toVElement(visibleElement);
-//     velement.text = 'dies ist ein test';
-//
-//     const result = _toVisibleElement(velement);
-//     return result;
-// }
+export function testRun(visibleElement: VisibleVElement): VisibleVElement {
+    const vElement: VElement = toVElement(visibleElement);
+
+    vtree = vElement;
+    const oldTree = vtree;
+
+    _removeAllRows();
+    const data: RowElement[] = buildData();
+    _appendRows(data);
+
+    // const patches = diff(oldTree, vtree);
+    // return patches;
+    const result = toVisibleVElement(vtree);
+    return result;
+}
 
 export function doRun(visibleElement: VisibleVElement): Patch[][] {
-    const velement: VElement = toVElement(visibleElement);
+    const vElement: VElement = toVElement(visibleElement);
 
-    const diff = mutateAndGetDiff(velement, () => {
+    const diff = mutateAndGetDiff(vElement, () => {
         _removeAllRows();
         const data: RowElement[] = buildData();
         _appendRows(data);

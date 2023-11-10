@@ -44,11 +44,7 @@ export function toVisibleVElement(vElement) {
     return Object.assign(Object.assign({}, vElement), { props: _toVisiblePropsType(vElement.props), children: vElement.children.map(el => (toVisibleVElement(el))) });
 }
 export function toVElement(visibleVElement) {
-    const newVElement = new EmptyVElement();
-    newVElement.tagName = visibleVElement.tagName;
-    newVElement.props = _toPropsType(visibleVElement.props);
-    newVElement.children = visibleVElement.children.map(el => (toVElement(el)));
-    newVElement.count = visibleVElement.count;
+    const newVElement = new VElement(visibleVElement.tagName, _toPropsType(visibleVElement.props), visibleVElement.children.map(el => (toVElement(el))));
     newVElement.text = visibleVElement.text;
     newVElement.empty = visibleVElement.empty;
     return newVElement;

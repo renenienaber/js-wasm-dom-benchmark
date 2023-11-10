@@ -73,10 +73,13 @@ export class VisiblePropsType {
 }
 
 export function toVElement(visibleElement: VisibleVElement): VElement  {
-  const velement: VElement = new EmptyVElement();
-  velement.tagName = visibleElement.tagName;
-  velement.props = toPropsType(visibleElement.props);
-  velement.props = new Map<string, string>();
+  const vElement: VElement = new EmptyVElement();
+
+  vElement.tagName = visibleElement.tagName;
+
+  const props: VisiblePropsType = visibleElement.props;
+  const newProps: PropsType = _toPropsType(props);
+  vElement.props = newProps;
 
   const children: VisibleVElement[] = visibleElement.children;
   const lenChildren: i32 = children.length;
@@ -86,19 +89,19 @@ export function toVElement(visibleElement: VisibleVElement): VElement  {
     const childVElement: VElement = toVElement(child);
     newChildren[i] = childVElement;
   }
-  velement.children = newChildren;
+  vElement.children = newChildren;
 
-  velement.count = visibleElement.count;
-  velement.text = visibleElement.text;
-  velement.empty = visibleElement.empty;
+  vElement.count = visibleElement.count;
+  vElement.text = visibleElement.text;
+  vElement.empty = visibleElement.empty;
 
-  return velement;
+  return vElement;
 }
 
 export function toVisibleVElement(vElement: VElement): VisibleVElement {
   const visibleElement: VisibleVElement = {
     tagName: vElement.tagName,
-    props: toVisiblePropsType(vElement.props),
+    props: _toVisiblePropsType(vElement.props),
     children: [],
     count: vElement.count,
     text: vElement.text,
@@ -118,7 +121,7 @@ export function toVisibleVElement(vElement: VElement): VisibleVElement {
   return visibleElement;
 }
 
-export function toPropsType(visiblePropsType: VisiblePropsType): PropsType {
+function _toPropsType(visiblePropsType: VisiblePropsType): PropsType {
   const keys: string[] = visiblePropsType.keys;
   const values: string[] = visiblePropsType.values;
   const lenKeys: i32 = keys.length;
@@ -133,7 +136,7 @@ export function toPropsType(visiblePropsType: VisiblePropsType): PropsType {
   return newMap;
 }
 
-export function toVisiblePropsType(propsType: PropsType): VisiblePropsType {
+function _toVisiblePropsType(propsType: PropsType): VisiblePropsType {
   const keys = propsType.keys();
   const values = propsType.values();
 

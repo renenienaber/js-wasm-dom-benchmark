@@ -73,11 +73,11 @@ export function toVisibleVElement(vElement: VElement): VisibleVElement {
 }
 
 export function toVElement(visibleVElement: VisibleVElement): VElement {
-  const newVElement: VElement = new EmptyVElement();
-  newVElement.tagName = visibleVElement.tagName;
-  newVElement.props = _toPropsType(visibleVElement.props);
-  newVElement.children = visibleVElement.children.map(el => (toVElement(el)));
-  newVElement.count = visibleVElement.count;
+  const newVElement: VElement = new VElement(
+      visibleVElement.tagName,
+      _toPropsType(visibleVElement.props),
+      visibleVElement.children.map(el => (toVElement(el)))
+  );
   newVElement.text = visibleVElement.text;
   newVElement.empty = visibleVElement.empty;
 

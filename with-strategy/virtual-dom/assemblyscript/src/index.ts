@@ -1,7 +1,7 @@
-import {toVisibleVElement, VElement} from './lib/models/element.js'
+import {toVElement, toVisibleVElement, VElement, VisibleVElement} from './lib/models/element.js'
 import {patch, renderVElement} from './lib/patch.js'
 import {Patch} from "./lib/models/patch.model.js";
-import { doRun } from "../build/main.js"
+import { testRun } from "../build/main.js"
 
 
 
@@ -45,22 +45,10 @@ function run(): void {
     //     return doRun(vtree);
     // })
 
-    // const newTestVTree = new VElement('tr', new Map<string, string>(), [
-    //     new VElement('td', new Map<string, string>(), [
-    //         new TextVElement('test')
-    //     ]),
-    //     new VElement('td', new Map<string, string>(), [
-    //         new VElement('a', new Map<string, string>(), [
-    //             new TextVElement('test2')
-    //         ])
-    //     ])
-    // ]);
-    // const result = test(newTestVTree);
-    // console.log(result);
-
-    const visibleVTree = toVisibleVElement(vtree);
-    const result = doRun(visibleVTree);
-    console.log(result);
+    const visibleTree = toVisibleVElement(vtree);
+    const result: VisibleVElement = testRun(visibleTree) as VisibleVElement;
+    const mappedResult = toVElement(result);
+    console.log(mappedResult);
 }
 
 function runLots(): void {
