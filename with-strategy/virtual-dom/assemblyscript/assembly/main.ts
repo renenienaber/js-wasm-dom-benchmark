@@ -2,7 +2,6 @@ import {
     EmptyVElement,
     TextVElement,
     toVElement,
-    toVisibleVElement,
     VElement,
     VisibleVElement
 } from "./lib/models/element";
@@ -22,7 +21,7 @@ function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
     return patches;
 }
 
-export function testRun(visibleElement: VisibleVElement): VisibleVElement {
+export function testRun(visibleElement: VisibleVElement): Patch[][] {
     const vElement: VElement = toVElement(visibleElement);
 
     vtree = vElement;
@@ -32,10 +31,8 @@ export function testRun(visibleElement: VisibleVElement): VisibleVElement {
     const data: RowElement[] = buildData();
     _appendRows(data);
 
-    // const patches = diff(oldTree, vtree);
-    // return patches;
-    const result = toVisibleVElement(vtree);
-    return result;
+    const patches = diff(oldTree, vtree);
+    return patches;
 }
 
 export function doRun(visibleElement: VisibleVElement): Patch[][] {

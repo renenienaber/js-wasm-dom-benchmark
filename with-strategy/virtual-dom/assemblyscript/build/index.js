@@ -1,5 +1,5 @@
 var _a, _b, _c, _d, _e, _f, _g;
-import { toVElement, toVisibleVElement, VElement } from './lib/models/element.js';
+import { toVisibleVElement, VElement } from './lib/models/element.js';
 import { patch, renderVElement } from './lib/patch.js';
 import { testRun } from "../build/main.js";
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
@@ -25,8 +25,7 @@ function getDiffAndRerender(fn) {
 function run() {
     const visibleTree = toVisibleVElement(vtree);
     const result = testRun(visibleTree);
-    const mappedResult = toVElement(result);
-    console.log(mappedResult);
+    console.log(result);
 }
 function runLots() {
 }

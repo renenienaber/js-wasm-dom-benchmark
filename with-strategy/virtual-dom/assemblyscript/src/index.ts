@@ -1,4 +1,4 @@
-import {toVElement, toVisibleVElement, VElement, VisibleVElement} from './lib/models/element.js'
+import {toVisibleVElement, VElement} from './lib/models/element.js'
 import {patch, renderVElement} from './lib/patch.js'
 import {Patch} from "./lib/models/patch.model.js";
 import { testRun } from "../build/main.js"
@@ -46,9 +46,8 @@ function run(): void {
     // })
 
     const visibleTree = toVisibleVElement(vtree);
-    const result: VisibleVElement = testRun(visibleTree) as VisibleVElement;
-    const mappedResult = toVElement(result);
-    console.log(mappedResult);
+    const result = testRun(visibleTree);
+    console.log(result);
 }
 
 function runLots(): void {
