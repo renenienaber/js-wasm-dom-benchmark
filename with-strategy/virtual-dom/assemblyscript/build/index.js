@@ -1,7 +1,9 @@
 var _a, _b, _c, _d, _e, _f, _g;
-import { toVisibleVElement, VElement } from './lib/models/element.js';
+import { VElement } from './lib/models/v-element.model.js';
 import { patch, renderVElement } from './lib/patch.js';
-import { testRun } from "../build/main.js";
+import { doRun } from "../build/main.js";
+import { toCopiedVElement } from "./lib/mappers/v-element.mapper.js";
+import { toPatch } from "./lib/mappers/patch.mapper.js";
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
 (_b = document.getElementById('runLots')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => doBenchmark(runLots), false);
 (_c = document.getElementById('add')) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => doBenchmark(add), false);
@@ -19,13 +21,20 @@ function doBenchmark(fn) {
     _displayBenchmark(t1 - t0);
 }
 function getDiffAndRerender(fn) {
-    const patches = fn(vtree);
-    patch(root, patches);
+    const visibleTree = toCopiedVElement(vtree);
+    const result = fn(visibleTree);
+    const mappedResult = result.map(el => {
+        return el.map(el => toPatch(el));
+    });
+    console.log(mappedResult);
 }
 function run() {
-    const visibleTree = toVisibleVElement(vtree);
-    const result = testRun(visibleTree);
-    console.log(result);
+    const visibleTree = toCopiedVElement(vtree);
+    const result = doRun(visibleTree);
+    const mappedResult = result.map(el => {
+        return el.map(el => toPatch(el));
+    });
+    patch(root, mappedResult);
 }
 function runLots() {
 }

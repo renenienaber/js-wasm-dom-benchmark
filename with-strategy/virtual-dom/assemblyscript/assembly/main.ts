@@ -1,42 +1,30 @@
 import {
     EmptyVElement,
     TextVElement,
-    toVElement,
-    VElement,
-    VisibleVElement
-} from "./lib/models/element";
-import {Patch} from "./lib/models/patch.model";
+    VElement
+} from "./lib/models/v-element.model";
 import {diff} from "./lib/diff";
+import {CopiedVElement} from "./lib/models/v-element.copied.model";
+import {toVElement} from "./lib/mappers/v-element.mapper";
+import {CopiedPatch} from "./lib/models/patch.copied.model";
+import {toCopiedPatches} from "./lib/mappers/patch.mapper";
 
 
 
 // click handler
-function mutateAndGetDiff(vElement: VElement, fn: () => void): Patch[][] {
+function mutateAndGetDiff(vElement: VElement, fn: () => void): CopiedPatch[][] {
     vtree = vElement;
     const oldTree = vtree;
 
     fn();
 
     const patches = diff(oldTree, vtree);
-    return patches;
+    const mappedPatches = toCopiedPatches(patches);
+    return mappedPatches;
 }
 
-export function testRun(visibleElement: VisibleVElement): Patch[][] {
-    const vElement: VElement = toVElement(visibleElement);
-
-    vtree = vElement;
-    const oldTree = vtree;
-
-    _removeAllRows();
-    const data: RowElement[] = buildData();
-    _appendRows(data);
-
-    const patches = diff(oldTree, vtree);
-    return patches;
-}
-
-export function doRun(visibleElement: VisibleVElement): Patch[][] {
-    const vElement: VElement = toVElement(visibleElement);
+export function doRun(copiedVElement: CopiedVElement): CopiedPatch[][] {
+    const vElement: VElement = toVElement(copiedVElement);
 
     const diff = mutateAndGetDiff(vElement, () => {
         _removeAllRows();
@@ -47,7 +35,7 @@ export function doRun(visibleElement: VisibleVElement): Patch[][] {
     return diff;
 }
 
-export function doRunLots(vtree: VElement): Patch[][] {
+export function doRunLots(vtree: VElement): CopiedPatch[][] {
     return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
         _appendRows(buildData(10000));
@@ -55,14 +43,14 @@ export function doRunLots(vtree: VElement): Patch[][] {
 
 }
 
-export function doAdd(vtree: VElement): Patch[][] {
+export function doAdd(vtree: VElement): CopiedPatch[][] {
     return mutateAndGetDiff(vtree, () => {
         _appendRows(buildData(1000, _getTableRowCount()+1));
     });
 
 }
 
-export function doUpdate(vtree: VElement): Patch[][] {
+export function doUpdate(vtree: VElement): CopiedPatch[][] {
     return mutateAndGetDiff(vtree, () => {
         const updatedData = updateData(_getTableRows());
 
@@ -72,14 +60,14 @@ export function doUpdate(vtree: VElement): Patch[][] {
 
 }
 
-export function doClearRows(vtree: VElement): Patch[][] {
+export function doClearRows(vtree: VElement): CopiedPatch[][] {
     return mutateAndGetDiff(vtree, () => {
         _removeAllRows();
     });
 
 }
 
-export function doSwapRows(vtree: VElement): Patch[][] {
+export function doSwapRows(vtree: VElement): CopiedPatch[][] {
     return mutateAndGetDiff(vtree, () => {
         const updatedData = updateDataForSwap(_getTableRows());
 

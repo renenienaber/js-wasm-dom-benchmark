@@ -1,7 +1,11 @@
-import {toVisibleVElement, VElement} from './lib/models/element.js'
-import {patch, renderVElement} from './lib/patch.js'
-import {Patch} from "./lib/models/patch.model.js";
-import { testRun } from "../build/main.js"
+import {VElement} from './lib/models/v-element.model'
+import {patch, renderVElement} from './lib/patch'
+import {Patch} from "./lib/models/patch.model";
+import { doRun } from "../build/main.js"
+import {CopiedVElement} from "./lib/models/v-element.copied.model";
+import {toCopiedVElement} from "./lib/mappers/v-element.mapper";
+import {CopiedPatch} from "./lib/models/patch.copied.model";
+import {toPatch} from "./lib/mappers/patch.mapper";
 
 
 
@@ -33,21 +37,27 @@ function doBenchmark(fn: () => void): void {
 
 // click handler
 
-function getDiffAndRerender(fn: (oldTree: VElement) => Patch[][]): void {
-    const patches = fn(vtree);
+function getDiffAndRerender(fn: (oldTree: CopiedVElement) => any): void {
+    const visibleTree: CopiedVElement = toCopiedVElement(vtree);
+    const result: CopiedPatch[][] = fn(visibleTree);
+    const mappedResult: Patch[][] = result.map(el => {
+        return el.map(el => toPatch(el))
+    });
 
     // apply changes to Real DOM
-    patch(root, patches);
+    // patch(root, patches);
+    console.log(mappedResult);
 }
 
 function run(): void {
-    // getDiffAndRerender(() => {
-    //     return doRun(vtree);
-    // })
+    const visibleTree = toCopiedVElement(vtree);
+    const result: CopiedPatch[][] = doRun(visibleTree) as CopiedPatch[][];
+    const mappedResult: Patch[][] = result.map(el => {
+        return el.map(el => toPatch(el))
+    });
 
-    const visibleTree = toVisibleVElement(vtree);
-    const result = testRun(visibleTree);
-    console.log(result);
+    // apply changes to Real DOM
+    patch(root, mappedResult);
 }
 
 function runLots(): void {

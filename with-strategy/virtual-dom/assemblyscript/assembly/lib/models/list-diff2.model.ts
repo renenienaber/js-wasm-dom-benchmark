@@ -1,4 +1,4 @@
-import {VElementChildType} from "./element";
+import {VElementChildType} from "./v-element.model";
 
 export class DiffResult {
     moves: Move[];

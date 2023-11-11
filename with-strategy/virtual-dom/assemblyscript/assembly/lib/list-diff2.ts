@@ -1,4 +1,4 @@
-import {VElement, EmptyVElement, VElementChildType} from "./models/element";
+import {VElement, EmptyVElement, VElementChildType} from "./models/v-element.model";
 import {DiffResult, Move} from "./models/list-diff2.model";
 
 
