@@ -39,9 +39,7 @@ function doBenchmark(fn: () => void): void {
 
 function _getDiffAndRerender(fn: (copiedVElement: CopiedVElement) => DiffResult): void {
     const mappedTree: CopiedVElement = toCopiedVElement(vtree);
-    console.log(mappedTree);
     const result: DiffResult = fn(mappedTree) as DiffResult;
-    console.log(result);
 
     const mappedNewTree: VElement = toVElement(result.newTree);
     const mappedPatches: Patch[][] = [];

@@ -22,7 +22,6 @@ export function diff (oldList: VElementChildType[], newList: (VElementChildType 
   // first pass to check item in old list: if it's removed or not
   while (i < oldList.length) {
     item = oldList[i];
-    console.log(newList.length.toString() + ', ' + freeIndex.toString());
     if(freeIndex < newList.length) {
       const freeItem: VElement | null = newList[freeIndex];
       children.push(freeItem || null);
