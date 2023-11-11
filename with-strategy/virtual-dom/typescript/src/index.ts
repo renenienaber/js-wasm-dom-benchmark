@@ -1,4 +1,4 @@
-import {VElement, TextVElement} from './lib/models/element'
+import {VElement, TextVElement} from './lib/models/v-element.model'
 import { diff } from './lib/diff'
 import {patch, renderVElement} from './lib/patch'
 

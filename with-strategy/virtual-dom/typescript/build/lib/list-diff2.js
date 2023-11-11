@@ -1,4 +1,4 @@
-import { EmptyVElement } from "./models/element.js";
+import { EmptyVElement } from "./models/v-element.model.js";
 export function diff(oldList, newList) {
     const moves = [];
     const children = [];

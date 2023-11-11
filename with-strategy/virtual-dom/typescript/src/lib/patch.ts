@@ -1,4 +1,4 @@
-import {VElement, PropsType} from "./models/element";
+import {VElement, PropsType} from "./models/v-element.model";
 import {Patch, PatchType, PropsPatch, ReorderPatch, ReplacePatch, TextPatch, Walker} from "./models/patch.model";
 import {Move} from "./models/list-diff2.model";
 

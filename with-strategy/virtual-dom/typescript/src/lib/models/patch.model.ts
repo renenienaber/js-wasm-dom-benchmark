@@ -1,4 +1,4 @@
-import {PropsType, VElementChildType} from "./element";
+import {PropsType, VElementChildType} from "./v-element.model";
 import {Move} from "./list-diff2.model";
 
 export enum PatchType {
