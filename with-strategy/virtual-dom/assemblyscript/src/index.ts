@@ -3,7 +3,7 @@ import {patch, renderVElement} from './lib/patch'
 import {Patch} from "./lib/models/patch.model";
 import { doRun, doRunLots, doAdd, doUpdate, doClearRows, doSwapRows } from "../build/main.js"
 import {CopiedVElement} from "./lib/models/v-element.copied.model";
-import {toCopiedVElement} from "./lib/mappers/v-element.mapper";
+import {toCopiedVElement, toVElement} from "./lib/mappers/v-element.mapper";
 import {CopiedPatch} from "./lib/models/patch.copied.model";
 import {toPatch} from "./lib/mappers/patch.mapper";
 
@@ -37,43 +37,53 @@ function doBenchmark(fn: () => void): void {
 
 // click handler
 
-function _getDiffAndRerender(fn: (copiedVElement: CopiedVElement) => CopiedPatch[][]): void {
+function _getDiffAndRerender(fn: (copiedVElement: CopiedVElement) => DiffResult): void {
     const mappedTree: CopiedVElement = toCopiedVElement(vtree);
-    const result: CopiedPatch[][] = fn(mappedTree) as CopiedPatch[][];
-    const mappedResult: Patch[][] = result.map(el => {
+    console.log(mappedTree);
+    const result: DiffResult = fn(mappedTree) as DiffResult;
+    console.log(result);
+
+    const mappedNewTree: VElement = toVElement(result.newTree);
+    const mappedPatches: Patch[][] = result.patches.map(el => {
         return el.map(el => toPatch(el))
     });
 
+    vtree = mappedNewTree;
     // apply changes to Real DOM
-    patch(root, mappedResult);
+    patch(root, mappedPatches);
 }
 
 function run(): void {
-    _getDiffAndRerender(doRun as () => CopiedPatch[][]);
+    _getDiffAndRerender(doRun as () => DiffResult);
 }
 
 function runLots(): void {
-    _getDiffAndRerender(doRunLots as () => CopiedPatch[][]);
+    _getDiffAndRerender(doRunLots as () => DiffResult);
 }
 
 function add(): void {
-    _getDiffAndRerender(doAdd as () => CopiedPatch[][]);
+    _getDiffAndRerender(doAdd as () => DiffResult);
 }
 
 function update(): void {
-    _getDiffAndRerender(doUpdate as () => CopiedPatch[][]);
+    _getDiffAndRerender(doUpdate as () => DiffResult);
 }
 
 function clearRows(): void {
-    _getDiffAndRerender(doClearRows as () => CopiedPatch[][]);
+    _getDiffAndRerender(doClearRows as () => DiffResult);
 }
 
 function swapRows(): void {
-    _getDiffAndRerender(doSwapRows as () => CopiedPatch[][]);
+    _getDiffAndRerender(doSwapRows as () => DiffResult);
 }
 
 
 // setup
+
+interface DiffResult {
+    newTree: CopiedVElement;
+    patches: CopiedPatch[][];
+}
 
 let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);
 const root: HTMLElement = renderVElement(vtree);

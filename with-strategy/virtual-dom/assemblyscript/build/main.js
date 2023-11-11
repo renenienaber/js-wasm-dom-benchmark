@@ -25,34 +25,34 @@ async function instantiate(module, imports = {}) {
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
     doRun(copiedVElement) {
-      // assembly/main/doRun(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doRun(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doRun(copiedVElement) >>> 0);
     },
     doRunLots(copiedVElement) {
-      // assembly/main/doRunLots(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doRunLots(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doRunLots(copiedVElement) >>> 0);
     },
     doAdd(copiedVElement) {
-      // assembly/main/doAdd(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doAdd(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doAdd(copiedVElement) >>> 0);
     },
     doUpdate(copiedVElement) {
-      // assembly/main/doUpdate(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doUpdate(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doUpdate(copiedVElement) >>> 0);
     },
     doClearRows(copiedVElement) {
-      // assembly/main/doClearRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doClearRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doClearRows(copiedVElement) >>> 0);
     },
     doSwapRows(copiedVElement) {
-      // assembly/main/doSwapRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      // assembly/main/doSwapRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => assembly/main/DiffResult
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(copiedVElement) >>> 0);
+      return __liftRecord13(exports.doSwapRows(copiedVElement) >>> 0);
     },
   }, exports);
   function __lowerRecord10(value) {
@@ -101,7 +101,7 @@ async function instantiate(module, imports = {}) {
       empty: __getU8(pointer + 20) != 0,
     };
   }
-  function __liftRecord14(pointer) {
+  function __liftRecord15(pointer) {
     // assembly/lib/models/list-diff2.copied.model/CopiedMove
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
@@ -111,16 +111,25 @@ async function instantiate(module, imports = {}) {
       item: __liftRecord9(__getU32(pointer + 8)),
     };
   }
-  function __liftRecord13(pointer) {
+  function __liftRecord14(pointer) {
     // assembly/lib/models/patch.copied.model/CopiedPatch
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
     return {
       type: __getI32(pointer + 0),
       node: __liftRecord9(__getU32(pointer + 4)),
-      moves: __liftArray(pointer => __liftRecord14(__getU32(pointer)), 2, __getU32(pointer + 8)),
+      moves: __liftArray(pointer => __liftRecord15(__getU32(pointer)), 2, __getU32(pointer + 8)),
       props: __liftRecord10(__getU32(pointer + 12)),
       content: __liftRecord9(__getU32(pointer + 16)),
+    };
+  }
+  function __liftRecord13(pointer) {
+    // assembly/main/DiffResult
+    // Hint: Opt-out from lifting as a record by providing an empty constructor
+    if (!pointer) return null;
+    return {
+      newTree: __liftRecord9(__getU32(pointer + 0)),
+      patches: __liftArray(pointer => __liftArray(pointer => __liftRecord14(__getU32(pointer)), 2, __getU32(pointer)), 2, __getU32(pointer + 4)),
     };
   }
   function __liftString(pointer) {

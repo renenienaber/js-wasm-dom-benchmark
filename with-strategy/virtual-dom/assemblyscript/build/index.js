@@ -2,7 +2,7 @@ var _a, _b, _c, _d, _e, _f, _g;
 import { VElement } from './lib/models/v-element.model.js';
 import { patch, renderVElement } from './lib/patch.js';
 import { doRun, doRunLots, doAdd, doUpdate, doClearRows, doSwapRows } from "../build/main.js";
-import { toCopiedVElement } from "./lib/mappers/v-element.mapper.js";
+import { toCopiedVElement, toVElement } from "./lib/mappers/v-element.mapper.js";
 import { toPatch } from "./lib/mappers/patch.mapper.js";
 (_a = document.getElementById('run')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => doBenchmark(run), false);
 (_b = document.getElementById('runLots')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => doBenchmark(runLots), false);
@@ -22,12 +22,15 @@ function doBenchmark(fn) {
 }
 function _getDiffAndRerender(fn) {
     const mappedTree = toCopiedVElement(vtree);
+    console.log(mappedTree);
     const result = fn(mappedTree);
-    const mappedResult = result.map(el => {
+    console.log(result);
+    const mappedNewTree = toVElement(result.newTree);
+    const mappedPatches = result.patches.map(el => {
         return el.map(el => toPatch(el));
     });
-    console.log(mappedResult);
-    patch(root, mappedResult);
+    vtree = mappedNewTree;
+    patch(root, mappedPatches);
 }
 function run() {
     _getDiffAndRerender(doRun);
