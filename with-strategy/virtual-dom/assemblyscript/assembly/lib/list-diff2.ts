@@ -10,25 +10,30 @@ import {DiffResult, Move} from "./models/list-diff2.model";
  * @return {Object} - {moves: <Array>}
  *                  - moves is a list of actions that telling how to remove and insert
  */
-export function diff (oldList: VElementChildType[], newList: VElementChildType[]): DiffResult {
+export function diff (oldList: VElementChildType[], newList: (VElementChildType | null)[]): DiffResult {
   const moves: Move[] = [];
 
   // a simulate list to manipulate
-  const children: VElementChildType[] = [];
+  const children: (VElementChildType|null)[] = [];
   let i: i32 = 0;
-  let item: VElementChildType;
+  let item: VElementChildType | null;
   let freeIndex: i32 = 0;
 
   // first pass to check item in old list: if it's removed or not
   while (i < oldList.length) {
-    item = oldList[i]
-    const freeItem: VElement = newList[freeIndex++];
-    children.push(freeItem || null);
-    // children.push(freeItem)
+    item = oldList[i];
+    console.log(newList.length.toString() + ', ' + freeIndex.toString());
+    if(freeIndex < newList.length) {
+      const freeItem: VElement | null = newList[freeIndex];
+      children.push(freeItem || null);
+    } else {
+      children.push(null);
+    }
+    freeIndex++;
     i++
   }
 
-  const simulateList: VElement[] = children.slice(0);
+  const simulateList: (VElement | null)[] = children.slice(0);
 
   // remove items no longer exist
   i = 0
@@ -49,7 +54,7 @@ export function diff (oldList: VElementChildType[], newList: VElementChildType[]
     item = newList[i]
 
     if(j < simulateList.length) {
-      const simulateItem: VElement = simulateList[j];
+      const simulateItem: VElement|null = simulateList[j];
       if (simulateItem) {
         j++;
       } else {

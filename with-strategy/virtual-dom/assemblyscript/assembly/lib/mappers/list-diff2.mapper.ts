@@ -2,9 +2,13 @@ import {Move} from "../models/list-diff2.model";
 import {CopiedVElement} from "../models/v-element.copied.model";
 import {toCopiedVElement} from "./v-element.mapper";
 import {CopiedMove} from "../models/list-diff2.copied.model";
+import {VElement} from "../models/v-element.model";
 
 function _toCopiedMove(move: Move): CopiedMove {
-    const newItem: CopiedVElement = toCopiedVElement(move.item);
+    let newItem: CopiedVElement | null = null;
+    if (move.item !== null) {
+        newItem = toCopiedVElement(move.item as VElement);
+    }
     const newMove: CopiedMove = {
         index: move.index,
         type: move.type,

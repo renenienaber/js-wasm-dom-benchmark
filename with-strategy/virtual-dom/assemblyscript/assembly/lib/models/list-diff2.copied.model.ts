@@ -6,5 +6,5 @@ export class CopiedMove {
     // @ts-ignore
     type: i32;
     // @ts-ignore
-    item: CopiedVElement;
+    item: CopiedVElement | null;
 }

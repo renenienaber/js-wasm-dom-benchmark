@@ -64,8 +64,8 @@ declare interface __Record15<TOmittable> {
   index: number | TOmittable;
   /** @type `i32` */
   type: number | TOmittable;
-  /** @type `assembly/lib/models/v-element.copied.model/CopiedVElement` */
-  item: __Record9<never>;
+  /** @type `assembly/lib/models/v-element.copied.model/CopiedVElement | null` */
+  item: __Record9<never> | null | TOmittable;
 }
 /** assembly/lib/models/patch.copied.model/CopiedPatch */
 declare interface __Record14<TOmittable> {

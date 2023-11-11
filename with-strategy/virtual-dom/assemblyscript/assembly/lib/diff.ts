@@ -12,7 +12,7 @@ export function diff (oldTree: VElement, newTree: VElement): (Patch[] | null)[] 
   return patches;
 }
 
-function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: (Patch[] | null)[]): void {
+function dfsWalk (oldNode: VElement, newNode: VElement | null, index: i32, patches: (Patch[] | null)[]): void {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
@@ -33,10 +33,18 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: (Pa
       currentPatch.push(new PropsPatch(propsPatches))
     }
     // Diff children. If the node has a `ignore` property, do not diff children
+    const newNodeChildren : VElement[] = newNode.children;
+    const lenNewNodeChildren: i32 = newNodeChildren.length;
+    const testNewChildren: (VElement | null)[] = new Array<VElement | null>(lenNewNodeChildren);
+    for (let i: i32 = 0; i < newNodeChildren.length; i++) {
+      const val = newNodeChildren[i];
+      testNewChildren[i] = val;
+    }
+
     if (!isIgnoreChildren(newNode)) {
       diffChildren(
         oldNode.children,
-        newNode.children,
+        testNewChildren,
         index,
         patches,
         currentPatch
@@ -54,7 +62,7 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: (Pa
   }
 }
 
-function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: i32, patches: (Patch[] | null)[], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: VElementChildType[], newChildren: (VElementChildType | null)[], index: i32, patches: (Patch[] | null)[], currentPatch: Patch[]): void {
   const diffs: DiffResult = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 
@@ -68,7 +76,7 @@ function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChi
 
   for (let i: i32 = 0; i < oldChildren.length; i++) {
     const child: VElement = oldChildren[i];
-    const newChild: VElement = newChildren[i] as VElement;
+    const newChild: VElement | null = newChildren[i];
     currentNodeIndex = (!leftNode.isEmpty() && leftNode.count)
         ? currentNodeIndex + leftNode.count + 1
         : currentNodeIndex + 1
