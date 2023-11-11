@@ -8,34 +8,34 @@ export declare const memory: WebAssembly.Memory;
 export declare function doRun(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doRunLots
- * @param vtree `assembly/lib/models/v-element.model/VElement`
+ * @param copiedVElement `assembly/lib/models/v-element.copied.model/CopiedVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>`
  */
-export declare function doRunLots(vtree: __Internref4): Array<Array<__Record13<never>>>;
+export declare function doRunLots(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doAdd
- * @param vtree `assembly/lib/models/v-element.model/VElement`
+ * @param copiedVElement `assembly/lib/models/v-element.copied.model/CopiedVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>`
  */
-export declare function doAdd(vtree: __Internref4): Array<Array<__Record13<never>>>;
+export declare function doAdd(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doUpdate
- * @param vtree `assembly/lib/models/v-element.model/VElement`
+ * @param copiedVElement `assembly/lib/models/v-element.copied.model/CopiedVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>`
  */
-export declare function doUpdate(vtree: __Internref4): Array<Array<__Record13<never>>>;
+export declare function doUpdate(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doClearRows
- * @param vtree `assembly/lib/models/v-element.model/VElement`
+ * @param copiedVElement `assembly/lib/models/v-element.copied.model/CopiedVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>`
  */
-export declare function doClearRows(vtree: __Internref4): Array<Array<__Record13<never>>>;
+export declare function doClearRows(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /**
  * assembly/main/doSwapRows
- * @param vtree `assembly/lib/models/v-element.model/VElement`
+ * @param copiedVElement `assembly/lib/models/v-element.copied.model/CopiedVElement`
  * @returns `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>`
  */
-export declare function doSwapRows(vtree: __Internref4): Array<Array<__Record13<never>>>;
+export declare function doSwapRows(copiedVElement: __Record9<undefined>): Array<Array<__Record13<never>>>;
 /** assembly/lib/models/v-element.copied.model/CopiedPropsType */
 declare interface __Record10<TOmittable> {
   /** @type `~lib/array/Array<~lib/string/String>` */
@@ -79,9 +79,4 @@ declare interface __Record13<TOmittable> {
   props: __Record10<never> | null | TOmittable;
   /** @type `assembly/lib/models/v-element.copied.model/CopiedVElement | null` */
   content: __Record9<never> | null | TOmittable;
-}
-/** assembly/lib/models/v-element.model/VElement */
-declare class __Internref4 extends Number {
-  private __nominal4: symbol;
-  private __nominal0: symbol;
 }

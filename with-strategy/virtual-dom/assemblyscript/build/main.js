@@ -29,30 +29,30 @@ async function instantiate(module, imports = {}) {
       copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
       return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRun(copiedVElement) >>> 0);
     },
-    doRunLots(vtree) {
-      // assembly/main/doRunLots(assembly/lib/models/v-element.model/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
-      vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(vtree) >>> 0);
+    doRunLots(copiedVElement) {
+      // assembly/main/doRunLots(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doRunLots(copiedVElement) >>> 0);
     },
-    doAdd(vtree) {
-      // assembly/main/doAdd(assembly/lib/models/v-element.model/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
-      vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(vtree) >>> 0);
+    doAdd(copiedVElement) {
+      // assembly/main/doAdd(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doAdd(copiedVElement) >>> 0);
     },
-    doUpdate(vtree) {
-      // assembly/main/doUpdate(assembly/lib/models/v-element.model/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
-      vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(vtree) >>> 0);
+    doUpdate(copiedVElement) {
+      // assembly/main/doUpdate(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doUpdate(copiedVElement) >>> 0);
     },
-    doClearRows(vtree) {
-      // assembly/main/doClearRows(assembly/lib/models/v-element.model/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
-      vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(vtree) >>> 0);
+    doClearRows(copiedVElement) {
+      // assembly/main/doClearRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doClearRows(copiedVElement) >>> 0);
     },
-    doSwapRows(vtree) {
-      // assembly/main/doSwapRows(assembly/lib/models/v-element.model/VElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
-      vtree = __lowerInternref(vtree) || __notnull();
-      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(vtree) >>> 0);
+    doSwapRows(copiedVElement) {
+      // assembly/main/doSwapRows(assembly/lib/models/v-element.copied.model/CopiedVElement) => ~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>
+      copiedVElement = __lowerRecord9(copiedVElement) || __notnull();
+      return __liftArray(pointer => __liftArray(pointer => __liftRecord13(__getU32(pointer)), 2, __getU32(pointer)), 2, exports.doSwapRows(copiedVElement) >>> 0);
     },
   }, exports);
   function __lowerRecord10(value) {
@@ -166,12 +166,6 @@ async function instantiate(module, imports = {}) {
     exports.__unpin(buffer);
     exports.__unpin(header);
     return header;
-  }
-  class Internref extends Number {}
-  function __lowerInternref(value) {
-    if (value == null) return 0;
-    if (value instanceof Internref) return value.valueOf();
-    throw TypeError("internref expected");
   }
   function __notnull() {
     throw TypeError("value must not be null");

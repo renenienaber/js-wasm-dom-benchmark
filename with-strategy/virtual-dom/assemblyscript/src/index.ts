@@ -1,7 +1,7 @@
 import {VElement} from './lib/models/v-element.model'
 import {patch, renderVElement} from './lib/patch'
 import {Patch} from "./lib/models/patch.model";
-import { doRun } from "../build/main.js"
+import { doRun, doRunLots, doAdd, doUpdate, doClearRows, doSwapRows } from "../build/main.js"
 import {CopiedVElement} from "./lib/models/v-element.copied.model";
 import {toCopiedVElement} from "./lib/mappers/v-element.mapper";
 import {CopiedPatch} from "./lib/models/patch.copied.model";
@@ -37,21 +37,9 @@ function doBenchmark(fn: () => void): void {
 
 // click handler
 
-function getDiffAndRerender(fn: (oldTree: CopiedVElement) => any): void {
-    const visibleTree: CopiedVElement = toCopiedVElement(vtree);
-    const result: CopiedPatch[][] = fn(visibleTree);
-    const mappedResult: Patch[][] = result.map(el => {
-        return el.map(el => toPatch(el))
-    });
-
-    // apply changes to Real DOM
-    // patch(root, patches);
-    console.log(mappedResult);
-}
-
-function run(): void {
-    const visibleTree = toCopiedVElement(vtree);
-    const result: CopiedPatch[][] = doRun(visibleTree) as CopiedPatch[][];
+function _getDiffAndRerender(fn: (copiedVElement: CopiedVElement) => CopiedPatch[][]): void {
+    const mappedTree: CopiedVElement = toCopiedVElement(vtree);
+    const result: CopiedPatch[][] = fn(mappedTree) as CopiedPatch[][];
     const mappedResult: Patch[][] = result.map(el => {
         return el.map(el => toPatch(el))
     });
@@ -60,34 +48,28 @@ function run(): void {
     patch(root, mappedResult);
 }
 
+function run(): void {
+    _getDiffAndRerender(doRun as () => CopiedPatch[][]);
+}
+
 function runLots(): void {
-    // getDiffAndRerender(() => {
-    //     return doRunLots(vtree);
-    // })
+    _getDiffAndRerender(doRunLots as () => CopiedPatch[][]);
 }
 
 function add(): void {
-    // getDiffAndRerender(() => {
-    //     return doAdd(vtree);
-    // })
+    _getDiffAndRerender(doAdd as () => CopiedPatch[][]);
 }
 
 function update(): void {
-    // getDiffAndRerender(() => {
-    //     return doUpdate(vtree);
-    // })
+    _getDiffAndRerender(doUpdate as () => CopiedPatch[][]);
 }
 
 function clearRows(): void {
-    // getDiffAndRerender(() => {
-    //     return doClearRows(vtree);
-    // })
+    _getDiffAndRerender(doClearRows as () => CopiedPatch[][]);
 }
 
 function swapRows(): void {
-    // getDiffAndRerender(() => {
-    //     return doSwapRows(vtree);
-    // });
+    _getDiffAndRerender(doSwapRows as () => CopiedPatch[][]);
 }
 
 
