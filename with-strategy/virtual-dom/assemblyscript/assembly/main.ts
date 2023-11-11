@@ -188,26 +188,22 @@ function _createRow(data: RowElement): VElement {
 // mutating functions
 
 function _appendRows(rowElements: RowElement[]): void {
-    // const vTreeChildren: VElement[] = vtree.children;
+    const vTreeChildren: VElement[] = vtree.children;
 
-    // const lenVTreeChildren: i32 = vTreeChildren.length;
+    const lenVTreeChildren: i32 = vTreeChildren.length;
     const lenRowElements: i32 = rowElements.length;
-    // const fullLen: i32 = lenVTreeChildren + lenRowElements;
 
-    const rows: VElement[] = new Array<VElement>(lenRowElements);
-    // const rows: VElement[] = new Array<VElement>(fullLen);
+    const rows: VElement[] = [];
 
-    // for(let i: i32 = 0; i < lenVTreeChildren; i++) {
-    //     const val: VElement = vTreeChildren[i];
-    //     rows[i] = val;
-    // }
+    for(let i: i32 = 0; i < lenVTreeChildren; i++) {
+        const val: VElement = vTreeChildren[i];
+        rows.push(val);
+    }
 
     for(let i: i32 = 0; i < lenRowElements; i++) {
         const el: RowElement = rowElements[i];
         const tr: VElement = _createRow(el);
-        // const index: i32 = lenVTreeChildren + i + 1;
-        // rows[index] = tr;
-        rows[i] = tr;
+        rows.push(tr);
     }
 
     const newMap: Map<string, string> = new Map<string, string>();
