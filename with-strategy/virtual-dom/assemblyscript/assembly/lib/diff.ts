@@ -5,14 +5,14 @@ import {DiffResult} from "./models/list-diff2.model";
 
 
 
-export function diff (oldTree: VElement, newTree: VElement): Patch[][] {
+export function diff (oldTree: VElement, newTree: VElement): (Patch[] | null)[] {
   const index: i32 = 0;
-  const patches: Patch[][] = [];
+  const patches: (Patch[] | null)[] = [];
   dfsWalk(oldTree, newTree, index, patches);
   return patches;
 }
 
-function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: Patch[][]): void {
+function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: (Patch[] | null)[]): void {
   const currentPatch: Patch[] = [];
 
   // Node is removed.
@@ -48,11 +48,13 @@ function dfsWalk (oldNode: VElement, newNode: VElement, index: i32, patches: Pat
   }
 
   if (currentPatch.length) {
-    patches[index] = currentPatch
+    patches[index] = currentPatch;
+  } else {
+    patches[index] = null;
   }
 }
 
-function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: i32, patches: Patch[][], currentPatch: Patch[]): void {
+function diffChildren(oldChildren: VElementChildType[], newChildren: VElementChildType[], index: i32, patches: (Patch[] | null)[], currentPatch: Patch[]): void {
   const diffs: DiffResult = listDiff(oldChildren, newChildren)
   newChildren = diffs.children
 

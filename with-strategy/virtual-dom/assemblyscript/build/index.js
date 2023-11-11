@@ -26,9 +26,13 @@ function _getDiffAndRerender(fn) {
     const result = fn(mappedTree);
     console.log(result);
     const mappedNewTree = toVElement(result.newTree);
-    const mappedPatches = result.patches.map(el => {
-        return el.map(el => toPatch(el));
-    });
+    const mappedPatches = [];
+    for (let i in result.patches) {
+        const val = result.patches[i];
+        if (val !== null) {
+            mappedPatches[i] = val.map(el => toPatch(el));
+        }
+    }
     vtree = mappedNewTree;
     patch(root, mappedPatches);
 }

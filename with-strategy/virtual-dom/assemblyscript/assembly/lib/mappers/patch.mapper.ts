@@ -45,21 +45,25 @@ function toCopiedPatch(patch: Patch): CopiedPatch {
     return newCopiedPatch;
 }
 
-export function toCopiedPatches(patches: Patch[][]): CopiedPatch[][] {
+export function toCopiedPatches(patches: (Patch[] | null)[]): (CopiedPatch[] | null)[] {
     const lenPatches: i32 = patches.length;
-    const newCopiedPatches: CopiedPatch[][] = new Array<CopiedPatch[]>(lenPatches);
+    const newCopiedPatches: (CopiedPatch[] | null)[] = new Array<CopiedPatch[] | null>(lenPatches);
     for (let i: i32 = 0; i < lenPatches; i++) {
-        const patches2: Patch[] = patches[i];
-        const lenPatches2: i32 = patches2.length;
+        const patches2: Patch[] | null = patches[i];
+        if(patches2) {
+            const lenPatches2: i32 = patches2.length;
 
-        const newCopiedPatches2: CopiedPatch[] = new Array<CopiedPatch>(lenPatches2);
-        for (let i: i32 = 0; i < lenPatches2; i++) {
-            const patch: Patch = patches2[i];
-            const newCopiedPatch: CopiedPatch = toCopiedPatch(patch);
-            newCopiedPatches2[i] = newCopiedPatch;
+            const newCopiedPatches2: CopiedPatch[] = new Array<CopiedPatch>(lenPatches2);
+            for (let i: i32 = 0; i < lenPatches2; i++) {
+                const patch: Patch = patches2[i];
+                const newCopiedPatch: CopiedPatch = toCopiedPatch(patch);
+                newCopiedPatches2[i] = newCopiedPatch;
+            }
+
+            newCopiedPatches[i] = newCopiedPatches2;
+        } else {
+            newCopiedPatches[i] = null;
         }
-
-        newCopiedPatches[i] = newCopiedPatches2;
     }
     return newCopiedPatches;
 }

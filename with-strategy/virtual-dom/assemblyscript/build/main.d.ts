@@ -84,6 +84,6 @@ declare interface __Record14<TOmittable> {
 declare interface __Record13<TOmittable> {
   /** @type `assembly/lib/models/v-element.copied.model/CopiedVElement` */
   newTree: __Record9<never>;
-  /** @type `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>>` */
-  patches: Array<Array<__Record14<never>>>;
+  /** @type `~lib/array/Array<~lib/array/Array<assembly/lib/models/patch.copied.model/CopiedPatch>|null>` */
+  patches: Array<Array<__Record14<never>> | null>;
 }

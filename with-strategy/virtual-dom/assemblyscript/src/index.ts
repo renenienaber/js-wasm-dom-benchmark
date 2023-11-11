@@ -44,9 +44,13 @@ function _getDiffAndRerender(fn: (copiedVElement: CopiedVElement) => DiffResult)
     console.log(result);
 
     const mappedNewTree: VElement = toVElement(result.newTree);
-    const mappedPatches: Patch[][] = result.patches.map(el => {
-        return el.map(el => toPatch(el))
-    });
+    const mappedPatches: Patch[][] = [];
+    for (let i in result.patches) {
+        const val: CopiedPatch[] | null = result.patches[i];
+        if(val !== null) {
+            mappedPatches[i] = val.map(el => toPatch(el));
+        }
+    }
 
     vtree = mappedNewTree;
     // apply changes to Real DOM
@@ -82,7 +86,7 @@ function swapRows(): void {
 
 interface DiffResult {
     newTree: CopiedVElement;
-    patches: CopiedPatch[][];
+    patches: (CopiedPatch[] | null)[];
 }
 
 let vtree: VElement = new VElement('tbody', new Map<string, string>([['id', 'body']]), []);

@@ -20,9 +20,9 @@ function mutateAndGetDiff(copiedVElement: CopiedVElement, fn: () => void): DiffR
 
     fn();
 
-    const patches: Patch[][] = diff(oldTree, vtree);
+    const patches: (Patch[] | null)[] = diff(oldTree, vtree);
     const mappedNewTree: CopiedVElement = toCopiedVElement(vtree);
-    const mappedPatches: CopiedPatch[][] = toCopiedPatches(patches);
+    const mappedPatches: (CopiedPatch[] | null)[] = toCopiedPatches(patches);
     return {
         newTree: mappedNewTree,
         patches: mappedPatches
@@ -99,7 +99,7 @@ class DiffResult {
     // @ts-ignore
     newTree: CopiedVElement;
     // @ts-ignore
-    patches: CopiedPatch[][];
+    patches: (CopiedPatch[] | null)[];
 }
 
 let vtree: VElement = new EmptyVElement();
